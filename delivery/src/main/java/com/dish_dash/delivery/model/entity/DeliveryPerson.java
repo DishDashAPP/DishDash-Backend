@@ -21,7 +21,7 @@ import org.hibernate.annotations.DynamicInsert;
 @Entity
 @Table(name = "delivery_person")
 @DynamicInsert
-public class deliveryPerson {
+public class DeliveryPerson {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
