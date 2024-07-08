@@ -1,7 +1,7 @@
 package com.dish_dash.user.service;
 
-import com.dish_dash.user.domain.RestaurantOwner;
-import com.dish_dash.user.repository.RestaurantOwnerRepository;
+import com.dish_dash.user.domain.model.RestaurantOwner;
+import com.dish_dash.user.adapters.repository.RestaurantOwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +16,8 @@ public class RestaurantOwnerService {
     }
 
     public boolean createRestaurantOwner(RestaurantOwner restaurantOwner) {
-        RestaurantOwner savedOwner = restaurantOwnerRepository.save(restaurantOwner);
-        return savedOwner != null;
+        RestaurantOwner savedRestaurantOwner = restaurantOwnerRepository.save(restaurantOwner);
+        return savedRestaurantOwner != null;
     }
 
     public RestaurantOwner getUserProfile(String restaurantOwnerID) {

@@ -1,13 +1,19 @@
 package com.dish_dash.user.domain.model;
 
-import lombok.AllArgsConstructor;
+import com.dish_dash.order.domain.model.Order;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@Entity
+@Table(name = "delivery_persons")
 public class DeliveryPerson implements User {
+
+    @Id
     private String id;
     private String name;
     private String phoneNumber;
@@ -15,40 +21,28 @@ public class DeliveryPerson implements User {
     private Order currentOrder;
     private DeliveryPersonStatus status;
 
+    public DeliveryPerson(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public boolean setLocation(Location location) {
         this.location = location;
         return true;
     }
 
-    public boolean assignOrder(String orderId) {
-        // Logic to assign order to the delivery person
+    public boolean assignOrder(String orderID) {
+        // logic to assign order
         return true;
     }
 
-    public Order getAssignedOrder(String orderId) {
-        // Logic to get the assigned order
-        return null;
-    }
-
-    @Override
-    public User modifyProfile(User user) {
-        if (user instanceof DeliveryPerson) {
-            DeliveryPerson deliveryPerson = (DeliveryPerson) user;
-            this.name = deliveryPerson.getName();
-            this.phoneNumber = deliveryPerson.getPhoneNumber();
-            this.location = deliveryPerson.getLocation();
-            this.status = deliveryPerson.getStatus();
-        }
-        return this;
-    }
-
-    // Additional methods
-    public Location getLocation() {
-        return location;
-    }
-
-    public Order getCurrentOrder() {
+    public Order getAssignedOrder(String orderID) {
+        // logic to get assigned order
         return currentOrder;
     }
 
-
+    public boolean setStatus(DeliveryPersonStatus status) {
+        this.status = status;
+        return true;
+    }
+}

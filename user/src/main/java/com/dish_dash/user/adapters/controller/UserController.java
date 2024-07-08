@@ -1,10 +1,11 @@
-package com.dish_dash.user.controller;
+package com.dish_dash.user.adapters.controller;
 
-import com.dish_dash.user.domain.Customer;
-import com.dish_dash.user.domain.DeliveryPerson;
-import com.dish_dash.user.domain.Restaurant;
-import com.dish_dash.user.domain.RestaurantOwner;
-import com.dish_dash.user.domain.DeliveryPersonStatus;
+import com.dish_dash.user.domain.model.Customer;
+import com.dish_dash.user.domain.model.DeliveryPersonStatus;
+import com.dish_dash.user.domain.model.RestaurantOwner;
+import com.dish_dash.user.service.CustomerService;
+import com.dish_dash.user.service.DeliveryPersonService;
+import com.dish_dash.user.service.RestaurantOwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,45 +14,51 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private CustomerService customerService;
 
-    @PutMapping("/modifyCustomerProfile")
+    @Autowired
+    private DeliveryPersonService deliveryPersonService;
+
+    @Autowired
+    private RestaurantOwnerService restaurantOwnerService;
+
+    @PutMapping("/customer")
     public Customer modifyCustomerProfile(@RequestBody Customer customer) {
-        return userService.modifyCustomerProfile(customer);
+        return customerService.modifyProfile(customer);
     }
 
-    @GetMapping("/getUserProfile/{userID}")
-    public Customer getUserProfile(@PathVariable String userID) {
-        return userService.getUserProfile(userID);
+    @GetMapping("/customer/{id}")
+    public Customer getUserProfile(@PathVariable String id) {
+        return customerService.getUserProfile(id);
     }
 
-    @PutMapping("/modifyRestaurantProfile")
-    public Restaurant modifyRestaurantProfile(@RequestBody Restaurant restaurant) {
-        return userService.modifyRestaurantProfile(restaurant);
+    @PutMapping("/restaurantOwner")
+    public RestaurantOwner modifyRestaurantProfile(@RequestBody RestaurantOwner restaurantOwner) {
+        return restaurantOwnerService.modifyProfile(restaurantOwner);
     }
 
-    @PutMapping("/modifyDeliveryPersonProfile")
+    @PutMapping("/deliveryPerson")
     public DeliveryPerson modifyDeliveryPersonProfile(@RequestBody DeliveryPerson deliveryPerson) {
-        return userService.modifyDeliveryPersonProfile(deliveryPerson);
+        return deliveryPersonService.modifyProfile(deliveryPerson);
     }
 
-    @PostMapping("/createCustomer")
+    @PostMapping("/customer")
     public boolean createCustomer(@RequestBody Customer customer) {
-        return userService.createCustomer(customer);
+        return customerService.createCustomer(customer);
     }
 
-    @PostMapping("/createDeliveryPerson")
+    @PostMapping("/deliveryPerson")
     public boolean createDeliveryPerson(@RequestBody DeliveryPerson deliveryPerson) {
-        return userService.createDeliveryPerson(deliveryPerson);
+        return deliveryPersonService.createDeliveryPerson(deliveryPerson);
     }
 
-    @PostMapping("/createRestaurantOwner")
+    @PostMapping("/restaurantOwner")
     public boolean createRestaurantOwner(@RequestBody RestaurantOwner restaurantOwner) {
-        return userService.createRestaurantOwner(restaurantOwner);
+        return restaurantOwnerService.createRestaurantOwner(restaurantOwner);
     }
 
-    @GetMapping("/getDeliveryPersonStatus/{deliveryPersonID}")
-    public DeliveryPersonStatus getDeliveryPersonStatus(@PathVariable String deliveryPersonID) {
-        return userService.getDeliveryPersonStatus(deliveryPersonID);
+    @GetMapping("/deliveryPerson/status/{id}")
+    public DeliveryPersonStatus getDeliveryPersonStatus(@PathVariable String id) {
+        return deliveryPersonService.getDeliveryPersonStatus(id);
     }
 }

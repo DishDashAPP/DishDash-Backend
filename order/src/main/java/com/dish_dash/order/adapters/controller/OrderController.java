@@ -3,29 +3,29 @@ package com.dish_dash.order.adapters.controller;
 import com.dish_dash.order.application.service.OrderService;
 import com.dish_dash.order.domain.model.Order;
 import com.dish_dash.order.domain.model.OrderStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/order")
 public class OrderController {
-    private final OrderService orderService;
 
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
-    }
+    @Autowired
+    private OrderService orderService;
 
-    @GetMapping("/{orderID}")
-    public Order viewOrder(@PathVariable String orderID) {
+    @GetMapping("/viewOrder")
+    public Order viewOrder(@RequestParam String orderID) {
         return orderService.viewOrder(orderID);
     }
 
-    @GetMapping("/{orderID}/status")
-    public OrderStatus getOrderStatus(@PathVariable String orderID) {
+    @GetMapping("/getOrderStatus")
+    public OrderStatus getOrderStatus(@RequestParam String orderID) {
         return orderService.getOrderStatus(orderID);
     }
 
-    @PostMapping("/prepare")
-    public boolean prepareOrder(@RequestBody Order order) {
+    @PostMapping("/prepareOrder")
+    public boolean prepareOrder(@RequestParam Order order) {
         return orderService.prepareOrder(order);
     }
 }
+

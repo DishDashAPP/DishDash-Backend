@@ -1,15 +1,19 @@
 package com.dish_dash.user.domain.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@Entity
+@Table(name = "restaurant_owners")
 public class RestaurantOwner implements User {
+
+    @Id
     private String id;
     private String name;
     private String phoneNumber;
@@ -18,18 +22,14 @@ public class RestaurantOwner implements User {
     private List<String> activeOrderIds;
     private List<String> orderHistoryIds;
 
-    public void addActiveOrder(String orderId) {
-        this.activeOrderIds.add(orderId);
+    public RestaurantOwner(String id, String name, String address) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
     }
 
-    @Override
-    public User modifyProfile(User user) {
-        if (user instanceof RestaurantOwner) {
-            RestaurantOwner owner = (RestaurantOwner) user;
-            this.name = owner.getName();
-            this.phoneNumber = owner.getPhoneNumber();
-            this.address = owner.getAddress();
-        }
-        return this;
+    public boolean addActiveOrderID(String orderID) {
+        // logic to add active order ID
+        return true;
     }
 }

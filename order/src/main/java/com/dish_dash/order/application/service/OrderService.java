@@ -1,9 +1,33 @@
 package com.dish_dash.order.application.service;
 
 import com.dish_dash.order.domain.model.Order;
+import com.dish_dash.order.domain.model.OrderStatus;
+import com.dish_dash.order.domain.repository.OrderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public interface OrderService {
-    Order viewOrder(String orderID);
-    OrderStatus getOrderStatus(String orderID);
-    boolean prepareOrder(Order order);
+@Service
+public class OrderService {
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    public Order viewOrder(String orderID) {
+        // Assuming orderRepository.findById() returns an Optional<Order>
+        return orderRepository.findById(orderID).orElse(null);
+    }
+
+    public OrderStatus getOrderStatus(String orderID) {
+        Order order = orderRepository.findById(orderID).orElse(null);
+        if (order != null) {
+            return order.getStatus();
+        }
+        return null;
+    }
+
+    public boolean prepareOrder(Order order) {
+        // Assuming orderRepository.save() saves and updates the order
+        Order savedOrder = orderRepository.save(order);
+        return savedOrder != null;
+    }
 }
