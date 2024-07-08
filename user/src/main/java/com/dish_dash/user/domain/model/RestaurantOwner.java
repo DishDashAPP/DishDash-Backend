@@ -1,23 +1,35 @@
 package com.dish_dash.user.domain.model;
 
-import java.util.List;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Entity
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RestaurantOwner implements User {
-    @Id
     private String id;
     private String name;
     private String phoneNumber;
-    private String email;
-    @OneToMany
-    private List<Menu> menus;
-    @OneToMany
-    private List<Order> orders;
-    @OneToMany
-    private List<Order> activeOrders;
+    private String address;
+    private List<String> menuIds;
+    private List<String> activeOrderIds;
+    private List<String> orderHistoryIds;
 
-    // Constructors, Getters, Setters, and Implement User methods
+    public void addActiveOrder(String orderId) {
+        this.activeOrderIds.add(orderId);
+    }
+
+    @Override
+    public User modifyProfile(User user) {
+        if (user instanceof RestaurantOwner) {
+            RestaurantOwner owner = (RestaurantOwner) user;
+            this.name = owner.getName();
+            this.phoneNumber = owner.getPhoneNumber();
+            this.address = owner.getAddress();
+        }
+        return this;
+    }
 }
