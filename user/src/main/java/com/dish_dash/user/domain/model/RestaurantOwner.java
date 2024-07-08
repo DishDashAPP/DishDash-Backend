@@ -29,7 +29,6 @@ public class RestaurantOwner implements User {
     }
 
     public boolean addActiveOrderID(String orderID) {
-        // logic to add active order ID
         return true;
     }
 }

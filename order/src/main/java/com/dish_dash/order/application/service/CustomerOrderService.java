@@ -15,7 +15,6 @@ public class CustomerOrderService {
     private OrderRepository orderRepository;
 
     public Transaction createOrder(String customerID, String restaurantOwnerID, OrderItem[] orderItems) {
-        // Implementation logic for creating an order
         Order newOrder = new Order();
         newOrder.setCustomerID(customerID);
         newOrder.setRestaurantOwnerID(restaurantOwnerID);
@@ -24,12 +23,10 @@ public class CustomerOrderService {
     }
 
     public Order modifyOrder(String orderID, OrderItem[] orderItems) {
-        // Implementation logic for modifying an order
         return orderRepository.modifyOrder(orderID, orderItems);
     }
 
     public boolean setOrderRate(String customerID, String orderID, int point) {
-        // Implementation logic for setting order rate
         Order order = orderRepository.findByID(orderID);
         if (order != null) {
             order.setCustomerRate(point);
@@ -40,7 +37,6 @@ public class CustomerOrderService {
     }
 
     public boolean setDeliveryRate(String customerID, String orderID, int point) {
-        // Implementation logic for setting delivery rate
         Order order = orderRepository.findByID(orderID);
         if (order != null) {
             order.setDeliveryPersonRate(point);
@@ -51,12 +47,10 @@ public class CustomerOrderService {
     }
 
     public List<Order> getCustomerOrders(String customerID) {
-        // Implementation logic for getting customer orders
         return orderRepository.findByCustomerID(customerID);
     }
 
     public Order getCustomerCurrentOrder(String customerID) {
-        // Implementation logic for getting current order
         return orderRepository.findCurrentOrderByCustomerID(customerID);
     }
 }

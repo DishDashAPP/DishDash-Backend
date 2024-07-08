@@ -32,12 +32,10 @@ public class DeliveryPerson implements User {
     }
 
     public boolean assignOrder(String orderID) {
-        // logic to assign order
         return true;
     }
 
     public Order getAssignedOrder(String orderID) {
-        // logic to get assigned order
         return currentOrder;
     }
 

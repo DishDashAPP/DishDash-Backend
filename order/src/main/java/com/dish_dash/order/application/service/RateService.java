@@ -11,7 +11,6 @@ public class RateService {
     private com.dish_dash.order.adapters.repository.RateRepository rateRepository;
 
     public boolean setOrderRate(String customerID, String orderID, int point) {
-        // Logic to set the order rate
         Rate rate = new Rate();
         rate.setCustomerID(customerID);
         rate.setOrderID(orderID);
@@ -20,7 +19,6 @@ public class RateService {
     }
 
     public boolean setDeliveryRate(String customerID, String orderID, int point) {
-        // Logic to set the delivery rate
         Rate rate = new Rate();
         rate.setCustomerID(customerID);
         rate.setOrderID(orderID);
@@ -29,7 +27,6 @@ public class RateService {
     }
 
     public Rate getDeliveryRate(String deliveryPersonID) {
-        // Logic to get the delivery rate
         return rateRepository.findByDeliveryPersonID(deliveryPersonID);
     }
 }

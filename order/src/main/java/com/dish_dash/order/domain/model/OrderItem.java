@@ -28,11 +28,10 @@ public class OrderItem {
         this.food = food;
         this.price = price;
         this.quantity = quantity;
-        this.orderItemID = generateOrderItemID(); // Implement a method to generate a unique ID
+        this.orderItemID = generateOrderItemID();
     }
 
     private String generateOrderItemID() {
-        // Implement a unique ID generation logic
         return UUID.randomUUID().toString();
     }
 }

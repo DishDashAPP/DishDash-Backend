@@ -19,6 +19,5 @@ public class Payment {
     }
 
     private String generateTraceID() {
-        // Logic to generate a unique trace ID
     }
 }

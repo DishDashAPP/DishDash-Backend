@@ -15,7 +15,6 @@ public class RestaurantOrderService {
     private OrderRepository orderRepository;
 
     public boolean updateOrderStatusByRestaurantOwner(String orderID, OrderStatus status) {
-        // Implementation logic for updating order status
         Order order = orderRepository.findByID(orderID);
         if (order != null) {
             order.setStatus(status);
@@ -26,12 +25,10 @@ public class RestaurantOrderService {
     }
 
     public List<Order> getRestaurantOwnerOrderHistory(String restaurantOwnerID) {
-        // Implementation logic for getting order history
         return orderRepository.findOrderHistoryByRestaurantOwnerID(restaurantOwnerID);
     }
 
     public List<Order> getRestaurantOwnerActiveOrders(String restaurantOwnerID) {
-        // Implementation logic for getting active orders
         return orderRepository.findActiveOrdersByRestaurantOwnerID(restaurantOwnerID);
     }
 }

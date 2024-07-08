@@ -19,7 +19,6 @@ public class Transaction {
     }
 
     private String generateTransactionID() {
-        // Logic to generate a unique transaction ID
     }
 }
 

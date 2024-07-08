@@ -13,7 +13,6 @@ public class DeliveryPersonOrderService {
     private OrderRepository orderRepository;
 
     public boolean updateOrderStatusByDeliveryPerson(String orderID, OrderStatus status) {
-        // Implementation logic for updating order status
         Order order = orderRepository.findByID(orderID);
         if (order != null) {
             order.setStatus(status);
@@ -24,7 +23,6 @@ public class DeliveryPersonOrderService {
     }
 
     public Order getDeliveryPersonCurrentOrder(String deliveryPersonID) {
-        // Implementation logic for getting current order
         return orderRepository.findCurrentOrderByDeliveryPersonID(deliveryPersonID);
     }
 }

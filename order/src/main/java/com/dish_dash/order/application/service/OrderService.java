@@ -13,7 +13,6 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     public Order viewOrder(String orderID) {
-        // Assuming orderRepository.findById() returns an Optional<Order>
         return orderRepository.findById(orderID).orElse(null);
     }
 
@@ -26,7 +25,6 @@ public class OrderService {
     }
 
     public boolean prepareOrder(Order order) {
-        // Assuming orderRepository.save() saves and updates the order
         Order savedOrder = orderRepository.save(order);
         return savedOrder != null;
     }
