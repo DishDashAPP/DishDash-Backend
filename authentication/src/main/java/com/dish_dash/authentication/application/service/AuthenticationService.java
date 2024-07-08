@@ -1,6 +1,13 @@
 package com.dish_dash.authentication.application.service;
 
 
+import com.dish_dash.authentication.domain.model.AuthenticationInfo;
+import com.dish_dash.authentication.domain.model.Token;
+import com.dish_dash.authentication.infrastructure.repository.AuthenticationRepository;
+import com.dish_dash.authentication.infrastructure.repository.TokenRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 @Service
 public class AuthenticationService {
 

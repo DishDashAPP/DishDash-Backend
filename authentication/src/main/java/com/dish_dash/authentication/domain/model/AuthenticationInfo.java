@@ -1,5 +1,8 @@
 package com.dish_dash.authentication.domain.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Data
 @NoArgsConstructor
 public class AuthenticationInfo {

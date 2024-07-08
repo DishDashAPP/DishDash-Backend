@@ -1,11 +1,13 @@
 package com.dish_dash.authentication.domain.model;
 
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Date;
 import java.util.UUID;
 
 @Data
-@NoArgsConstructor
 public class Token {
     private String tokenID;
     private String value;

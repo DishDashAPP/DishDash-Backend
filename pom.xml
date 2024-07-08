@@ -22,6 +22,7 @@
     <module>order</module>
     <module>gateway</module>
     <module>user</module>
+    <module>delivery</module>
   </modules>
 
   <properties>
