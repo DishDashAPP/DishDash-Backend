@@ -13,11 +13,11 @@ public class RestaurantOwner implements User {
     private String phoneNumber;
     private String email;
     @OneToMany
-    private List<String> menus;
+    private List<Menu> menus;
     @OneToMany
-    private List<String> orders;
+    private List<Order> orders;
     @OneToMany
-    private List<String> activeOrders;
+    private List<Order> activeOrders;
 
     // Constructors, Getters, Setters, and Implement User methods
 }

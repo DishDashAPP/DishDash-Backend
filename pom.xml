@@ -19,7 +19,7 @@
 
   <modules>
     <module>authentication</module>
-    <module>delivery</module>
+    <module>order</module>
     <module>restaurant</module>
     <module>customer</module>
     <module>gateway</module>
