@@ -3,10 +3,12 @@ package com.dish_dash.payment.domain.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 public class Transaction {
-    private String id;
+    private UUID id;
     private TransactionStatus status;
     private Price price;
     private String orderID;
@@ -18,7 +20,8 @@ public class Transaction {
         this.orderID = orderID;
     }
 
-    private String generateTransactionID() {
+    private UUID generateTransactionID() {
+        return UUID.randomUUID();
     }
 }
 

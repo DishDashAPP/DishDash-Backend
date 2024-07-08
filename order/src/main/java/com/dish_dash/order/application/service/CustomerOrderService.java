@@ -3,6 +3,7 @@ package com.dish_dash.order.application.service;
 import com.dish_dash.order.domain.model.Order;
 import com.dish_dash.order.domain.model.OrderItem;
 import com.dish_dash.order.domain.repository.OrderRepository;
+import com.dish_dash.payment.domain.model.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

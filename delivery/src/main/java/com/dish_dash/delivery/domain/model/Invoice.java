@@ -1,5 +1,8 @@
 package com.dish_dash.delivery.domain.model;
 
+import com.dish_dash.user.domain.model.Customer;
+import com.dish_dash.user.domain.model.DeliveryPerson;
+
 import java.util.Date;
 
 public class Invoice {

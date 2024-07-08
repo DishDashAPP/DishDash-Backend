@@ -1,6 +1,7 @@
 package com.dish_dash.order.application.service;
 
 import com.dish_dash.order.domain.model.Rate;
+import com.dish_dash.order.domain.repository.RateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class RateService {
 
     @Autowired
-    private com.dish_dash.order.adapters.repository.RateRepository rateRepository;
+    private RateRepository rateRepository;
 
     public boolean setOrderRate(String customerID, String orderID, int point) {
         Rate rate = new Rate();

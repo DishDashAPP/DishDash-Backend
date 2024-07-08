@@ -1,6 +1,8 @@
 package com.dish_dash.order.domain.model;
 
 import javax.persistence.*;
+
+import com.dish_dash.product.domain.model.Food;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

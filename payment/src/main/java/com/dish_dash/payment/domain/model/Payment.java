@@ -4,11 +4,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 public class Payment {
-    private String traceID;
+    private UUID traceID;
     private Date dateTime;
     private String transactionID;
 
@@ -18,6 +19,7 @@ public class Payment {
         this.transactionID = transactionID;
     }
 
-    private String generateTraceID() {
+    private UUID generateTraceID() {
+        return UUID.randomUUID();
     }
 }

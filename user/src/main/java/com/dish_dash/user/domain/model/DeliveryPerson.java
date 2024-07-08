@@ -1,11 +1,11 @@
 package com.dish_dash.user.domain.model;
 
-import com.dish_dash.order.domain.model.Order;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.xml.stream.Location;
 
 @Data
 @NoArgsConstructor
@@ -18,7 +18,7 @@ public class DeliveryPerson implements User {
     private String name;
     private String phoneNumber;
     private Location location;
-    private Order currentOrder;
+    private String currentOrderId;
     private DeliveryPersonStatus status;
 
     public DeliveryPerson(String id, String name) {

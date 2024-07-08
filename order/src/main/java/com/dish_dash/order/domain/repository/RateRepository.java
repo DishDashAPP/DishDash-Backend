@@ -20,4 +20,6 @@ public interface RateRepository extends JpaRepository<Rate, String> {
             return false;
         }
     }
+
+    Rate findByDeliveryPersonID(String deliveryPersonID);
 }
