@@ -23,6 +23,7 @@
     <module>restaurant</module>
     <module>customer</module>
     <module>gateway</module>
+    <module>user</module>
   </modules>
 
   <properties>
