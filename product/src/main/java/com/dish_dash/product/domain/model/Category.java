@@ -15,7 +15,6 @@ public class Category {
     }
 
     private String generateCategoryID() {
-        // Logic to generate category ID
         return "CAT-" + System.currentTimeMillis();
     }
 }

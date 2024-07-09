@@ -1,6 +1,7 @@
 package com.dish_dash.user.service;
 
 import com.dish_dash.user.adapters.repository.CustomerRepository;
+import com.dish_dash.user.domain.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

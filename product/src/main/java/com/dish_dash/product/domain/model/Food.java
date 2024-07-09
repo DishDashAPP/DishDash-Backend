@@ -23,7 +23,6 @@ public class Food {
     }
 
     private String generateFoodID() {
-        // Logic to generate food ID
         return "FOOD-" + System.currentTimeMillis();
     }
 }

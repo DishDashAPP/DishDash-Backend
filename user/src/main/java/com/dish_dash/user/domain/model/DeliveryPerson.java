@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.xml.stream.Location;
 
 @Data
 @NoArgsConstructor
@@ -35,8 +34,8 @@ public class DeliveryPerson implements User {
         return true;
     }
 
-    public Order getAssignedOrder(String orderID) {
-        return currentOrder;
+    public String getAssignedOrder(String orderID) {
+        return currentOrderId;
     }
 
     public boolean setStatus(DeliveryPersonStatus status) {

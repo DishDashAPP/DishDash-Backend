@@ -2,7 +2,7 @@ package com.dish_dash.delivery.adapters.controller;
 
 import com.dish_dash.delivery.application.service.DeliveryService;
 import com.dish_dash.delivery.domain.model.Invoice;
-import com.dish_dash.delivery.domain.model.Location;
+import com.dish_dash.user.domain.model.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

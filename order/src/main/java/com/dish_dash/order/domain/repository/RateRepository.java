@@ -4,9 +4,11 @@ import com.dish_dash.order.domain.model.Rate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface RateRepository extends JpaRepository<Rate, String> {
-    Rate findById(String id);
+    Optional<Rate> findById(String id);
 
     default boolean createReview(String customerID, String orderID, int point) {
         try {

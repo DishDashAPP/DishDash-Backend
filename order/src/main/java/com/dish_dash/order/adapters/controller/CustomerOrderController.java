@@ -17,12 +17,12 @@ public class CustomerOrderController {
     private CustomerOrderService customerOrderService;
 
     @PostMapping("/createOrder")
-    public Transaction createOrder(@RequestParam String customerID, @RequestParam String restaurantOwnerID, @RequestBody OrderItem[] orderItems) {
+    public Transaction createOrder(@RequestParam String customerID, @RequestParam String restaurantOwnerID, @RequestBody List<OrderItem> orderItems) {
         return customerOrderService.createOrder(customerID, restaurantOwnerID, orderItems);
     }
 
     @PostMapping("/modifyOrder")
-    public Order modifyOrder(@RequestParam String orderID, @RequestBody OrderItem[] orderItems) {
+    public Order modifyOrder(@RequestParam String orderID, @RequestBody List<OrderItem> orderItems) {
         return customerOrderService.modifyOrder(orderID, orderItems);
     }
 

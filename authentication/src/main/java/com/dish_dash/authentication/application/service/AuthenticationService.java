@@ -5,6 +5,8 @@ import com.dish_dash.authentication.domain.model.AuthenticationInfo;
 import com.dish_dash.authentication.domain.model.Token;
 import com.dish_dash.authentication.infrastructure.repository.AuthenticationRepository;
 import com.dish_dash.authentication.infrastructure.repository.TokenRepository;
+import com.dish_dash.user.domain.model.Customer;
+import com.dish_dash.user.domain.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +39,7 @@ public class AuthenticationService {
 
     public User register(String username, String password, String name) {
         if (authenticationRepository.register(username, password, name)) {
-            return new User(username, name);
+            return new Customer();
         }
         return null;
     }

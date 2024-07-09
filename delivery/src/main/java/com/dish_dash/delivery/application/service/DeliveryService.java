@@ -1,9 +1,10 @@
 package com.dish_dash.delivery.application.service;
 
 import com.dish_dash.delivery.domain.model.Invoice;
-import com.dish_dash.delivery.domain.model.Location;
+import com.dish_dash.user.domain.model.DeliveryPerson;
+import com.dish_dash.user.domain.model.Location;
 import com.dish_dash.delivery.infrastructure.repository.InvoiceRepository;
-import com.dish_dash.delivery.infrastructure.repository.LocationRepository;
+import com.dish_dash.user.adapters.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +27,7 @@ public class DeliveryService {
 
     public boolean assignOrder(String orderId, String deliveryPersonId) {
         Invoice invoice = invoiceRepository.getInvoice(orderId);
-        // Assume some logic to assign the order to the delivery person
-        invoice.setDeliveryPerson(new DeliveryPerson(deliveryPersonId));
+        invoice.setDeliveryPerson(new DeliveryPerson());
         return invoiceRepository.modify(invoice);
     }
 

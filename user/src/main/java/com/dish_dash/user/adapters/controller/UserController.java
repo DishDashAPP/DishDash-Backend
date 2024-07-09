@@ -2,6 +2,8 @@ package com.dish_dash.user.adapters.controller;
 
 import com.dish_dash.user.domain.model.DeliveryPersonStatus;
 import com.dish_dash.user.domain.model.RestaurantOwner;
+import com.dish_dash.user.domain.model.Customer;
+import com.dish_dash.user.domain.model.DeliveryPerson;
 import com.dish_dash.user.service.CustomerService;
 import com.dish_dash.user.service.DeliveryPersonService;
 import com.dish_dash.user.service.RestaurantOwnerService;

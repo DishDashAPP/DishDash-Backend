@@ -12,8 +12,7 @@ public class FoodService {
     private FoodRepository foodRepository;
 
     public boolean addFoodItem(String name, String description, double price, int stock, String menuID) {
-        Food food = new Food(name, description, price, stock, menuID);
-        return foodRepository.create(food) != null;
+        return foodRepository.create(name, description, price, stock, menuID) != null;
     }
 
     public boolean deleteFood(String foodID) {

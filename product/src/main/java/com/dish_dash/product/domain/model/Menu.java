@@ -19,7 +19,6 @@ public class Menu {
     }
 
     private String generateMenuID() {
-        // Logic to generate menu ID
         return "MENU-" + System.currentTimeMillis();
     }
 

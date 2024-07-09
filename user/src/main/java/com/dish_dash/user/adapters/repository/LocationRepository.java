@@ -1,6 +1,6 @@
-package com.dish_dash.delivery.infrastructure.repository;
+package com.dish_dash.user.adapters.repository;
 
-import com.dish_dash.delivery.domain.model.Location;
+import com.dish_dash.user.domain.model.Location;
 import org.springframework.stereotype.Repository;
 
 @Repository
