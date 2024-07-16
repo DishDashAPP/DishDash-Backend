@@ -9,6 +9,8 @@ import com.dish_dash.user.domain.model.Customer;
 import com.dish_dash.user.domain.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 import java.util.UUID;
 
@@ -21,9 +23,12 @@ public class AuthenticationService {
     @Autowired
     private TokenRepository tokenRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     public String login(String username, String password) {
         AuthenticationInfo authInfo = authRepository.findByUsername(username);
-        if (authInfo != null && authInfo.getPassword().equals(password)) {
+        if (authInfo != null && passwordEncoder.matches(password, authInfo.getPassword())) {
             Token token = new Token();
             token.setValue(UUID.randomUUID().toString());
             token.setTokenID(authInfo.getUserID());
@@ -45,10 +50,11 @@ public class AuthenticationService {
         }
     }
 
-    public User register(String username, String password, String name) {
-        if (authRepository.register(username, password, name)) {
-            return new Customer();
-        }
-        return null;
+    public void register(String username, String password, String roles) {
+        AuthenticationInfo authInfo = new AuthenticationInfo();
+        authInfo.setUsername(username);
+        authInfo.setPassword(passwordEncoder.encode(password));
+        authInfo.setRoles(roles);
+        authRepository.save(authInfo);
     }
 }

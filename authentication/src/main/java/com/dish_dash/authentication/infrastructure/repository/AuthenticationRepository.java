@@ -9,5 +9,7 @@ public interface AuthenticationRepository {
     AuthenticationInfo findByUsername(String username);
     boolean create(String username, String password);
     boolean register(String username, String password, String name);
+
+    void save(AuthenticationInfo authInfo);
 }
 
