@@ -24,6 +24,11 @@ public class ProductController {
     @Autowired
     private MenuService menuService;
 
+    @PostMapping("/menus/{menuId}/foods")
+    public Food addFoodToMenu(@PathVariable Long menuId, @RequestBody Food food) {
+        return menuService.addFoodToMenu(menuId, food);
+    }
+
     // Category endpoints
     @GetMapping("/categories")
     public List<Category> getAllCategories() {

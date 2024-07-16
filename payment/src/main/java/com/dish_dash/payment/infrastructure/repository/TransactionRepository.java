@@ -1,7 +1,6 @@
 package com.dish_dash.payment.infrastructure.repository;
 
 
-import com.dish_dash.payment.domain.model.Price;
 import com.dish_dash.payment.domain.model.Transaction;
 
 public interface TransactionRepository {

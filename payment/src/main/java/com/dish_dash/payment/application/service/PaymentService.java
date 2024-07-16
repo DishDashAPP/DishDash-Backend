@@ -1,9 +1,7 @@
 package com.dish_dash.payment.application.service;
 
 import com.dish_dash.payment.domain.model.Payment;
-import com.dish_dash.payment.domain.model.Price;
 import com.dish_dash.payment.domain.model.Transaction;
-import com.dish_dash.payment.domain.model.TransactionStatus;
 import com.dish_dash.payment.infrastructure.repository.PaymentRepository;
 import com.dish_dash.payment.infrastructure.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.dish_dash.payment.domain.model;
+package com.dishDash;
 
 public enum TransactionStatus {
     PAID,

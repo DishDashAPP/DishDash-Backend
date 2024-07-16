@@ -3,7 +3,6 @@ package com.dish_dash.order.adapters.controller;
 import com.dish_dash.order.application.service.CustomerOrderService;
 import com.dish_dash.order.domain.model.Order;
 import com.dish_dash.order.domain.model.OrderItem;
-import com.dish_dash.payment.domain.model.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

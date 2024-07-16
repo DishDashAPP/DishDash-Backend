@@ -23,6 +23,7 @@
         <module>gateway</module>
         <module>user</module>
         <module>delivery</module>
+        <module>Common</module>
     </modules>
 
     <properties>
