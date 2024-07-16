@@ -2,13 +2,19 @@ package com.dish_dash.authentication.domain.model;
 
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import java.util.Date;
 import java.util.UUID;
 
+
 @Data
+@Entity
 public class Token {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @javax.persistence.Id
     private String tokenID;
     private String value;
     private Date expirationDate;
@@ -35,4 +41,5 @@ public class Token {
     private Date generateExpirationDate() {
         return new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000);
     }
+
 }
