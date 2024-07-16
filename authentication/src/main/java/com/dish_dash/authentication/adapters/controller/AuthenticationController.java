@@ -9,26 +9,34 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
 
     @Autowired
-    private AuthenticationService authenticationService;
+    private AuthenticationService authService;
 
     @PostMapping("/login")
-    public Token login(@RequestParam String username, @RequestParam String password) {
-        return authenticationService.login(username, password);
+    public String login(@RequestParam String username, @RequestParam String password) {
+        return authService.login(username, password);
+    }
+
+    @GetMapping("/validate")
+    public boolean validate(@RequestParam String token) {
+        return authService.validateToken(token);
     }
 
     @PostMapping("/logout")
-    public boolean logout(@RequestParam String tokenID) {
-        return authenticationService.logout(tokenID);
+    public void logout(@RequestParam String token) {
+        authService.logout(token);
     }
 
     @PostMapping("/register")
     public User register(@RequestParam String username, @RequestParam String password, @RequestParam String name) {
-        return authenticationService.register(username, password, name);
+        return authService.register(username, password, name);
     }
 }
