@@ -1,65 +1,64 @@
 package com.dish_dash.user.adapters.controller;
 
-import com.dish_dash.user.domain.model.DeliveryPersonStatus;
-import com.dish_dash.user.domain.model.RestaurantOwner;
-import com.dish_dash.user.domain.model.Customer;
-import com.dish_dash.user.domain.model.DeliveryPerson;
+import com.dishDash.common.dto.CustomerDto;
+import com.dishDash.common.dto.DeliveryPersonDto;
+import com.dishDash.common.dto.RestaurantOwnerDto;
+import com.dishDash.common.enums.DeliveryPersonStatus;
+import com.dishDash.common.feign.user.UserApi;
 import com.dish_dash.user.service.CustomerService;
 import com.dish_dash.user.service.DeliveryPersonService;
 import com.dish_dash.user.service.RestaurantOwnerService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
-public class UserController {
+@RequiredArgsConstructor
+public class UserController implements UserApi {
 
-    @Autowired
-    private CustomerService customerService;
+  private final CustomerService customerService;
 
-    @Autowired
-    private DeliveryPersonService deliveryPersonService;
+  private final DeliveryPersonService deliveryPersonService;
 
-    @Autowired
-    private RestaurantOwnerService restaurantOwnerService;
+  private final RestaurantOwnerService restaurantOwnerService;
 
-    @PutMapping("/customer")
-    public Customer modifyCustomerProfile(@RequestBody Customer customer) {
-        return customerService.modifyProfile(customer);
-    }
+  @Override
+  public Boolean modifyCustomerProfile(Long id, CustomerDto customerDto) {
+    return customerService.modifyProfile(id, customerDto);
+  }
 
-    @GetMapping("/customer/{id}")
-    public Customer getUserProfile(@PathVariable String id) {
-        return customerService.getUserProfile(id);
-    }
+  @Override
+  public CustomerDto getUserProfile(Long id) {
+    return customerService.getUserProfile(id);
+  }
 
-    @PutMapping("/restaurantOwner")
-    public RestaurantOwner modifyRestaurantProfile(@RequestBody RestaurantOwner restaurantOwner) {
-        return restaurantOwnerService.modifyProfile(restaurantOwner);
-    }
+  @Override
+  public Boolean modifyRestaurantProfile(Long id, RestaurantOwnerDto restaurantOwnerDto) {
+    return restaurantOwnerService.modifyProfile(id, restaurantOwnerDto);
+  }
 
-    @PutMapping("/deliveryPerson")
-    public DeliveryPerson modifyDeliveryPersonProfile(@RequestBody DeliveryPerson deliveryPerson) {
-        return deliveryPersonService.modifyProfile(deliveryPerson);
-    }
+  @Override
+  public Boolean modifyDeliveryPersonProfile(Long id, DeliveryPersonDto deliveryPersonDto) {
+    return deliveryPersonService.modifyProfile(id, deliveryPersonDto);
+  }
 
-    @PostMapping("/customer")
-    public boolean createCustomer(@RequestBody Customer customer) {
-        return customerService.createCustomer(customer);
-    }
+  @Override
+  public void createCustomer(CustomerDto customerDto) {
+    customerService.createCustomer(customerDto);
+  }
 
-    @PostMapping("/deliveryPerson")
-    public boolean createDeliveryPerson(@RequestBody DeliveryPerson deliveryPerson) {
-        return deliveryPersonService.createDeliveryPerson(deliveryPerson);
-    }
+  @Override
+  public void createDeliveryPerson(DeliveryPersonDto deliveryPersonDto) {
+    deliveryPersonService.createDeliveryPerson(deliveryPersonDto);
+  }
 
-    @PostMapping("/restaurantOwner")
-    public boolean createRestaurantOwner(@RequestBody RestaurantOwner restaurantOwner) {
-        return restaurantOwnerService.createRestaurantOwner(restaurantOwner);
-    }
+  @Override
+  public void createRestaurantOwner(RestaurantOwnerDto restaurantOwnerDto) {
+    restaurantOwnerService.createRestaurantOwner(restaurantOwnerDto);
+  }
 
-    @GetMapping("/deliveryPerson/status/{id}")
-    public DeliveryPersonStatus getDeliveryPersonStatus(@PathVariable String id) {
-        return deliveryPersonService.getDeliveryPersonStatus(id);
-    }
+  @Override
+  public DeliveryPersonStatus getDeliveryPersonStatus(Long id) {
+    return deliveryPersonService.getDeliveryPersonStatus(id);
+  }
 }

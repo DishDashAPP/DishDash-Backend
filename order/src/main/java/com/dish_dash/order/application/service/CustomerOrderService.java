@@ -4,55 +4,62 @@ import com.dish_dash.order.domain.model.Order;
 import com.dish_dash.order.domain.model.OrderItem;
 import com.dish_dash.order.domain.model.Rate;
 import com.dish_dash.order.domain.repository.OrderRepository;
-import com.dish_dash.payment.domain.model.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
+@RequiredArgsConstructor
 public class CustomerOrderService {
 
-    @Autowired
-    private OrderRepository orderRepository;
+  private final OrderRepository orderRepository;
 
-    public Transaction createOrder(String customerID, String restaurantOwnerID, List<OrderItem> orderItems) {
-        Order newOrder = new Order();
-        newOrder.setCustomerID(customerID);
-        newOrder.setRestaurantOwnerID(restaurantOwnerID);
-        newOrder.setOrderItems(orderItems);
-        orderRepository.createOrder(newOrder);
-        return new Transaction();
-    }
+  public Order createOrder(Long customerId, Long restaurantOwnerId, List<OrderItem> orderItems) {
+    Order order =
+        Order.builder()
+            .customerId(customerId)
+            .restaurantOwnerId(restaurantOwnerId)
+            .orderItems(orderItems)
+            .build();
+    return orderRepository.save(order);
+  }
 
-    public Order modifyOrder(String orderID, List<OrderItem> orderItems) {
-        return orderRepository.modifyOrder(orderID, orderItems);
+  public Order modifyOrder(Long orderId, List<OrderItem> orderItems) {
+    Optional<Order> orderOptional = orderRepository.findById(orderId);
+    if (orderOptional.isPresent()) {
+      orderOptional.get().setOrderItems(orderItems);
+      return orderRepository.save(orderOptional.get());
     }
+    return null;
+  }
 
-    public boolean setOrderRate(String customerID, String orderID, int point) {
-        Order order = orderRepository.findByID(orderID);
-        if (order != null) {
-            orderRepository.save(order);
-            return true;
-        }
-        return false;
+  public boolean setOrderRate(Long customerId, Long orderID, int point) {
+    Optional<Order> orderOptional = orderRepository.findById(orderID);
+    if (orderOptional.isPresent()) {
+      orderRepository.save(orderOptional.get());
+      return true;
     }
+    return false;
+  }
 
-    public boolean setDeliveryRate(String customerID, String orderID, int point) {
-        Order order = orderRepository.findByID(orderID);
-        if (order != null) {
-            order.setDeliveryPersonRate(new Rate());
-            orderRepository.save(order);
-            return true;
-        }
-        return false;
+  public boolean setDeliveryRate(Long customerID, Long orderID, int point) {
+    Optional<Order> order = orderRepository.findById(orderID);
+    if (order.isPresent()) {
+      order.get().setDeliveryPersonRate(Rate.builder().build());
+      orderRepository.save(order.get());
+      return true;
     }
+    return false;
+  }
 
-    public List<Order> getCustomerOrders(String customerID) {
-        return orderRepository.findByCustomerID(customerID);
-    }
+  public List<Order> getCustomerOrders(Long customerID) {
+    return orderRepository.findByCustomerId(customerID);
+  }
 
-    public Order getCustomerCurrentOrder(String customerID) {
-        return orderRepository.findCurrentOrderByCustomerID(customerID);
-    }
+  public Order getCustomerCurrentOrder(Long customerID) {
+    //    TODO GET FROM USER MODULE
+    //    return orderRepository.findCurrentOrderByCustomerId(customerID);
+    return Order.builder().build();
+  }
 }

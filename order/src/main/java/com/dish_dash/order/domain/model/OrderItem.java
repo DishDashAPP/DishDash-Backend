@@ -1,39 +1,29 @@
 package com.dish_dash.order.domain.model;
 
+import com.dishDash.common.Price;
 import javax.persistence.*;
+import lombok.*;
 
-import com.dish_dash.product.domain.model.Food;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.UUID;
-
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode
 @Entity
+@Table(name = "order_item")
 public class OrderItem {
-    @Id
-    private String orderItemID;
-    private String orderID;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Food food;
+  @Column(name = "order_id")
+  private Long orderId;
 
-    @Embedded
-    private Price price;
+  private Long foodId;
 
-    private int quantity;
+  @Embedded private Price price;
 
-    public OrderItem(Food food, Price price, int quantity) {
-        this.food = food;
-        this.price = price;
-        this.quantity = quantity;
-        this.orderItemID = generateOrderItemID();
-    }
-
-    private String generateOrderItemID() {
-        return UUID.randomUUID().toString();
-    }
+  private Integer quantity;
 }

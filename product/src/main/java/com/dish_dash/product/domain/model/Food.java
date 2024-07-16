@@ -1,36 +1,33 @@
 package com.dish_dash.product.domain.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import com.dishDash.common.Price;
+import com.dishDash.common.enums.CurrencyUnit;
 import javax.persistence.*;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode
 @Entity
+@Table(name = "food")
 public class Food {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String foodID;
-    private String name;
-    private String description;
-    @Embedded
-    private Price price;
-    private int stock;
-    @ManyToOne
-    @JoinColumn(name = "menu_id")
-    private Menu menu;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    public Food(String name, String description, double price, int stock, Menu menu) {
-        this.name = name;
-        this.description = description;
-        this.price = new Price(price, CurrencyUnit.TOMAN);
-        this.stock = stock;
-        this.menu = menu;
-        this.foodID = generateFoodID();
-    }
+  private String name;
+  private String description;
 
-    private String generateFoodID() {
-        return "FOOD-" + System.currentTimeMillis();
-    }
+  @Embedded @Builder.Default
+  private Price price = Price.builder().amount(0.0).unit(CurrencyUnit.TOMAN).build();
+
+  private Integer stock;
+
+  @ManyToOne
+  @JoinColumn(name = "menu_id")
+  private Menu menu;
 }

@@ -2,16 +2,12 @@ package com.dish_dash.authentication.adapters.controller;
 
 
 import com.dish_dash.authentication.application.service.AuthenticationService;
-import com.dish_dash.authentication.domain.model.Token;
-import com.dish_dash.user.domain.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 
 @RestController
 @RequestMapping("/auth")

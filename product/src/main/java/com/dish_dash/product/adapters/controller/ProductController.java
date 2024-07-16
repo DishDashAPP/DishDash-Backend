@@ -6,89 +6,86 @@ import com.dish_dash.product.application.service.MenuService;
 import com.dish_dash.product.domain.model.Category;
 import com.dish_dash.product.domain.model.Food;
 import com.dish_dash.product.domain.model.Menu;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/products")
+@RequiredArgsConstructor
 public class ProductController {
 
-    @Autowired
-    private CategoryService categoryService;
+  private final CategoryService categoryService;
 
-    @Autowired
-    private FoodService foodService;
+  private final FoodService foodService;
 
-    @Autowired
-    private MenuService menuService;
+  private final MenuService menuService;
 
-    @PostMapping("/menus/{menuId}/foods")
-    public Food addFoodToMenu(@PathVariable Long menuId, @RequestBody Food food) {
-        return menuService.addFoodToMenu(menuId, food);
-    }
+  @PostMapping("/menus/{menuId}/foods")
+  public Food addFoodToMenu(@PathVariable Long menuId, @RequestBody Food food) {
+    return menuService.addFoodToMenu(menuId, food);
+  }
 
-    // Category endpoints
-    @GetMapping("/categories")
-    public List<Category> getAllCategories() {
-        return categoryService.getAllCategories();
-    }
+  // Category endpoints
+  @GetMapping("/categories")
+  public List<Category> getAllCategories() {
+    return categoryService.getAllCategories();
+  }
 
-    @GetMapping("/categories/{id}")
-    public Category getCategoryById(@PathVariable Long id) {
-        return categoryService.getCategoryById(id);
-    }
+  @GetMapping("/categories/{id}")
+  public Category getCategoryById(@PathVariable Long id) {
+    return categoryService.getCategoryById(id);
+  }
 
-    @PostMapping("/categories")
-    public Category createCategory(@RequestBody Category category) {
-        return categoryService.saveCategory(category);
-    }
+  @PostMapping("/categories")
+  public Category createCategory(@RequestBody Category category) {
+    return categoryService.saveCategory(category);
+  }
 
-    @DeleteMapping("/categories/{id}")
-    public void deleteCategory(@PathVariable Long id) {
-        categoryService.deleteCategory(id);
-    }
+  @DeleteMapping("/categories/{id}")
+  public void deleteCategory(@PathVariable Long id) {
+    categoryService.deleteCategory(id);
+  }
 
-    // Food endpoints
-    @GetMapping("/foods")
-    public List<Food> getAllFoods() {
-        return foodService.getAllFoods();
-    }
+  // Food endpoints
+  @GetMapping("/foods")
+  public List<Food> getAllFoods() {
+    return foodService.getAllFoods();
+  }
 
-    @GetMapping("/foods/{id}")
-    public Food getFoodById(@PathVariable Long id) {
-        return foodService.getFoodById(id);
-    }
+  @GetMapping("/foods/{id}")
+  public Food getFoodById(@PathVariable Long id) {
+    return foodService.getFoodById(id);
+  }
 
-    @PostMapping("/foods")
-    public Food createFood(@RequestBody Food food) {
-        return foodService.saveFood(food);
-    }
+  @PostMapping("/foods")
+  public Food createFood(@RequestBody Food food) {
+    return foodService.saveFood(food);
+  }
 
-    @DeleteMapping("/foods/{id}")
-    public void deleteFood(@PathVariable Long id) {
-        foodService.deleteFood(id);
-    }
+  @DeleteMapping("/foods/{id}")
+  public void deleteFood(@PathVariable Long id) {
+    foodService.deleteFood(id);
+  }
 
-    // Menu endpoints
-    @GetMapping("/menus")
-    public List<Menu> getAllMenus() {
-        return menuService.getAllMenus();
-    }
+  // Menu endpoints
+  @GetMapping("/menus")
+  public List<Menu> getAllMenus() {
+    return menuService.getAllMenus();
+  }
 
-    @GetMapping("/menus/{id}")
-    public Menu getMenuById(@PathVariable Long id) {
-        return menuService.getMenuById(id);
-    }
+  @GetMapping("/menus/{id}")
+  public Menu getMenuById(@PathVariable Long id) {
+    return menuService.getMenuById(id);
+  }
 
-    @PostMapping("/menus")
-    public Menu createMenu(@RequestBody Menu menu) {
-        return menuService.saveMenu(menu);
-    }
+  @PostMapping("/menus")
+  public Menu createMenu(@RequestBody Menu menu) {
+    return menuService.saveMenu(menu);
+  }
 
-    @DeleteMapping("/menus/{id}")
-    public void deleteMenu(@PathVariable Long id) {
-        menuService.deleteMenu(id);
-    }
+  @DeleteMapping("/menus/{id}")
+  public void deleteMenu(@PathVariable Long id) {
+    menuService.deleteMenu(id);
+  }
 }

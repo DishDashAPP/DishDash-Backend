@@ -14,42 +14,41 @@ import java.util.UUID;
 @Service
 public class AuthenticationService {
 
-    @Autowired
-    private AuthenticationRepository authRepository;
+  @Autowired private AuthenticationRepository authRepository;
 
-    @Autowired
-    private TokenRepository tokenRepository;
+  @Autowired private TokenRepository tokenRepository;
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+  @Autowired private BCryptPasswordEncoder passwordEncoder;
 
-    public String login(String username, String password) {
-        AuthenticationInfo authInfo = authRepository.findByUsername(username);
-        if (authInfo != null && passwordEncoder.matches(password, authInfo.getPassword())) {
-            Token token = new Token();
-            token.setValue(UUID.randomUUID().toString());
-            token.setTokenID(authInfo.getUserID());
-            tokenRepository.save(token);
-            return token.getValue();
-        }
-        return null;
+  public String login(String username, String password) {
+    AuthenticationInfo authInfo = authRepository.findByUsername(username);
+    if (authInfo != null && passwordEncoder.matches(password, authInfo.getPassword())) {
+      Token token = new Token();
+      token.setValue(UUID.randomUUID().toString());
+      token.setTokenID(authInfo.getUserID());
+      tokenRepository.save(token);
+      return token.getValue();
     }
+    return null;
+  }
 
-    public boolean validateToken(String token) {
-        Optional<Token> foundToken = tokenRepository.findByValue(token); // Changed findByToken to findByValue
-        return foundToken.isPresent();
-    }
+  public boolean validateToken(String token) {
+    Optional<Token> foundToken =
+        tokenRepository.findByValue(token); // Changed findByToken to findByValue
+    return foundToken.isPresent();
+  }
 
-    public void logout(String token) {
-        Optional<Token> foundToken = tokenRepository.findByValue(token); // Changed findByToken to findByValue
-        foundToken.ifPresent(value -> tokenRepository.delete(value));
-    }
+  public void logout(String token) {
+    Optional<Token> foundToken =
+        tokenRepository.findByValue(token); // Changed findByToken to findByValue
+    foundToken.ifPresent(value -> tokenRepository.delete(value));
+  }
 
-    public void register(String username, String password, String roles) {
-        AuthenticationInfo authInfo = new AuthenticationInfo();
-        authInfo.setUsername(username);
-        authInfo.setPassword(passwordEncoder.encode(password));
-        authInfo.setRoles(roles);
-        authRepository.save(authInfo);
-    }
+  public void register(String username, String password, String roles) {
+    AuthenticationInfo authInfo = new AuthenticationInfo();
+    authInfo.setUsername(username);
+    authInfo.setPassword(passwordEncoder.encode(password));
+    authInfo.setRoles(roles);
+    authRepository.save(authInfo);
+  }
 }

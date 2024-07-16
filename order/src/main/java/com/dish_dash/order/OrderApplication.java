@@ -2,8 +2,10 @@ package com.dish_dash.order;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
-@SpringBootApplication(scanBasePackages = "com.dish_dash.order")
+@SpringBootApplication
+@EnableEurekaClient
 public class OrderApplication {
   public static void main(String[] args) {
     SpringApplication.run(OrderApplication.class, args);

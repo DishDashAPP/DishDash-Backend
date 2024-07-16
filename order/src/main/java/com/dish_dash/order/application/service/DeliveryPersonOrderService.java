@@ -3,26 +3,29 @@ package com.dish_dash.order.application.service;
 import com.dish_dash.order.domain.model.Order;
 import com.dish_dash.order.domain.model.OrderStatus;
 import com.dish_dash.order.domain.repository.OrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class DeliveryPersonOrderService {
 
-    @Autowired
-    private OrderRepository orderRepository;
+  private final OrderRepository orderRepository;
 
-    public boolean updateOrderStatusByDeliveryPerson(String orderID, OrderStatus status) {
-        Order order = orderRepository.findByID(orderID);
-        if (order != null) {
-            order.setStatus(status);
-            orderRepository.save(order);
-            return true;
-        }
-        return false;
+  public boolean updateOrderStatusByDeliveryPerson(Long orderID, OrderStatus status) {
+    Optional<Order> order = orderRepository.findById(orderID);
+    if (order.isPresent()) {
+      order.get().setStatus(status);
+      orderRepository.save(order.get());
+      return true;
     }
+    return false;
+  }
 
-    public Order getDeliveryPersonCurrentOrder(String deliveryPersonID) {
-        return orderRepository.findCurrentOrderByDeliveryPersonID(deliveryPersonID);
-    }
+  public Order getDeliveryPersonCurrentOrder(String deliveryPersonID) {
+    //    todo This is wrong
+    //    return orderRepository.findCurrentOrderByDeliveryPersonID(deliveryPersonID);
+    return Order.builder().build();
+  }
 }

@@ -1,37 +1,30 @@
 package com.dish_dash.order.domain.repository;
 
 import com.dish_dash.order.domain.model.Order;
-import com.dish_dash.order.domain.model.OrderItem;
 import com.dish_dash.order.domain.model.OrderStatus;
+import java.util.List;
+import java.util.Optional;
+import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface OrderRepository extends JpaRepository<Order, String> {
-    Order findByID(String id);
+public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    default Order createOrder(Order order) {
-        return save(order);
-    }
+  List<Order> findAllByRestaurantOwnerIdAndStatusIn(
+      Long restaurantOwnerId, List<OrderStatus> status);
 
-    default Order modifyOrder(String orderID, List<OrderItem> orderItems) {
-        Order order = findByID(orderID);
-        if (order != null) {
-            order.setOrderItems(orderItems);
-            return save(order);
-        }
-        return null;
-    }
+  //  Order findCurrentOrderByDeliveryPersonID(String deliveryPersonId);
 
-    List<Order> findOrderHistoryByRestaurantOwnerID(String restaurantOwnerID);
+  List<Order> findByCustomerId(Long customerID);
 
-    List<Order> findActiveOrdersByRestaurantOwnerID(String restaurantOwnerID);
+  @Query("UPDATE Order SET status =:status where id=:id")
+  @Modifying
+  @Transactional
+  void updateStatus(@Param("status") OrderStatus status, @Param("id") Long id);
 
-    List<Order> findByCustomerID(String customerID);
-
-    Order findCurrentOrderByCustomerID(String customerID);
-
-    Order findCurrentOrderByDeliveryPersonID(String deliveryPersonID);
+  Optional<Order> findCurrentOrderByCustomerId(Long customerId);
 }

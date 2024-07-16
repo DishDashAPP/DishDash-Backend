@@ -2,32 +2,31 @@ package com.dish_dash.order.application.service;
 
 import com.dish_dash.order.domain.model.Rate;
 import com.dish_dash.order.domain.repository.RateRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class RateService {
 
-    @Autowired
-    private RateRepository rateRepository;
+  private final RateRepository rateRepository;
 
-    public boolean setOrderRate(String customerID, String orderID, int point) {
-        Rate rate = new Rate();
-        rate.setCustomerID(customerID);
-        rate.setOrderID(orderID);
-        rate.setPoint(point);
-        return rateRepository.save(rate) != null;
-    }
+  public boolean setOrderRate(Long customerId, Long orderId, int point) {
+//    Rate rate = Rate.builder().customerId(customerId).orderId(orderId).point(point).build();
+//    rateRepository.save(rate);
+    return true;
+  }
 
-    public boolean setDeliveryRate(String customerID, String orderID, int point) {
-        Rate rate = new Rate();
-        rate.setCustomerID(customerID);
-        rate.setOrderID(orderID);
-        rate.setPoint(point);
-        return rateRepository.save(rate) != null;
-    }
+  public boolean setDeliveryRate(Long customerId, Long orderId, int point) {
+//    Rate rate = Rate.builder().customerId(customerId).orderId(orderId).point(point).build();
+//    rateRepository.save(rate);
+    return true;
+  }
 
-    public Rate getDeliveryRate(String deliveryPersonID) {
-        return rateRepository.findByDeliveryPersonID(deliveryPersonID);
-    }
+  public Rate getDeliveryRate(String deliveryPersonID) {
+    // TODO rate, no delivery person
+
+    // return rateRepository.findByDeliveryPersonID(deliveryPersonID);
+    return Rate.builder().build();
+  }
 }

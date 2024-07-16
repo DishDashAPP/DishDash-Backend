@@ -1,27 +1,31 @@
 package com.dish_dash.payment.domain.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import com.dishDash.common.Price;
+import com.dishDash.common.enums.TransactionStatus;
 import java.util.UUID;
+import javax.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode
+@Entity
+@Table(name = "transaction")
 public class Transaction {
-    private UUID id;
-    private TransactionStatus status;
-    private Price price;
-    private String orderID;
+  @Id
+  @GeneratedValue(generator = "UUID")
+  @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+  private UUID id;
 
-    public Transaction(String orderID, Price price) {
-        this.id = generateTransactionID();
-        this.status = TransactionStatus.NOT_PAID;
-        this.price = price;
-        this.orderID = orderID;
-    }
+  @Column(name = "status", length = 32, columnDefinition = "varchar(32) default 'NOT_PAID' ")
+  @Enumerated(EnumType.STRING)
+  private TransactionStatus status;
 
-    private UUID generateTransactionID() {
-        return UUID.randomUUID();
-    }
+  @Embedded private Price price;
+  private Long orderId;
 }
-

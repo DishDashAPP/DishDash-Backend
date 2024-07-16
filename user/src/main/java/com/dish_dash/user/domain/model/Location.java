@@ -1,35 +1,27 @@
 package com.dish_dash.user.domain.model;
 
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import lombok.*;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode
 @Entity
 @Table(name = "locations")
-@NoArgsConstructor
-@Embeddable
 public class Location {
-    @Id
-    private String id;
-    private long latitude;
-    private long longitude;
-    private LocalDateTime timestamp;
-    private String deliveryID;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long id;
 
-    public Location(long latitude, long longitude, String deliveryID) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.timestamp = LocalDateTime.now();
-        this.deliveryID = deliveryID;
-        this.id = generateLocationID();
-    }
+  private long latitude;
+  private long longitude;
+  private LocalDateTime timestamp;
 
-    private String generateLocationID() {
-        return "LOC-" + System.currentTimeMillis();
-    }
+  @Column(name = "delivery_id")
+  private Long deliveryID;
 }

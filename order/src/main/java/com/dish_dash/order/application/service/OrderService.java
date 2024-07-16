@@ -3,29 +3,30 @@ package com.dish_dash.order.application.service;
 import com.dish_dash.order.domain.model.Order;
 import com.dish_dash.order.domain.model.OrderStatus;
 import com.dish_dash.order.domain.repository.OrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService {
 
-    @Autowired
-    private OrderRepository orderRepository;
+  private final OrderRepository orderRepository;
 
-    public Order viewOrder(String orderID) {
-        return orderRepository.findById(orderID).orElse(null);
-    }
+  public Order viewOrder(Long orderID) {
+    return orderRepository.findById(orderID).orElse(null);
+  }
 
-    public OrderStatus getOrderStatus(String orderID) {
-        Order order = orderRepository.findById(orderID).orElse(null);
-        if (order != null) {
-            return order.getStatus();
-        }
-        return null;
+  public OrderStatus getOrderStatus(Long orderID) {
+    Order order = orderRepository.findById(orderID).orElse(null);
+    if (order != null) {
+      return order.getStatus();
     }
+    return null;
+  }
 
-    public boolean prepareOrder(Order order) {
-        Order savedOrder = orderRepository.save(order);
-        return savedOrder != null;
-    }
+  public boolean prepareOrder(Order order) {
+    // TODO call updateStatus
+    orderRepository.save(order);
+    return true;
+  }
 }

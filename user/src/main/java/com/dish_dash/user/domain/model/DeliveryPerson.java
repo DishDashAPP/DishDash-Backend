@@ -1,46 +1,33 @@
 package com.dish_dash.user.domain.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-@Data
+import com.dishDash.common.enums.DeliveryPersonStatus;
+import lombok.*;
+
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode
 @Entity
 @Table(name = "delivery_persons")
 public class DeliveryPerson implements User {
 
-    @Id
-    private String id;
-    private String name;
-    private String phoneNumber;
-    private Location location;
-    private String currentOrderId;
-    private DeliveryPersonStatus status;
-    private String username;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    public DeliveryPerson(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+  private String name;
+  private String phoneNumber;
 
-    public boolean setLocation(Location location) {
-        this.location = location;
-        return true;
-    }
+  @ManyToOne
+  @JoinColumn(name = "location_id")
+  private Location location;
 
-    public boolean assignOrder(String orderID) {
-        return true;
-    }
-
-    public String getAssignedOrder(String orderID) {
-        return currentOrderId;
-    }
-
-    public boolean setStatus(DeliveryPersonStatus status) {
-        this.status = status;
-        return true;
-    }
+  private Long currentOrderId;
+  private DeliveryPersonStatus status;
+  private String username;
 }

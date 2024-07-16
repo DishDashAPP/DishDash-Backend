@@ -3,32 +3,39 @@ package com.dish_dash.order.application.service;
 import com.dish_dash.order.domain.model.Order;
 import com.dish_dash.order.domain.model.OrderStatus;
 import com.dish_dash.order.domain.repository.OrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
+@RequiredArgsConstructor
 public class RestaurantOrderService {
 
-    @Autowired
-    private OrderRepository orderRepository;
+  private final OrderRepository orderRepository;
 
-    public boolean updateOrderStatusByRestaurantOwner(String orderID, OrderStatus status) {
-        Order order = orderRepository.findByID(orderID);
-        if (order != null) {
-            order.setStatus(status);
-            orderRepository.save(order);
-            return true;
-        }
-        return false;
+  public boolean updateOrderStatusByRestaurantOwner(Long orderId, OrderStatus status) {
+    Optional<Order> orderOptional = orderRepository.findById(orderId);
+    if (orderOptional.isPresent()) {
+      orderOptional.get().setStatus(status);
+      orderRepository.updateStatus(status, orderId);
+      return true;
     }
+    return false;
+  }
 
-    public List<Order> getRestaurantOwnerOrderHistory(String restaurantOwnerID) {
-        return orderRepository.findOrderHistoryByRestaurantOwnerID(restaurantOwnerID);
-    }
+  public List<Order> getRestaurantOwnerOrderHistory(Long restaurantOwnerID) {
+    return orderRepository.findAllByRestaurantOwnerIdAndStatusIn(
+        restaurantOwnerID,
+        List.of(
+            OrderStatus.DELIVERED,
+            OrderStatus.NOT_PAID,
+            OrderStatus.DELIVERING,
+            OrderStatus.PREPARING));
+  }
 
-    public List<Order> getRestaurantOwnerActiveOrders(String restaurantOwnerID) {
-        return orderRepository.findActiveOrdersByRestaurantOwnerID(restaurantOwnerID);
-    }
+  public List<Order> getRestaurantOwnerActiveOrders(Long restaurantOwnerID) {
+    return orderRepository.findAllByRestaurantOwnerIdAndStatusIn(
+        restaurantOwnerID, List.of(OrderStatus.PREPARING, OrderStatus.DELIVERING));
+  }
 }

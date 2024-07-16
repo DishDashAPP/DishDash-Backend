@@ -1,35 +1,43 @@
 package com.dish_dash.user.service;
 
-import com.dish_dash.user.domain.model.DeliveryPerson;
-import com.dish_dash.user.domain.model.DeliveryPersonStatus;
+import com.dishDash.common.dto.DeliveryPersonDto;
+import com.dishDash.common.enums.DeliveryPersonStatus;
 import com.dish_dash.user.adapters.repository.DeliveryPersonRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.dish_dash.user.domain.mapper.UserMapper;
+import com.dish_dash.user.domain.model.DeliveryPerson;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class DeliveryPersonService {
 
-    @Autowired
-    private DeliveryPersonRepository deliveryPersonRepository;
+  private final DeliveryPersonRepository deliveryPersonRepository;
 
-    public DeliveryPerson modifyProfile(DeliveryPerson deliveryPerson) {
-        return deliveryPersonRepository.save(deliveryPerson);
-    }
+  public Boolean modifyProfile(Long id, DeliveryPersonDto deliveryPersonDto) {
+    return deliveryPersonRepository
+        .findById(id)
+        .map(
+            deliveryPerson -> {
+              UserMapper.INSTANCE.updateDeliveryPersonFromDto(deliveryPersonDto, deliveryPerson);
+              deliveryPersonRepository.save(deliveryPerson);
+              return true;
+            })
+        .orElse(false);
+  }
 
-    public boolean createDeliveryPerson(DeliveryPerson deliveryPerson) {
-        DeliveryPerson savedDeliveryPerson = deliveryPersonRepository.save(deliveryPerson);
-        return savedDeliveryPerson != null;
-    }
+  public void createDeliveryPerson(DeliveryPersonDto deliveryPersonDto) {
+    deliveryPersonRepository.save(UserMapper.INSTANCE.dtoToDeliveryPerson(deliveryPersonDto));
+  }
 
-    public DeliveryPerson getUserProfile(String deliveryPersonID) {
-        return deliveryPersonRepository.findById(deliveryPersonID).orElse(null);
-    }
+  public DeliveryPerson getUserProfile(Long deliveryPersonId) {
+    return deliveryPersonRepository.findById(deliveryPersonId).orElse(null);
+  }
 
-    public DeliveryPersonStatus getDeliveryPersonStatus(String deliveryPersonID) {
-        DeliveryPerson deliveryPerson = deliveryPersonRepository.findById(deliveryPersonID).orElse(null);
-        if (deliveryPerson != null) {
-            return deliveryPerson.getStatus();
-        }
-        return null;
-    }
+  public DeliveryPersonStatus getDeliveryPersonStatus(Long deliveryPersonId) {
+    return deliveryPersonRepository
+        .findById(deliveryPersonId)
+        .map(DeliveryPerson::getStatus)
+        .orElse(null);
+  }
 }

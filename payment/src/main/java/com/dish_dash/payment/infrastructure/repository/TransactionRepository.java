@@ -1,11 +1,9 @@
 package com.dish_dash.payment.infrastructure.repository;
 
-
 import com.dish_dash.payment.domain.model.Transaction;
+import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface TransactionRepository {
-    Transaction findByID(String transactionID);
-    Transaction create(String orderID, Price price);
-    boolean modify(Transaction transaction);
-}
-
+@Repository
+public interface TransactionRepository extends JpaRepository<Transaction, UUID> {}

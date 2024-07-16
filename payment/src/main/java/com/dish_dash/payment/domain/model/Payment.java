@@ -1,25 +1,31 @@
 package com.dish_dash.payment.domain.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.UUID;
+import javax.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode
+@Entity
+@Table(name = "payment")
 public class Payment {
-    private UUID traceID;
-    private Date dateTime;
-    private String transactionID;
+  @Id
+  @GeneratedValue(generator = "UUID")
+  @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+  private UUID id;
 
-    public Payment(String transactionID) {
-        this.traceID = generateTraceID();
-        this.dateTime = new Date();
-        this.transactionID = transactionID;
-    }
+  @CreationTimestamp
+  @Column(name = "create_time")
+  private Timestamp createTime;
 
-    private UUID generateTraceID() {
-        return UUID.randomUUID();
-    }
+  @Column(name = "transaction_id")
+  private String transactionId;
 }

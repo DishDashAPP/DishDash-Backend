@@ -1,10 +1,8 @@
 package com.dish_dash.payment.infrastructure.repository;
 
 import com.dish_dash.payment.domain.model.Payment;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface PaymentRepository {
-    Payment findByID(String traceID);
-    boolean create(Payment payment);
-    boolean modify(Payment payment);
-}
-
+@Repository
+public interface PaymentRepository extends JpaRepository<Payment, Long> {}

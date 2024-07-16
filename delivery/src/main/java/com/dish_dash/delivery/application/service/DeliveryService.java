@@ -1,37 +1,38 @@
 package com.dish_dash.delivery.application.service;
 
+import com.dishDash.common.dto.LocationDto;
 import com.dish_dash.delivery.domain.model.Invoice;
-import com.dish_dash.user.domain.model.DeliveryPerson;
-import com.dish_dash.user.domain.model.Location;
 import com.dish_dash.delivery.infrastructure.repository.InvoiceRepository;
-import com.dish_dash.user.adapters.repository.LocationRepository;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DeliveryService {
 
-    @Autowired
-    private InvoiceRepository invoiceRepository;
+  @Autowired private InvoiceRepository invoiceRepository;
 
-    @Autowired
-    private LocationRepository locationRepository;
+  //  @Autowired private LocationRepository locationRepository;
 
-    public boolean setLocation(Location location, String deliveryPersonId) {
-        return locationRepository.modify(location);
-    }
+  public boolean setLocation(LocationDto locationDto, String deliveryPersonId) {
+    //    return locationRepository.modify(location);
+    return true;
+  }
 
-    public Location getLocation(String deliveryPersonId) {
-        return locationRepository.findByID(deliveryPersonId);
-    }
+  public LocationDto getLocation(String deliveryPersonId) {
+    //    return locationRepository.findByID(deliveryPersonId);
+    return LocationDto.builder().build();
+  }
 
-    public boolean assignOrder(String orderId, String deliveryPersonId) {
-        Invoice invoice = invoiceRepository.getInvoice(orderId);
-        invoice.setDeliveryPerson(new DeliveryPerson());
-        return invoiceRepository.modify(invoice);
-    }
+  public boolean assignOrder(Long orderId, Long deliveryPersonId) {
+    Optional<Invoice> invoiceOptional = invoiceRepository.findById(orderId);
+    if (invoiceOptional.isEmpty()) return false;
+    invoiceOptional.get().setDeliveryPersonId(deliveryPersonId);
+    invoiceRepository.save(invoiceOptional.get());
+    return true;
+  }
 
-    public Invoice getInvoice(String orderId) {
-        return invoiceRepository.getInvoice(orderId);
-    }
+  public Invoice getInvoice(Long orderId) {
+    return invoiceRepository.findById(orderId).orElse(null);
+  }
 }

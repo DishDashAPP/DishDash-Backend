@@ -1,73 +1,66 @@
 package com.dish_dash.order.domain.model;
 
-import javax.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import java.util.Date;
+import com.dishDash.common.Price;
+import com.dishDash.common.enums.CurrencyUnit;
+import java.sql.Timestamp;
 import java.util.List;
+import javax.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode
 @Entity
+@Table(name = "orders")
 public class Order {
-    @Id
-    private String orderID;
-    private Date orderDate;
-    private OrderStatus status;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<OrderItem> orderItems;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String restaurantOwnerID;
-    private String customerID;
+  @Column(name = "create_time")
+  @CreationTimestamp
+  private Timestamp createTime;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Review review;
+  @Column(name = "status", length = 32, columnDefinition = "varchar(32) default 'PREPARING' ")
+  @Enumerated(EnumType.STRING)
+  private OrderStatus status;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Rate restaurantRate;
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "orderId")
+  private List<OrderItem> orderItems;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Rate deliveryPersonRate;
+  @Column(name = "restaurant_owner_id")
+  private Long restaurantOwnerId;
 
-    @Embedded
-    private Price totalPrice;
+  @Column(name = "customer_id")
+  private Long customerId;
 
-    public Order(String customerID, String restaurantOwnerID, List<OrderItem> orderItems) {
-        this.customerID = customerID;
-        this.restaurantOwnerID = restaurantOwnerID;
-        this.orderItems = orderItems;
-        this.orderDate = new Date();
-        this.status = OrderStatus.PREPARING;
-        calculateTotalPrice();
-    }
+  @OneToOne(cascade = CascadeType.ALL)
+  @PrimaryKeyJoinColumn
+  private Review review;
 
-    public void updateStatus(OrderStatus status) {
-        this.status = status;
-    }
+  @OneToOne(cascade = CascadeType.ALL)
+  @PrimaryKeyJoinColumn
+  private Rate restaurantRate;
 
-    public void calculateTotalPrice() {
-        double total = orderItems.stream().mapToDouble(item -> item.getPrice().getAmount()).sum();
-        this.totalPrice = new Price(total, CurrencyUnit.TOMAN);
-    }
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @PrimaryKeyJoinColumn
+  private Rate deliveryPersonRate;
 
-    public boolean setReview(Review review) {
-        if (this.review == null) {
-            this.review = review;
-            return true;
-        }
-        return false;
-    }
+  @Column(name = "total_price")
+  @Embedded
+  private Price totalPrice;
 
-    public boolean setRate(Rate rate) {
-        if (rate != null) {
-            if (rate.getCustomerID().equals(this.customerID) && rate.getOrderID().equals(this.orderID)) {
-                this.restaurantRate = rate;
-                return true;
-            }
-        }
-        return false;
-    }
+  @PostLoad
+  @PrePersist
+  @PreUpdate
+  private void calculateTotalPrice() {
+    double total = orderItems.stream().mapToDouble(item -> item.getPrice().getAmount()).sum();
+    this.totalPrice = new Price(total, CurrencyUnit.TOMAN);
+  }
 }

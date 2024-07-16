@@ -1,35 +1,33 @@
 package com.dish_dash.user.domain.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.*;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode
 @Entity
 @Table(name = "customers")
 public class Customer implements User {
 
-    @Id
-    private String id;
-    private String name;
-    private String phoneNumber;
-    private String address;
-    private String username;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ElementCollection
-    @CollectionTable(name = "customer_orders", joinColumns = @JoinColumn(name = "customer_id"))
-    @Column(name = "order_id")
-    private List<String> orderIds = new ArrayList<>();
+  private String name;
+  private String phoneNumber;
+  private String address;
+  private String username;
 
-    public Customer(String id, String name, String phoneNumber, String address, String username) {
-        this.id = id;
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.address = address;
-        this.username = username;
-    }
+  @ElementCollection
+  @CollectionTable(name = "customer_orders", joinColumns = @JoinColumn(name = "customer_id"))
+  @Column(name = "order_id")
+  @Singular
+  private List<String> orderIds = new ArrayList<>();
 }

@@ -1,25 +1,29 @@
 package com.dish_dash.order.domain.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import javax.persistence.*;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode
 @Entity
+@Table(name = "review")
 public class Review {
-    @Id
-    private String reviewID;
-    private String comment;
-    private String customerID;
-    private String orderID;
 
-    public Review(String comment, String customerID, String orderID) {
-        this.comment = comment;
-        this.customerID = customerID;
-        this.orderID = orderID;
-    }
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
+
+  private String comment;
+
+  @Column(name = "customer_id")
+  private Long customerId;
+
+  @Column(name = "order_id")
+  private Long orderId;
 }

@@ -8,12 +8,12 @@ import java.util.Optional;
 
 @Repository
 public interface TokenRepository extends JpaRepository<Token, Long> {
-    Token findByTokenID(String tokenID);
+  Token findByTokenID(String tokenID);
 
-    @Override
-    <S extends Token> S save(S entity);
+  @Override
+  <S extends Token> S save(S entity);
 
-    Optional<Token> findByValue(String value);
+  Optional<Token> findByValue(String value);
 
-    void deleteByTokenID(String tokenID);
+  void deleteByTokenID(String tokenID);
 }

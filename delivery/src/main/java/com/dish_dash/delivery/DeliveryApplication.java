@@ -1,9 +1,11 @@
-package com.dish_dash.authentication;
+package com.dish_dash.delivery;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
-@SpringBootApplication(scanBasePackages = "com.dish_dash.authentication")
+@SpringBootApplication
+@EnableEurekaClient
 public class DeliveryApplication {
   public static void main(String[] args) {
     SpringApplication.run(DeliveryApplication.class, args);
