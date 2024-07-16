@@ -1,14 +1,17 @@
 package com.dish_dash.authentication.infrastructure.repository;
 
 import com.dish_dash.authentication.domain.model.Token;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 
 @Repository
-public interface TokenRepository {
+public interface TokenRepository extends JpaRepository<Token, Long> {
     Token findByID(String tokenID);
+
     boolean create(String tokenID, String value, Date expirationDate);
+
     boolean modify(String tokenID);
 
     Token save(Token token);
