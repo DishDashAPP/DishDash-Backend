@@ -14,7 +14,8 @@ import javax.persistence.Id;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String categoryID;
+    private Long categoryID; // Change to Long
+
     private String name;
 
     public Category(String name) {
@@ -22,7 +23,7 @@ public class Category {
         this.categoryID = generateCategoryID();
     }
 
-    private String generateCategoryID() {
-        return "CAT-" + System.currentTimeMillis();
+    private Long generateCategoryID() {
+        return System.currentTimeMillis();
     }
 }

@@ -6,7 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MenuRepository extends JpaRepository<Menu, Long> {
-    Menu findByID(String menuID);
-    Menu create(String restaurantID);
-    boolean addCategory(String name);
 }
