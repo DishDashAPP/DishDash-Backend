@@ -19,6 +19,7 @@ public class DeliveryPerson implements User {
     private Location location;
     private String currentOrderId;
     private DeliveryPersonStatus status;
+    private String username;
 
     public DeliveryPerson(String id, String name) {
         this.id = id;

@@ -4,4 +4,5 @@ public interface User {
     String getId();
     String getName();
     String getPhoneNumber();
+    String getUsername();
 }

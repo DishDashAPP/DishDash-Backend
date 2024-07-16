@@ -4,19 +4,16 @@ import com.dish_dash.authentication.domain.model.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
+import java.util.Optional;
 
 @Repository
 public interface TokenRepository extends JpaRepository<Token, Long> {
-    Token findByID(String tokenID);
+    Token findByTokenID(String tokenID);
 
-    boolean create(String tokenID, String value, Date expirationDate);
+    @Override
+    <S extends Token> S save(S entity);
 
-    boolean modify(String tokenID);
+    Optional<Token> findByValue(String value);
 
-    Token save(Token token);
-
-    Token findByToken(String token);
-
-    void delete(Token foundToken);
+    void deleteByTokenID(String tokenID);
 }

@@ -9,7 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-public class ApplicationConfiguration {
+public class AuthenticationConfiguration {
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -21,10 +21,10 @@ public class ApplicationConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable) // todo:consider enabling in production
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/register").permitAll()
-                        .requestMatchers("/auth/login").permitAll()
-                        .requestMatchers("/auth/validate").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/auth/logout").hasAnyRole("USER", "ADMIN")
+                        .antMatchers("/auth/register").permitAll()
+                        .antMatchers("/auth/login").permitAll()
+                        .antMatchers("/auth/validate").hasAnyRole("USER", "ADMIN")
+                        .antMatchers("/auth/logout").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());

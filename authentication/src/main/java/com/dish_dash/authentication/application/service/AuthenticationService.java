@@ -1,17 +1,14 @@
 package com.dish_dash.authentication.application.service;
 
-
 import com.dish_dash.authentication.domain.model.AuthenticationInfo;
 import com.dish_dash.authentication.domain.model.Token;
 import com.dish_dash.authentication.infrastructure.repository.AuthenticationRepository;
 import com.dish_dash.authentication.infrastructure.repository.TokenRepository;
-import com.dish_dash.user.domain.model.Customer;
-import com.dish_dash.user.domain.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
-
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -39,15 +36,13 @@ public class AuthenticationService {
     }
 
     public boolean validateToken(String token) {
-        Token foundToken = tokenRepository.findByToken(token);
-        return foundToken != null;
+        Optional<Token> foundToken = tokenRepository.findByValue(token); // Changed findByToken to findByValue
+        return foundToken.isPresent();
     }
 
     public void logout(String token) {
-        Token foundToken = tokenRepository.findByToken(token);
-        if (foundToken != null) {
-            tokenRepository.delete(foundToken);
-        }
+        Optional<Token> foundToken = tokenRepository.findByValue(token); // Changed findByToken to findByValue
+        foundToken.ifPresent(value -> tokenRepository.delete(value));
     }
 
     public void register(String username, String password, String roles) {
