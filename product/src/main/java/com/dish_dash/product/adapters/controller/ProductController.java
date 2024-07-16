@@ -1,55 +1,89 @@
 package com.dish_dash.product.adapters.controller;
 
-import com.dish_dash.product.application.service.MenuService;
-import com.dish_dash.product.application.service.FoodService;
 import com.dish_dash.product.application.service.CategoryService;
-import com.dish_dash.product.domain.model.Menu;
-import com.dish_dash.product.domain.model.Food;
+import com.dish_dash.product.application.service.FoodService;
+import com.dish_dash.product.application.service.MenuService;
 import com.dish_dash.product.domain.model.Category;
+import com.dish_dash.product.domain.model.Food;
+import com.dish_dash.product.domain.model.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/products")
 public class ProductController {
 
     @Autowired
-    private MenuService menuService;
+    private CategoryService categoryService;
 
     @Autowired
     private FoodService foodService;
 
     @Autowired
-    private CategoryService categoryService;
+    private MenuService menuService;
 
-    @PostMapping("/addFoodItem")
-    public boolean addFoodItem(@RequestParam String name, @RequestParam String description, @RequestParam double price,
-                               @RequestParam int stock, @RequestParam String menuID) {
-        return foodService.addFoodItem(name, description, price, stock, menuID);
+    // Category endpoints
+    @GetMapping("/categories")
+    public List<Category> getAllCategories() {
+        return categoryService.getAllCategories();
     }
 
-    @GetMapping("/getMenu")
-    public Menu getMenu(@RequestParam String restaurantOwnerID) {
-        return menuService.getMenu(restaurantOwnerID);
+    @GetMapping("/categories/{id}")
+    public Category getCategoryById(@PathVariable Long id) {
+        return categoryService.getCategoryById(id);
     }
 
-    @DeleteMapping("/deleteFood")
-    public boolean deleteFood(@RequestParam String foodID) {
-        return foodService.deleteFood(foodID);
+    @PostMapping("/categories")
+    public Category createCategory(@RequestBody Category category) {
+        return categoryService.saveCategory(category);
     }
 
-    @PutMapping("/modifyFood")
-    public boolean modifyFood(@RequestBody Food food) {
-        return foodService.modifyFood(food);
+    @DeleteMapping("/categories/{id}")
+    public void deleteCategory(@PathVariable Long id) {
+        categoryService.deleteCategory(id);
     }
 
-    @PostMapping("/addCategory")
-    public boolean addCategory(@RequestParam String name) {
-        return categoryService.addCategory(name);
+    // Food endpoints
+    @GetMapping("/foods")
+    public List<Food> getAllFoods() {
+        return foodService.getAllFoods();
     }
 
-    @PostMapping("/createMenu")
-    public Menu createMenu(@RequestParam String restaurantID) {
-        return menuService.createMenu(restaurantID);
+    @GetMapping("/foods/{id}")
+    public Food getFoodById(@PathVariable Long id) {
+        return foodService.getFoodById(id);
+    }
+
+    @PostMapping("/foods")
+    public Food createFood(@RequestBody Food food) {
+        return foodService.saveFood(food);
+    }
+
+    @DeleteMapping("/foods/{id}")
+    public void deleteFood(@PathVariable Long id) {
+        foodService.deleteFood(id);
+    }
+
+    // Menu endpoints
+    @GetMapping("/menus")
+    public List<Menu> getAllMenus() {
+        return menuService.getAllMenus();
+    }
+
+    @GetMapping("/menus/{id}")
+    public Menu getMenuById(@PathVariable Long id) {
+        return menuService.getMenuById(id);
+    }
+
+    @PostMapping("/menus")
+    public Menu createMenu(@RequestBody Menu menu) {
+        return menuService.saveMenu(menu);
+    }
+
+    @DeleteMapping("/menus/{id}")
+    public void deleteMenu(@PathVariable Long id) {
+        menuService.deleteMenu(id);
     }
 }
