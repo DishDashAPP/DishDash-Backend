@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/deliveryPersonOrder")
 @RequiredArgsConstructor
-public class DeliveryPersonOrderController {
+public class DeliveryPersonOrderController implements DeliveryPersonOrderApi {
 
   private final DeliveryPersonOrderService deliveryPersonOrderService;
 
-  @PostMapping("/updateOrderStatus")
+  @Override
   public boolean updateOrderStatusByDeliveryPerson(
-      @RequestParam Long orderID, @RequestParam OrderStatus status) {
+          @RequestParam Long orderID, @RequestParam OrderStatus status) {
     return deliveryPersonOrderService.updateOrderStatusByDeliveryPerson(orderID, status);
   }
 
-  @GetMapping("/getCurrentOrder")
+  @Override
   public Order getDeliveryPersonCurrentOrder(@RequestParam String deliveryPersonID) {
     return deliveryPersonOrderService.getDeliveryPersonCurrentOrder(deliveryPersonID);
   }

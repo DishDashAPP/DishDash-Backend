@@ -9,21 +9,21 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/order")
 @RequiredArgsConstructor
-public class OrderController {
+public class OrderController implements OrderApi {
 
   private final OrderService orderService;
 
-  @GetMapping("/viewOrder")
+  @Override
   public Order viewOrder(@RequestParam Long orderID) {
     return orderService.viewOrder(orderID);
   }
 
-  @GetMapping("/getOrderStatus")
+  @Override
   public OrderStatus getOrderStatus(@RequestParam Long orderID) {
     return orderService.getOrderStatus(orderID);
   }
 
-  @PostMapping("/prepareOrder")
+  @Override
   public boolean prepareOrder(@RequestParam Order order) {
     return orderService.prepareOrder(order);
   }

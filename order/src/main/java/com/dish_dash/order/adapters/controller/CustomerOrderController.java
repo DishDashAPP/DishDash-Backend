@@ -10,41 +10,41 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/customerOrder")
 @RequiredArgsConstructor
-public class CustomerOrderController {
+public class CustomerOrderController implements CustomerOrderAPi {
 
   private final CustomerOrderService customerOrderService;
 
-  @PostMapping("/createOrder")
+  @Override
   public Order createOrder(
-      @RequestParam Long customerId,
-      @RequestParam Long restaurantOwnerId,
-      @RequestBody List<OrderItem> orderItems) {
+          @RequestParam Long customerId,
+          @RequestParam Long restaurantOwnerId,
+          @RequestBody List<OrderItem> orderItems) {
     return customerOrderService.createOrder(customerId, restaurantOwnerId, orderItems);
   }
 
-  @PostMapping("/modifyOrder")
+  @Override
   public Order modifyOrder(@RequestParam Long orderId, @RequestBody List<OrderItem> orderItems) {
     return customerOrderService.modifyOrder(orderId, orderItems);
   }
 
-  @PostMapping("/setOrderRate")
+  @Override
   public boolean setOrderRate(
-      @RequestParam Long customerId, @RequestParam Long orderId, @RequestParam int point) {
+          @RequestParam Long customerId, @RequestParam Long orderId, @RequestParam int point) {
     return customerOrderService.setOrderRate(customerId, orderId, point);
   }
 
-  @PostMapping("/setDeliveryRate")
+  @Override
   public boolean setDeliveryRate(
-      @RequestParam Long customerId, @RequestParam Long orderId, @RequestParam int point) {
+          @RequestParam Long customerId, @RequestParam Long orderId, @RequestParam int point) {
     return customerOrderService.setDeliveryRate(customerId, orderId, point);
   }
 
-  @GetMapping("/getCustomerOrders")
+  @Override
   public List<Order> getCustomerOrders(@RequestParam Long customerId) {
     return customerOrderService.getCustomerOrders(customerId);
   }
 
-  @GetMapping("/getCustomerCurrentOrder")
+  @Override
   public Order getCustomerCurrentOrder(@RequestParam Long customerId) {
     return customerOrderService.getCustomerCurrentOrder(customerId);
   }
