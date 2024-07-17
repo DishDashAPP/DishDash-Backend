@@ -2,6 +2,7 @@ package com.dish_dash.user.adapters.controller;
 
 import com.dishDash.common.dto.CustomerDto;
 import com.dishDash.common.dto.DeliveryPersonDto;
+import com.dishDash.common.dto.LocationDto;
 import com.dishDash.common.dto.RestaurantOwnerDto;
 import com.dishDash.common.enums.DeliveryPersonStatus;
 import com.dishDash.common.feign.authentication.AuthenticationApi;
@@ -63,5 +64,16 @@ public class UserController implements UserApi {
   @Override
   public DeliveryPersonStatus getDeliveryPersonStatus(Long id) {
     return deliveryPersonService.getDeliveryPersonStatus(id);
+  }
+
+  @Override
+  public boolean setLocation(
+          @RequestBody LocationDto locationDto, @RequestParam long deliveryPersonId) {
+    return deliveryPersonService.setLocation(locationDto, deliveryPersonId);
+  }
+
+  @Override
+  public LocationDto getLocation(@RequestParam long deliveryPersonId) {
+    return deliveryPersonService.getLocation(deliveryPersonId);
   }
 }

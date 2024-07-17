@@ -4,6 +4,7 @@ import static com.dishDash.common.util.UrlConstraint.*;
 
 import com.dishDash.common.dto.CustomerDto;
 import com.dishDash.common.dto.DeliveryPersonDto;
+import com.dishDash.common.dto.LocationDto;
 import com.dishDash.common.dto.RestaurantOwnerDto;
 import com.dishDash.common.enums.DeliveryPersonStatus;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -36,4 +37,10 @@ public interface UserApi {
 
   @GetMapping(DELIVERY_PERSON + "/status/{id}")
   DeliveryPersonStatus getDeliveryPersonStatus(@PathVariable Long id);
+
+  @PostMapping("/setLocation")
+  public boolean setLocation(@RequestBody LocationDto locationDto, @RequestParam long deliveryPersonId);
+
+  @GetMapping("/getLocation")
+  public LocationDto getLocation(@RequestParam long deliveryPersonId);
 }
