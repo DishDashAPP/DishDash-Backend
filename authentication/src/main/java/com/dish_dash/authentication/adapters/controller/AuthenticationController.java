@@ -1,7 +1,9 @@
 package com.dish_dash.authentication.adapters.controller;
 
 
+import com.dishDash.common.feign.authentication.AuthenticationApi;
 import com.dish_dash.authentication.application.service.AuthenticationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,28 +13,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthenticationController {
+@RequiredArgsConstructor
+public class AuthenticationController implements AuthenticationApi {
 
-    @Autowired
-    private AuthenticationService authService;
+    private final AuthenticationService authService;
 
-    @PostMapping("/login")
-    public String login(@RequestParam String username, @RequestParam String password) {
+    @Override
+    public String login(String username, String password) {
         return authService.login(username, password);
     }
 
-    @GetMapping("/validate")
-    public boolean validate(@RequestParam String token) {
+    @Override
+    public boolean validate(String token) {
         return authService.validateToken(token);
     }
 
-    @PostMapping("/logout")
-    public void logout(@RequestParam String token) {
+    @Override
+    public void logout(String token) {
         authService.logout(token);
     }
 
-    @PostMapping("/register")
-    public void register(@RequestParam String username, @RequestParam String password, @RequestParam String roles) {
+    @Override
+    public void register(String username, String password, String roles) {
         authService.register(username, password, roles);
     }
 }
