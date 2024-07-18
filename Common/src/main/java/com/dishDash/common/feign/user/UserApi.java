@@ -38,9 +38,9 @@ public interface UserApi {
   @GetMapping(DELIVERY_PERSON + "/status/{id}")
   DeliveryPersonStatus getDeliveryPersonStatus(@PathVariable Long id);
 
-  @PostMapping("/setLocation")
-  public boolean setLocation(@RequestBody LocationDto locationDto, @RequestParam long deliveryPersonId);
+  @PostMapping("/location")
+  boolean setLocation(@RequestBody LocationDto locationDto, @RequestParam long deliveryPersonId);
 
-  @GetMapping("/getLocation")
-  public LocationDto getLocation(@RequestParam long deliveryPersonId);
+  @GetMapping("/location")
+  LocationDto getLocation(@RequestParam long deliveryPersonId);
 }

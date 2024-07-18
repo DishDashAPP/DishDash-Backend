@@ -1,10 +1,8 @@
 package com.dish_dash.delivery.adapters.controller;
 
 import com.dishDash.common.dto.InvoiceDto;
-import com.dishDash.common.dto.LocationDto;
 import com.dishDash.common.feign.delivery.DeliveryApi;
 import com.dish_dash.delivery.application.service.DeliveryService;
-import com.dish_dash.delivery.domain.model.Invoice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,10 +1,14 @@
 package com.dish_dash.product.application.service;
 
+import com.dishDash.common.dto.FoodDto;
+import com.dishDash.common.dto.MenuDto;
+import com.dish_dash.product.domain.mapper.ProductMapper;
 import com.dish_dash.product.domain.model.Food;
 import com.dish_dash.product.domain.model.Menu;
 import com.dish_dash.product.infrastructure.repository.FoodRepository;
 import com.dish_dash.product.infrastructure.repository.MenuRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,29 +19,32 @@ public class MenuService {
   private final MenuRepository menuRepository;
 
   private final FoodRepository foodRepository;
+  private final ProductMapper productMapper;
 
-  public List<Menu> getAllMenus() {
-    return menuRepository.findAll();
+  public List<MenuDto> getAllMenus() {
+    return menuRepository.findAll().stream()
+        .map(ProductMapper.INSTANCE::menuToDto)
+        .collect(Collectors.toList());
   }
 
-  public Menu getMenuById(Long id) {
-    return menuRepository.findById(id).orElse(null);
+  public MenuDto getMenuById(Long id) {
+    return menuRepository.findById(id).map(ProductMapper.INSTANCE::menuToDto).orElse(null);
   }
 
-  public Menu saveMenu(Menu menu) {
-    return menuRepository.save(menu);
+  public MenuDto saveMenu(MenuDto menu) {
+    return ProductMapper.INSTANCE.menuToDto(menuRepository.save(productMapper.dtoToMenu(menu)));
   }
 
   public void deleteMenu(Long id) {
     menuRepository.deleteById(id);
   }
 
-  public Food addFoodToMenu(Long menuId, Food food) {
+  public FoodDto addFoodToMenu(Long menuId, Food food) {
     Menu menu =
         menuRepository
             .findById(menuId)
             .orElseThrow(() -> new IllegalArgumentException("Menu not found"));
     food.setMenu(menu);
-    return foodRepository.save(food);
+    return ProductMapper.INSTANCE.foodToDto(foodRepository.save(food));
   }
 }

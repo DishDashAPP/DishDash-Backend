@@ -5,7 +5,6 @@ import com.dishDash.common.dto.DeliveryPersonDto;
 import com.dishDash.common.dto.LocationDto;
 import com.dishDash.common.dto.RestaurantOwnerDto;
 import com.dishDash.common.enums.DeliveryPersonStatus;
-import com.dishDash.common.feign.authentication.AuthenticationApi;
 import com.dishDash.common.feign.user.UserApi;
 import com.dish_dash.user.service.CustomerService;
 import com.dish_dash.user.service.DeliveryPersonService;
@@ -23,8 +22,6 @@ public class UserController implements UserApi {
   private final DeliveryPersonService deliveryPersonService;
 
   private final RestaurantOwnerService restaurantOwnerService;
-
-  private final AuthenticationApi authenticationApi;
 
   @Override
   public Boolean modifyCustomerProfile(Long id, CustomerDto customerDto) {
@@ -68,7 +65,7 @@ public class UserController implements UserApi {
 
   @Override
   public boolean setLocation(
-          @RequestBody LocationDto locationDto, @RequestParam long deliveryPersonId) {
+      @RequestBody LocationDto locationDto, @RequestParam long deliveryPersonId) {
     return deliveryPersonService.setLocation(locationDto, deliveryPersonId);
   }
 

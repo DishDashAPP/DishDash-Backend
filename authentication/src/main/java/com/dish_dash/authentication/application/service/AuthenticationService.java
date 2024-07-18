@@ -4,21 +4,23 @@ import com.dish_dash.authentication.domain.model.AuthenticationInfo;
 import com.dish_dash.authentication.domain.model.Token;
 import com.dish_dash.authentication.infrastructure.repository.AuthenticationRepository;
 import com.dish_dash.authentication.infrastructure.repository.TokenRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Optional;
+import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.UUID;
-
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class AuthenticationService {
 
-  @Autowired private AuthenticationRepository authRepository;
+  private final AuthenticationRepository authRepository;
 
-  @Autowired private TokenRepository tokenRepository;
+  private final TokenRepository tokenRepository;
 
-  @Autowired private BCryptPasswordEncoder passwordEncoder;
+  private final BCryptPasswordEncoder passwordEncoder;
 
   public String login(String username, String password) {
     AuthenticationInfo authInfo = authRepository.findByUsername(username);
@@ -32,10 +34,24 @@ public class AuthenticationService {
     return null;
   }
 
-  public boolean validateToken(String token) {
-    Optional<Token> foundToken =
-        tokenRepository.findByValue(token); // Changed findByToken to findByValue
-    return foundToken.isPresent();
+  public String validateToken(String token) {
+    return tokenRepository
+        .findByValue(token)
+        .flatMap(
+            t -> {
+              log.info("Token found: {}", t);
+              return authRepository.findById(t.getValue());
+            })
+        .map(
+            authenticationInfo -> {
+              log.info("Authentication info found: {}", authenticationInfo);
+              return authenticationInfo.getUsername();
+            })
+        .orElseGet(
+            () -> {
+              log.warn("Token or authentication info not found for token: {}", token);
+              return null;
+            });
   }
 
   public void logout(String token) {

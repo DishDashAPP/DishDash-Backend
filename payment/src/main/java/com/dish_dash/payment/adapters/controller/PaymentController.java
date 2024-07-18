@@ -1,27 +1,29 @@
 package com.dish_dash.payment.adapters.controller;
 
 import com.dishDash.common.Price;
+import com.dishDash.common.dto.TransactionDto;
 import com.dishDash.common.enums.CurrencyUnit;
+import com.dishDash.common.feign.payment.PaymentApi;
 import com.dish_dash.payment.application.service.PaymentService;
-import com.dish_dash.payment.domain.model.Transaction;
+import com.dish_dash.payment.domain.mapper.TransactionMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/payment")
 @RequiredArgsConstructor
-public class PaymentController {
+public class PaymentController implements PaymentApi {
   private final PaymentService paymentService;
 
-  @PostMapping("/pay")
-  public boolean pay(@RequestParam String transactionID) {
+  @Override
+  public boolean pay(String transactionID) {
     return paymentService.pay(transactionID);
   }
 
-  @PostMapping("/createOrderTransaction")
-  public Transaction createOrderTransaction(
-      @RequestParam Long orderId, @RequestParam double amount) {
+  @Override
+  public TransactionDto createOrderTransaction(Long orderId, double amount) {
     Price price = Price.builder().amount(amount).unit(CurrencyUnit.TOMAN).build();
-    return paymentService.createOrderTransaction(orderId, price);
+    return TransactionMapper.INSTANCE.transactionToDto(
+        paymentService.createOrderTransaction(orderId, price));
   }
 }
