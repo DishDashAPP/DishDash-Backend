@@ -4,11 +4,9 @@ import com.dishDash.common.feign.authentication.AuthenticationApi;
 import com.dish_dash.gateway.annotation.Authentication;
 import com.dish_dash.gateway.request.LoginRequest;
 import com.dish_dash.gateway.request.RegisterRequest;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/auth")
@@ -28,6 +26,10 @@ public class AuthenticationController {
         registerRequest.getPassword(),
         // TODO REMOVE .toString()
         registerRequest.getRole().toString());
+  }
+  @GetMapping("/validate")
+  boolean validate(@RequestParam String token){
+    return Objects.nonNull(authenticationApi.validate(token));
   }
 
   @PostMapping("/logout")
