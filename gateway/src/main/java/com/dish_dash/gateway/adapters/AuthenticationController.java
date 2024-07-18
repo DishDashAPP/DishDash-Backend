@@ -27,9 +27,11 @@ public class AuthenticationController {
         // TODO REMOVE .toString()
         registerRequest.getRole().toString());
   }
+
   @GetMapping("/validate")
-  boolean validate(@RequestParam String token){
-    return Objects.nonNull(authenticationApi.validate(token));
+  @Authentication
+  boolean validate(String token) {
+    return Objects.nonNull(token);
   }
 
   @PostMapping("/logout")
