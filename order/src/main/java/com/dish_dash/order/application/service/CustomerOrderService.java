@@ -1,11 +1,14 @@
 package com.dish_dash.order.application.service;
 
+import com.dishDash.common.dto.OrderDto;
+import com.dishDash.common.dto.OrderItemDto;
+import com.dish_dash.order.domain.mapper.OrderMapper;
 import com.dish_dash.order.domain.model.Order;
-import com.dish_dash.order.domain.model.OrderItem;
 import com.dish_dash.order.domain.model.Rate;
 import com.dish_dash.order.domain.repository.OrderRepository;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,21 +18,30 @@ public class CustomerOrderService {
 
   private final OrderRepository orderRepository;
 
-  public Order createOrder(Long customerId, Long restaurantOwnerId, List<OrderItem> orderItems) {
+  public OrderDto createOrder(
+      Long customerId, Long restaurantOwnerId, List<OrderItemDto> orderItemsDto) {
     Order order =
         Order.builder()
             .customerId(customerId)
             .restaurantOwnerId(restaurantOwnerId)
-            .orderItems(orderItems)
+            .orderItems(
+                orderItemsDto.stream()
+                    .map(OrderMapper.INSTANCE::orderItemDtoToOrderItem)
+                    .collect(Collectors.toList()))
             .build();
-    return orderRepository.save(order);
+    return OrderMapper.INSTANCE.orderToDto(orderRepository.save(order));
   }
 
-  public Order modifyOrder(Long orderId, List<OrderItem> orderItems) {
+  public OrderDto modifyOrder(Long orderId, List<OrderItemDto> orderItemsDto) {
     Optional<Order> orderOptional = orderRepository.findById(orderId);
     if (orderOptional.isPresent()) {
-      orderOptional.get().setOrderItems(orderItems);
-      return orderRepository.save(orderOptional.get());
+      orderOptional
+          .get()
+          .setOrderItems(
+              orderItemsDto.stream()
+                  .map(OrderMapper.INSTANCE::orderItemDtoToOrderItem)
+                  .collect(Collectors.toList()));
+      return OrderMapper.INSTANCE.orderToDto(orderRepository.save(orderOptional.get()));
     }
     return null;
   }
@@ -53,13 +65,15 @@ public class CustomerOrderService {
     return false;
   }
 
-  public List<Order> getCustomerOrders(Long customerID) {
-    return orderRepository.findByCustomerId(customerID);
+  public List<OrderDto> getCustomerOrders(Long customerID) {
+    return orderRepository.findByCustomerId(customerID).stream()
+        .map(OrderMapper.INSTANCE::orderToDto)
+        .collect(Collectors.toList());
   }
 
-  public Order getCustomerCurrentOrder(Long customerID) {
+  public OrderDto getCustomerCurrentOrder(Long customerID) {
     //    TODO GET FROM USER MODULE
     //    return orderRepository.findCurrentOrderByCustomerId(customerID);
-    return Order.builder().build();
+    return OrderMapper.INSTANCE.orderToDto(Order.builder().build());
   }
 }

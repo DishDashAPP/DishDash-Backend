@@ -1,7 +1,7 @@
 package com.dish_dash.order.domain.repository;
 
 import com.dish_dash.order.domain.model.Order;
-import com.dish_dash.order.domain.model.OrderStatus;
+import com.dishDash.common.enums.OrderStatus;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;

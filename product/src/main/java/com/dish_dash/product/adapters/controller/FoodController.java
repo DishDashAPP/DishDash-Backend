@@ -8,8 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/food")
 @RequiredArgsConstructor
+@RequestMapping("/food")
 public class FoodController implements FoodApi {
   private final FoodService foodService;
 

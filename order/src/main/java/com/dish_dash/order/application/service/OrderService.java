@@ -1,7 +1,9 @@
 package com.dish_dash.order.application.service;
 
+import com.dishDash.common.dto.OrderDto;
+import com.dishDash.common.enums.OrderStatus;
+import com.dish_dash.order.domain.mapper.OrderMapper;
 import com.dish_dash.order.domain.model.Order;
-import com.dish_dash.order.domain.model.OrderStatus;
 import com.dish_dash.order.domain.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,8 +14,8 @@ public class OrderService {
 
   private final OrderRepository orderRepository;
 
-  public Order viewOrder(Long orderID) {
-    return orderRepository.findById(orderID).orElse(null);
+  public OrderDto viewOrder(Long orderID) {
+    return orderRepository.findById(orderID).map(OrderMapper.INSTANCE::orderToDto).orElse(null);
   }
 
   public OrderStatus getOrderStatus(Long orderID) {
@@ -24,9 +26,9 @@ public class OrderService {
     return null;
   }
 
-  public boolean prepareOrder(Order order) {
+  public boolean prepareOrder(OrderDto orderDto) {
     // TODO call updateStatus
-    orderRepository.save(order);
+    orderRepository.save(OrderMapper.INSTANCE.orderDtoToOrder(orderDto));
     return true;
   }
 }

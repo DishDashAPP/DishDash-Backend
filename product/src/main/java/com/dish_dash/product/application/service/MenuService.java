@@ -15,11 +15,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class MenuService {
-
   private final MenuRepository menuRepository;
-
   private final FoodRepository foodRepository;
-  private final ProductMapper productMapper;
 
   public List<MenuDto> getAllMenus() {
     return menuRepository.findAll().stream()
@@ -32,18 +29,20 @@ public class MenuService {
   }
 
   public MenuDto saveMenu(MenuDto menu) {
-    return ProductMapper.INSTANCE.menuToDto(menuRepository.save(productMapper.dtoToMenu(menu)));
+    return ProductMapper.INSTANCE.menuToDto(
+        menuRepository.save(ProductMapper.INSTANCE.dtoToMenu(menu)));
   }
 
   public void deleteMenu(Long id) {
     menuRepository.deleteById(id);
   }
 
-  public FoodDto addFoodToMenu(Long menuId, Food food) {
+  public FoodDto addFoodToMenu(Long menuId, FoodDto foodDto) {
     Menu menu =
         menuRepository
             .findById(menuId)
             .orElseThrow(() -> new IllegalArgumentException("Menu not found"));
+    Food food = ProductMapper.INSTANCE.dtoToFood(foodDto);
     food.setMenu(menu);
     return ProductMapper.INSTANCE.foodToDto(foodRepository.save(food));
   }

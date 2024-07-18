@@ -1,10 +1,13 @@
 package com.dish_dash.order.application.service;
 
+import com.dishDash.common.dto.OrderDto;
+import com.dishDash.common.enums.OrderStatus;
+import com.dish_dash.order.domain.mapper.OrderMapper;
 import com.dish_dash.order.domain.model.Order;
-import com.dish_dash.order.domain.model.OrderStatus;
 import com.dish_dash.order.domain.repository.OrderRepository;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,18 +27,26 @@ public class RestaurantOrderService {
     return false;
   }
 
-  public List<Order> getRestaurantOwnerOrderHistory(Long restaurantOwnerID) {
-    return orderRepository.findAllByRestaurantOwnerIdAndStatusIn(
-        restaurantOwnerID,
-        List.of(
-            OrderStatus.DELIVERED,
-            OrderStatus.NOT_PAID,
-            OrderStatus.DELIVERING,
-            OrderStatus.PREPARING));
+  public List<OrderDto> getRestaurantOwnerOrderHistory(Long restaurantOwnerID) {
+    return orderRepository
+        .findAllByRestaurantOwnerIdAndStatusIn(
+            restaurantOwnerID,
+            List.of(
+                OrderStatus.DELIVERED,
+                OrderStatus.NOT_PAID,
+                OrderStatus.DELIVERING,
+                OrderStatus.PREPARING))
+        .stream()
+        .map(OrderMapper.INSTANCE::orderToDto)
+        .collect(Collectors.toList());
   }
 
-  public List<Order> getRestaurantOwnerActiveOrders(Long restaurantOwnerID) {
-    return orderRepository.findAllByRestaurantOwnerIdAndStatusIn(
-        restaurantOwnerID, List.of(OrderStatus.PREPARING, OrderStatus.DELIVERING));
+  public List<OrderDto> getRestaurantOwnerActiveOrders(Long restaurantOwnerID) {
+    return orderRepository
+        .findAllByRestaurantOwnerIdAndStatusIn(
+            restaurantOwnerID, List.of(OrderStatus.PREPARING, OrderStatus.DELIVERING))
+        .stream()
+        .map(OrderMapper.INSTANCE::orderToDto)
+        .collect(Collectors.toList());
   }
 }

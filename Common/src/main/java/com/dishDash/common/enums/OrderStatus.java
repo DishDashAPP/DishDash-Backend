@@ -1,4 +1,4 @@
-package com.dish_dash.order.domain.model;
+package com.dishDash.common.enums;
 
 public enum OrderStatus {
   PREPARING,

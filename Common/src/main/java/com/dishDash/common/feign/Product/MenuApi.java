@@ -6,8 +6,7 @@ import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "product-service", qualifiers = "menu-product-service")
-@RequestMapping("/menu")
+@FeignClient(name = "product-service", contextId = "menu-product-service")
 public interface MenuApi {
   @GetMapping()
   List<MenuDto> getAllMenus();

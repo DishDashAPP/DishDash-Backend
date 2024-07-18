@@ -1,31 +1,29 @@
 package com.dish_dash.order.adapters.controller;
 
+import com.dishDash.common.dto.RateDto;
+import com.dishDash.common.feign.order.RateApi;
 import com.dish_dash.order.application.service.RateService;
-import com.dish_dash.order.domain.model.Rate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/rates")
 @RequiredArgsConstructor
-public class RateController {
-
+public class RateController implements RateApi {
   private final RateService rateService;
 
-  @PostMapping("/order")
-  public boolean setOrderRate(
-      @RequestParam Long customerId, @RequestParam Long orderId, @RequestParam int point) {
+  @Override
+  public boolean setOrderRate(Long customerId, Long orderId, int point) {
     return rateService.setOrderRate(customerId, orderId, point);
   }
 
-  @PostMapping("/delivery")
-  public boolean setDeliveryRate(
-      @RequestParam Long customerID, @RequestParam Long orderID, @RequestParam int point) {
+  @Override
+  public boolean setDeliveryRate(Long customerID, Long orderID, int point) {
     return rateService.setDeliveryRate(customerID, orderID, point);
   }
 
-  @GetMapping("/delivery/{deliveryPersonID}")
-  public Rate getDeliveryRate(@PathVariable String deliveryPersonID) {
+  @Override
+  public RateDto getDeliveryRate(String deliveryPersonID) {
     return rateService.getDeliveryRate(deliveryPersonID);
   }
 }

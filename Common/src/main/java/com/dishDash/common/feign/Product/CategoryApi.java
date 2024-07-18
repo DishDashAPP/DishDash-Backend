@@ -5,8 +5,7 @@ import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "product-service", qualifiers = "category-product-service")
-@RequestMapping("/category")
+@FeignClient(name = "product-service", contextId = "category-product-service")
 public interface CategoryApi {
 
   @GetMapping()

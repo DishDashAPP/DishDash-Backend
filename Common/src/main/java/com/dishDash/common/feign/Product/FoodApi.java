@@ -5,8 +5,7 @@ import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "product-service", qualifiers = "food-product-service")
-@RequestMapping("/foods")
+@FeignClient(name = "product-service", contextId = "food-product-service")
 public interface FoodApi {
 
   @GetMapping()

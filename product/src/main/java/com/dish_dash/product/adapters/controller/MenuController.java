@@ -4,14 +4,13 @@ import com.dishDash.common.dto.FoodDto;
 import com.dishDash.common.dto.MenuDto;
 import com.dishDash.common.feign.Product.MenuApi;
 import com.dish_dash.product.application.service.MenuService;
-import com.dish_dash.product.domain.mapper.ProductMapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/menu")
 @RequiredArgsConstructor
+@RequestMapping("/menu")
 public class MenuController implements MenuApi {
   private final MenuService menuService;
 
@@ -36,7 +35,7 @@ public class MenuController implements MenuApi {
   }
 
   @Override
-  public FoodDto addFoodToMenu(Long menuId, FoodDto food) {
-    return menuService.addFoodToMenu(menuId, ProductMapper.INSTANCE.dtoToFood(food));
+  public FoodDto addFoodToMenu(Long menuId, FoodDto foodDto) {
+    return menuService.addFoodToMenu(menuId, foodDto);
   }
 }

@@ -8,8 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/category")
 @RequiredArgsConstructor
+@RequestMapping("/category")
 public class CategoryController implements CategoryApi {
   private final CategoryService categoryService;
 

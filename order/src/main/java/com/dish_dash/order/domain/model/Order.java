@@ -5,6 +5,8 @@ import com.dishDash.common.enums.CurrencyUnit;
 import java.sql.Timestamp;
 import java.util.List;
 import javax.persistence.*;
+
+import com.dishDash.common.enums.OrderStatus;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
