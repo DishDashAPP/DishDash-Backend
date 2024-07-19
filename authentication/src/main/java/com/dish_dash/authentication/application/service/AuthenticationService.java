@@ -4,67 +4,103 @@ import com.dish_dash.authentication.domain.model.AuthenticationInfo;
 import com.dish_dash.authentication.domain.model.Token;
 import com.dish_dash.authentication.infrastructure.repository.AuthenticationRepository;
 import com.dish_dash.authentication.infrastructure.repository.TokenRepository;
-import java.util.Optional;
-import java.util.UUID;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class AuthenticationService {
 
-  private final AuthenticationRepository authRepository;
+    private final AuthenticationRepository authRepository;
+    private final TokenRepository tokenRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final StringRedisTemplate redisTemplate;
 
-  private final TokenRepository tokenRepository;
+    private static final String SECRET_KEY = "your-256-bit-secret"; // Replace with your actual secret key
 
-  private final BCryptPasswordEncoder passwordEncoder;
-
-  public String login(String username, String password) {
-    AuthenticationInfo authInfo = authRepository.findByUsername(username);
-    if (authInfo != null && passwordEncoder.matches(password, authInfo.getPassword())) {
-      Token token = new Token();
-      token.setValue(UUID.randomUUID().toString());
-      token.setTokenID(authInfo.getUserID());
-      tokenRepository.save(token);
-      return token.getValue();
+    public String login(String username, String password) {
+        AuthenticationInfo authInfo = authRepository.findByUsername(username);
+        if (authInfo != null && passwordEncoder.matches(password, authInfo.getPassword())) {
+            Token token = generateToken();
+            return token.getValue();
+        }
+        return null;
     }
-    return null;
-  }
 
-  public String validateToken(String token) {
-    return tokenRepository
-        .findByValue(token)
-        .flatMap(
-            t -> {
-              log.info("Token found: {}", t);
-              return authRepository.findById(t.getValue());
-            })
-        .map(
-            authenticationInfo -> {
-              log.info("Authentication info found: {}", authenticationInfo);
-              return authenticationInfo.getUsername();
-            })
-        .orElseGet(
-            () -> {
-              log.warn("Token or authentication info not found for token: {}", token);
-              return null;
-            });
-  }
+    public boolean validateToken(String tokenValue) {
+        Token token = tokenRepository.findById(tokenValue).orElse(null);
+        if (token != null) {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                    .build()
+                    .parseClaimsJws(token.getValue())
+                    .getBody();
+            String redisKey = "token:" + token.getValue();
+            String storedToken = redisTemplate.opsForValue().get(redisKey);
+            return storedToken == null && new Date().before(claims.getExpiration());
+        }
+        return false;
+    }
 
-  public void logout(String token) {
-    Optional<Token> foundToken =
-        tokenRepository.findByValue(token); // Changed findByToken to findByValue
-    foundToken.ifPresent(value -> tokenRepository.delete(value));
-  }
+    public boolean invalidateToken(String tokenValue) {
+        Token token = tokenRepository.findById(tokenValue).orElse(null);
+        if (token != null) {
+            String redisKey = "token:" + token.getValue();
+            redisTemplate.opsForValue().set(redisKey, "revoked", 24, TimeUnit.HOURS);
+            return true;
+        }
+        return false;
+    }
 
-  public void register(String username, String password, String roles) {
-    AuthenticationInfo authInfo = new AuthenticationInfo();
-    authInfo.setUsername(username);
-    authInfo.setPassword(passwordEncoder.encode(password));
-    authInfo.setRoles(roles);
-    authRepository.save(authInfo);
-  }
+    private Token generateToken() {
+        Token token = new Token();
+        token.setValue(generateTokenValue());
+        tokenRepository.save(token);
+        return token;
+    }
+
+    private String generateTokenValue() {
+        long nowMillis = System.currentTimeMillis();
+        long expMillis = nowMillis + 24 * 60 * 60 * 1000; // 1 day validity
+        return Jwts.builder()
+                .setIssuer("https://auth.example.com")
+                .setSubject("user")
+                .setAudience("https://api.example.com")
+                .setIssuedAt(new Date(nowMillis))
+                .setExpiration(new Date(expMillis))
+                .setId(UUID.randomUUID().toString())
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                .compact();
+    }
+
+    public boolean register(String username, String password, String role) {
+    // 1. Check if the username already exists
+    AuthenticationInfo existingUser = authRepository.findByUsername(username);
+    if (existingUser != null) {
+        // Username already exists
+        return false; // Or throw an exception
+    }
+
+    // 2. Encode the password
+    String encodedPassword = passwordEncoder.encode(password);
+
+    // 3. Create and save the AuthenticationInfo object
+    AuthenticationInfo newUser = new AuthenticationInfo();
+    newUser.setUsername(username);
+    newUser.setPassword(encodedPassword);
+    newUser.setRoles(role);
+    authRepository.save(newUser);
+
+    return true;
+}
 }
