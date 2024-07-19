@@ -159,7 +159,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
-          source: "./docker-compose.yaml"
+          source: "docker-compose.yaml"
           target: "/root"
 
       - name: Deploy with SSH
