@@ -26,7 +26,7 @@ jobs:
       - name: Set up JDK 22
         uses: actions/setup-java@v3
         with:
-          java-version: '22'
+          java-version: '22.0.1'
           distribution: 'temurin'
           cache: maven
 
@@ -71,7 +71,7 @@ jobs:
             --build-arg JAR_FILE=${{ env.DISCOVERY_JAR_NAME }} \
             -t mirzaeimahdi409/dish_dash_discovery:latest \
             --push \
-            ./discovery
+            -f ./discovery/DockerFile ./discovery
 
       - name: Build and Push authentication Docker Image
         run: |
@@ -79,7 +79,7 @@ jobs:
             --build-arg JAR_FILE=${{ env.AUTHENTICATION_JAR_NAME }} \
             -t mirzaeimahdi409/dish_dash_authentication:latest \
             --push \
-            ./authentication
+            -f ./authentication/DockerFile ./authentication
 
       - name: Build and Push order Docker Image
         run: |
@@ -87,7 +87,7 @@ jobs:
             --build-arg JAR_FILE=${{ env.ORDER_JAR_NAME }} \
             -t mirzaeimahdi409/dish_dash_order:latest \
             --push \
-            ./order
+            -f ./order/DockerFile ./order
 
       - name: Build and Push gateway Docker Image
         run: |
@@ -95,7 +95,7 @@ jobs:
             --build-arg JAR_FILE=${{ env.GATEWAY_JAR_NAME }} \
             -t mirzaeimahdi409/dish_dash_gateway:latest \
             --push \
-            ./gateway
+            -f ./gateway/DockerFile ./gateway
 
       - name: Build and Push user Docker Image
         run: |
@@ -103,7 +103,7 @@ jobs:
             --build-arg JAR_FILE=${{ env.USER_JAR_NAME }} \
             -t mirzaeimahdi409/dish_dash_user:latest \
             --push \
-            ./user
+            -f ./user/DockerFile ./user
 
       - name: Build and Push delivery Docker Image
         run: |
@@ -111,7 +111,7 @@ jobs:
             --build-arg JAR_FILE=${{ env.DELIVERY_JAR_NAME }} \
             -t mirzaeimahdi409/dish_dash_delivery:latest \
             --push \
-            ./delivery
+            -f ./delivery/DockerFile ./delivery
 
       - name: Build and Push product Docker Image
         run: |
@@ -119,7 +119,7 @@ jobs:
             --build-arg JAR_FILE=${{ env.PRODUCT_JAR_NAME }} \
             -t mirzaeimahdi409/dish_dash_product:latest \
             --push \
-            ./product
+            -f ./product/DockerFile ./product
 
       - name: Build and Push payment Docker Image
         run: |
@@ -127,4 +127,25 @@ jobs:
             --build-arg JAR_FILE=${{ env.PAYMENT_JAR_NAME }} \
             -t mirzaeimahdi409/dish_dash_payment:latest \
             --push \
-            ./payment
+            -f ./payment/DockerFile ./payment
+          
+      - name: Copy docker-compose.yml to server
+        uses: appleboy/scp-action@v0.1.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: "docker-compose.yml"
+          target: "/root/dish_dash"
+
+      - name: Deploy with SSH
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd /root/dish_dash
+            docker compose down
+            docker compose pull
+            docker compose up -d
