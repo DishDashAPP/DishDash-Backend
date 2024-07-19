@@ -57,11 +57,11 @@ public class AuthenticationAspect {
     }
     String requestPath = httpServletRequestOptional.get().getRequestURI();
 
-    if (!isAccessAllowed(authDto.getRole(), requestPath)) {
-      log.error(
-          "Access denied for user with roles: {} to path: {}", authDto.getRole(), requestPath);
-      throw new CustomException(ErrorCode.FORBIDDEN, "Access denied");
-    }
+//    if (!isAccessAllowed(authDto.getRole(), requestPath)) {
+//      log.error(
+//          "Access denied for user with roles: {} to path: {}", authDto.getRole(), requestPath);
+//      throw new CustomException(ErrorCode.FORBIDDEN, "Access denied");
+//    }
     injectTokenIntoArgs(joinPoint, methodSignature, token, authDto.getUserId());
     return joinPoint.proceed(joinPoint.getArgs());
   }
