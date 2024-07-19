@@ -157,7 +157,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           source: "docker-compose.yml"
-          target: "/root"
+          target: "/root/dish_dash"
 
       - name: Deploy with SSH
         uses: appleboy/ssh-action@v0.1.7
@@ -166,7 +166,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd /root
+            cd /root/dish_dash
             docker compose down
             docker compose pull
             docker compose up -d
