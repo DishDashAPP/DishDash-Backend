@@ -19,33 +19,8 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Build common with Maven
-      run: mvn -B install --file common/pom.xml
-
-    - name: Build discovery with Maven
-      run: mvn -B package --file discovery/pom.xml
-      
-    - name: Build authentication with Maven
-      run: mvn -B package --file authentication/pom.xml
-
-    - name: Build order with Maven
-      run: mvn -B package --file order/pom.xml
-
-    - name: Build gateway with Maven
-      run: mvn -B package --file gateway/pom.xml
-
-    - name: Build user with Maven
-      run: mvn -B package --file user/pom.xml
-
-    - name: Build delivery with Maven
-      run: mvn -B package --file delivery/pom.xml
-      
-    - name: Build product with Maven
-      run: mvn -B package --file product/pom.xml
-
-    - name: Build payment with Maven
-      run: mvn -B package --file payment/pom.xml
-
+    - name: Build all modules with Maven
+      run: mvn -B install
       
     - name: Get discovery JAR name
       run: echo "DISCOVERY_JAR_NAME=$(ls discovery/target/*.jar)" >> $GITHUB_ENV
