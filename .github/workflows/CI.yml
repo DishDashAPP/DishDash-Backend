@@ -28,6 +28,17 @@ jobs:
       - name: Build all modules with Maven
         run: mvn -B install
 
+      - name: Verify JAR files
+        run: |
+          ls discovery/target/*.jar
+          ls authentication/target/*.jar
+          ls order/target/*.jar
+          ls gateway/target/*.jar
+          ls user/target/*.jar
+          ls delivery/target/*.jar
+          ls product/target/*.jar
+          ls payment/target/*.jar
+
       - name: Get JAR names
         id: get_jars
         run: |
