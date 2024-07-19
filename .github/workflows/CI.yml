@@ -49,9 +49,9 @@ jobs:
       - name: Build and Push discovery Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          context: ./discovery
-          file: ./discovery/Dockerfile
-          build-args: JAR_FILE=${{ env.DISCOVERY_JAR_NAME }}
+          directory: ./discovery
+          dockerfile: Dockerfile
+          buildArgs: JAR_FILE=${{ env.DISCOVERY_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_discovery
           tags: latest
           registry: docker.io
@@ -61,9 +61,9 @@ jobs:
       - name: Build and Push authentication Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          context: ./authentication
-          file: ./authentication/Dockerfile
-          build-args: JAR_FILE=${{ env.AUTHENTICATION_JAR_NAME }}
+          directory: ./authentication
+          dockerfile: Dockerfile
+          buildArgs: JAR_FILE=${{ env.AUTHENTICATION_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_authentication
           tags: latest
           registry: docker.io
@@ -73,9 +73,9 @@ jobs:
       - name: Build and Push order Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          context: ./order
-          file: ./order/Dockerfile
-          build-args: JAR_FILE=${{ env.ORDER_JAR_NAME }}
+          directory: ./order
+          dockerfile: Dockerfile
+          buildArgs: JAR_FILE=${{ env.ORDER_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_order
           tags: latest
           registry: docker.io
@@ -85,9 +85,9 @@ jobs:
       - name: Build and Push gateway Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          context: ./gateway
-          file: ./gateway/Dockerfile
-          build-args: JAR_FILE=${{ env.GATEWAY_JAR_NAME }}
+          directory: ./gateway
+          dockerfile: Dockerfile
+          buildArgs: JAR_FILE=${{ env.GATEWAY_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_gateway
           tags: latest
           registry: docker.io
@@ -97,9 +97,9 @@ jobs:
       - name: Build and Push user Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          context: ./user
-          file: ./user/Dockerfile
-          build-args: JAR_FILE=${{ env.USER_JAR_NAME }}
+          directory: ./user
+          dockerfile: Dockerfile
+          buildArgs: JAR_FILE=${{ env.USER_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_user
           tags: latest
           registry: docker.io
@@ -109,9 +109,9 @@ jobs:
       - name: Build and Push delivery Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          context: ./delivery
-          file: ./delivery/Dockerfile
-          build-args: JAR_FILE=${{ env.DELIVERY_JAR_NAME }}
+          directory: ./delivery
+          dockerfile: Dockerfile
+          buildArgs: JAR_FILE=${{ env.DELIVERY_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_delivery
           tags: latest
           registry: docker.io
@@ -121,9 +121,9 @@ jobs:
       - name: Build and Push product Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          context: ./product
-          file: ./product/Dockerfile
-          build-args: JAR_FILE=${{ env.PRODUCT_JAR_NAME }}
+          directory: ./product
+          dockerfile: Dockerfile
+          buildArgs: JAR_FILE=${{ env.PRODUCT_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_product
           tags: latest
           registry: docker.io
@@ -133,9 +133,9 @@ jobs:
       - name: Build and Push payment Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          context: ./payment
-          file: ./payment/Dockerfile
-          build-args: JAR_FILE=${{ env.PAYMENT_JAR_NAME }}
+          directory: ./payment
+          dockerfile: Dockerfile
+          buildArgs: JAR_FILE=${{ env.PAYMENT_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_payment
           tags: latest
           registry: docker.io
