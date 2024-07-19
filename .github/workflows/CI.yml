@@ -42,6 +42,23 @@ jobs:
           echo "PRODUCT_JAR_NAME=$(ls product/target/*.jar)" >> $GITHUB_ENV
           echo "PAYMENT_JAR_NAME=$(ls payment/target/*.jar)" >> $GITHUB_ENV
 
+      - name: Copy JAR files to build context
+        run: |
+          cp ${{ env.DISCOVERY_JAR_NAME }} discovery/app.jar
+          cp ${{ env.AUTHENTICATION_JAR_NAME }} authentication/app.jar
+          cp ${{ env.ORDER_JAR_NAME }} order/app.jar
+          cp ${{ env.GATEWAY_JAR_NAME }} gateway/app.jar
+          cp ${{ env.USER_JAR_NAME }} user/app.jar
+          cp ${{ env.DELIVERY_JAR_NAME }} delivery/app.jar
+          cp ${{ env.PRODUCT_JAR_NAME }} product/app.jar
+          cp ${{ env.PAYMENT_JAR_NAME }} payment/app.jar
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Build and Push Docker Images
         run: |
           docker buildx build --platform linux/amd64 -t mirzaeimahdi409/dish_dash_discovery:latest -f ./discovery/DockerFile ./discovery --push
