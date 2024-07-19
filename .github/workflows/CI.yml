@@ -44,12 +44,14 @@ jobs:
 
       - name: Build and Push Docker Images
         run: |
-          services=("discovery" "authentication" "order" "gateway" "user" "delivery" "product" "payment")
-          for service in ${services[@]}; do
-            image_name="mirzaeimahdi409/dish_dash_$service"
-            jar_name="${service^^}_JAR_NAME"
-            docker buildx build --platform linux/amd64 --build-arg JAR_FILE=${{ env[$jar_name] }} -t $image_name:latest -f ./$service/DockerFile ./$service --push
-          done
+          docker buildx build --platform linux/amd64 --build-arg JAR_FILE=${{ env.DISCOVERY_JAR_NAME }} -t mirzaeimahdi409/dish_dash_discovery:latest -f ./discovery/DockerFile ./discovery --push
+          docker buildx build --platform linux/amd64 --build-arg JAR_FILE=${{ env.AUTHENTICATION_JAR_NAME }} -t mirzaeimahdi409/dish_dash_authentication:latest -f ./authentication/DockerFile ./authentication --push
+          docker buildx build --platform linux/amd64 --build-arg JAR_FILE=${{ env.ORDER_JAR_NAME }} -t mirzaeimahdi409/dish_dash_order:latest -f ./order/DockerFile ./order --push
+          docker buildx build --platform linux/amd64 --build-arg JAR_FILE=${{ env.GATEWAY_JAR_NAME }} -t mirzaeimahdi409/dish_dash_gateway:latest -f ./gateway/DockerFile ./gateway --push
+          docker buildx build --platform linux/amd64 --build-arg JAR_FILE=${{ env.USER_JAR_NAME }} -t mirzaeimahdi409/dish_dash_user:latest -f ./user/DockerFile ./user --push
+          docker buildx build --platform linux/amd64 --build-arg JAR_FILE=${{ env.DELIVERY_JAR_NAME }} -t mirzaeimahdi409/dish_dash_delivery:latest -f ./delivery/DockerFile ./delivery --push
+          docker buildx build --platform linux/amd64 --build-arg JAR_FILE=${{ env.PRODUCT_JAR_NAME }} -t mirzaeimahdi409/dish_dash_product:latest -f ./product/DockerFile ./product --push
+          docker buildx build --platform linux/amd64 --build-arg JAR_FILE=${{ env.PAYMENT_JAR_NAME }} -t mirzaeimahdi409/dish_dash_payment:latest -f ./payment/DockerFile ./payment --push
 
       - name: Copy docker-compose.yml to server
         uses: appleboy/scp-action@v0.1.0
