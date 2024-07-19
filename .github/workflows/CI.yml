@@ -50,7 +50,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           directory: ./discovery
-          dockerfile: ./discovery/Dockerfile
+          dockerfile: ./discovery/DockerFile
           buildArgs: JAR_FILE=${{ env.DISCOVERY_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_discovery
           tags: latest
@@ -62,7 +62,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           directory: ./authentication
-          dockerfile: ./authentication/Dockerfile
+          dockerfile: ./authentication/DockerFile
           buildArgs: JAR_FILE=${{ env.AUTHENTICATION_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_authentication
           tags: latest
@@ -74,7 +74,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           directory: ./order
-          dockerfile: ./order/Dockerfile
+          dockerfile: ./order/DockerFile
           buildArgs: JAR_FILE=${{ env.ORDER_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_order
           tags: latest
@@ -86,7 +86,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           directory: ./gateway
-          dockerfile: ./gateway/Dockerfile
+          dockerfile: ./gateway/DockerFile
           buildArgs: JAR_FILE=${{ env.GATEWAY_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_gateway
           tags: latest
@@ -98,7 +98,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           directory: ./user
-          dockerfile: ./user/Dockerfile
+          dockerfile: ./user/DockerFile
           buildArgs: JAR_FILE=${{ env.USER_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_user
           tags: latest
@@ -110,7 +110,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           directory: ./delivery
-          dockerfile: ./delivery/Dockerfile
+          dockerfile: ./delivery/DockerFile
           buildArgs: JAR_FILE=${{ env.DELIVERY_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_delivery
           tags: latest
@@ -122,7 +122,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           directory: ./product
-          dockerfile: ./product/Dockerfile
+          dockerfile: ./product/DockerFile
           buildArgs: JAR_FILE=${{ env.PRODUCT_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_product
           tags: latest
@@ -134,7 +134,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           directory: ./payment
-          dockerfile: ./payment/Dockerfile
+          dockerfile: ./payment/DockerFile
           buildArgs: JAR_FILE=${{ env.PAYMENT_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_payment
           tags: latest
