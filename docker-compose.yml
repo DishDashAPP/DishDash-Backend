@@ -1,33 +1,138 @@
 version: '3.8'
 
 services:
-  db:
-    image: postgres:16.3
-    container_name: dishdash_postgres
-    environment:
-      POSTGRES_USER: dishdash
-      POSTGRES_PASSWORD: dishdash_pass
-      POSTGRES_DB: dishdash
+  #  db:
+  #    image: postgres:16.3
+  #    container_name: dishdash_postgres
+  #    environment:
+  #      POSTGRES_USER: dishdash
+  #      POSTGRES_PASSWORD: dishdash_pass
+  #      POSTGRES_DB: dishdash
+  #    ports:
+  #      - "5432:5432"
+  #    #    volumes:
+  #    #      - postgres_data:/var/lib/postgresql/data
+  #    #      - ./db_init:/docker-entrypoint-initdb.d
+  #    networks:
+  #      - dishdash_network
+  #
+  #networks:
+  #  dishdash_network:
+  #    driver: bridge
+  #
+  #volumes:
+  #  postgres_data:
+  discovery:
+    image: mirzaeimahdi409/dish_dash:discovery
+    build:
+      context: ./discovery
+      dockerfile: Dockerfile
     ports:
-      - "5432:5432"
-#    volumes:
-#      - postgres_data:/var/lib/postgresql/data
-#      - ./db_init:/docker-entrypoint-initdb.d
+      - "8971:8971"
     networks:
-      - dishdash_network
+      - app_network
+    restart: always
 
-  redis:
-    image: redis:latest
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis-data:/data
+  authentication:
+    image: mirzaeimahdi409/dish_dash:authentication
+    build:
+      context: ./authentication
+      dockerfile: Dockerfile
+    networks:
+      - app_network
+    deploy:
+      replicas: 2
+    depends_on:
+      - discovery
+    restart: always
+
+  order:
+    image: mirzaeimahdi409/dish_dash:order
+    build:
+      context: ./order
+      dockerfile: Dockerfile
+    networks:
+      - app_network
+    deploy:
+      replicas: 2
+    depends_on:
+      - discovery
+    restart: always
+
+  gateway:
+    image: mirzaeimahdi409/dish_dash:gateway
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    networks:
+      - app_network
+    deploy:
+      replicas: 2
+    depends_on:
+      - discovery
+    restart: always
+
+  user:
+    image: mirzaeimahdi409/dish_dash:user
+    build:
+      context: ./user
+      dockerfile: Dockerfile
+    networks:
+      - app_network
+    deploy:
+      replicas: 2
+    depends_on:
+      - discovery
+    restart: always
+
+  delivery:
+    image: mirzaeimahdi409/dish_dash:delivery
+    build:
+      context: ./delivery
+      dockerfile: Dockerfile
+    networks:
+      - app_network
+    deploy:
+      replicas: 2
+    depends_on:
+      - discovery
+    restart: always
+
+  product:
+    image: mirzaeimahdi409/dish_dash:product
+    build:
+      context: ./product
+      dockerfile: Dockerfile
+    networks:
+      - app_network
+    deploy:
+      replicas: 2
+    depends_on:
+      - discovery
+    restart: always
+
+  #  redis:
+  #    image: redis:latest
+  #    ports:
+  #      - "6379:6379"
+  #    volumes:
+  #      - redis-data:/data
+
+  payment:
+    image: mirzaeimahdi409/dish_dash:payment
+    build:
+      context: ./payment
+      dockerfile: Dockerfile
+    networks:
+      - app_network
+    deploy:
+      replicas: 2
+    depends_on:
+      - discovery
+    restart: always
 
 networks:
-  dishdash_network:
+  app_network:
     driver: bridge
 
-volumes:
-  postgres_data:
-
-  redis-data:
+#  redis-data:
