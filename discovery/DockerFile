@@ -3,7 +3,7 @@ FROM openjdk:21
 
 WORKDIR /app
 
-ARG JAR_FILE
+ARG JAR_FILE=discovery/target/discovery-0.0.1-SNAPSHOT.jar
 
 COPY ${JAR_FILE} app.jar
 
