@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
     steps:
@@ -23,10 +24,10 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Set up JDK 22
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
-          java-version: '22.0.1'
+          java-version: '17'
           distribution: 'temurin'
           cache: maven
 
@@ -79,7 +80,7 @@ jobs:
             --build-arg JAR_FILE=${{ env.AUTHENTICATION_JAR_NAME }} \
             -t mirzaeimahdi409/dish_dash_authentication:latest \
             --push \
-            -f ./authentication/DockerFile ./authentication
+            -f ./authentication/Dockerfile ./authentication
 
       - name: Build and Push order Docker Image
         run: |
@@ -128,7 +129,7 @@ jobs:
             -t mirzaeimahdi409/dish_dash_payment:latest \
             --push \
             -f ./payment/DockerFile ./payment
-          
+
       - name: Copy docker-compose.yml to server
         uses: appleboy/scp-action@v0.1.0
         with:
