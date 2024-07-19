@@ -12,14 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-        with:
-          platforms: all
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -63,84 +55,100 @@ jobs:
         run: echo "PAYMENT_JAR_NAME=$(ls payment/target/*.jar)" >> $GITHUB_ENV
 
       - name: Build and Push discovery Docker Image
-        uses: docker/build-push-action@v4
+        uses: mr-smithers-excellent/docker-build-push@v6
         with:
           context: ./discovery
-          file: ./discovery/DockerFile
+          dockerfile: ./discovery/DockerFile
           build-args: JAR_FILE=${{ env.DISCOVERY_JAR_NAME }}
-          push: true
-          tags: mirzaeimahdi409/dish_dash_discovery:latest
-          platforms: linux/amd64,linux/arm64
+          image: mirzaeimahdi409/dish_dash_discovery
+          tags: latest
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push authentication Docker Image
-        uses: docker/build-push-action@v4
+        uses: mr-smithers-excellent/docker-build-push@v6
         with:
           context: ./authentication
-          file: ./authentication/DockerFile
+          dockerfile: ./authentication/DockerFile
           build-args: JAR_FILE=${{ env.AUTHENTICATION_JAR_NAME }}
-          push: true
-          tags: mirzaeimahdi409/dish_dash_authentication:latest
-          platforms: linux/amd64,linux/arm64
+          image: mirzaeimahdi409/dish_dash_authentication
+          tags: latest
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push order Docker Image
-        uses: docker/build-push-action@v4
+        uses: mr-smithers-excellent/docker-build-push@v6
         with:
           context: ./order
-          file: ./order/DockerFile
+          dockerfile: ./order/DockerFile
           build-args: JAR_FILE=${{ env.ORDER_JAR_NAME }}
-          push: true
-          tags: mirzaeimahdi409/dish_dash_order:latest
-          platforms: linux/amd64,linux/arm64
+          image: mirzaeimahdi409/dish_dash_order
+          tags: latest
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push gateway Docker Image
-        uses: docker/build-push-action@v4
+        uses: mr-smithers-excellent/docker-build-push@v6
         with:
           context: ./gateway
-          file: ./gateway/DockerFile
+          dockerfile: ./gateway/DockerFile
           build-args: JAR_FILE=${{ env.GATEWAY_JAR_NAME }}
-          push: true
-          tags: mirzaeimahdi409/dish_dash_gateway:latest
-          platforms: linux/amd64,linux/arm64
+          image: mirzaeimahdi409/dish_dash_gateway
+          tags: latest
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push user Docker Image
-        uses: docker/build-push-action@v4
+        uses: mr-smithers-excellent/docker-build-push@v6
         with:
           context: ./user
-          file: ./user/DockerFile
+          dockerfile: ./user/DockerFile
           build-args: JAR_FILE=${{ env.USER_JAR_NAME }}
-          push: true
-          tags: mirzaeimahdi409/dish_dash_user:latest
-          platforms: linux/amd64,linux/arm64
+          image: mirzaeimahdi409/dish_dash_user
+          tags: latest
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push delivery Docker Image
-        uses: docker/build-push-action@v4
+        uses: mr-smithers-excellent/docker-build-push@v6
         with:
           context: ./delivery
-          file: ./delivery/DockerFile
+          dockerfile: ./delivery/DockerFile
           build-args: JAR_FILE=${{ env.DELIVERY_JAR_NAME }}
-          push: true
-          tags: mirzaeimahdi409/dish_dash_delivery:latest
-          platforms: linux/amd64,linux/arm64
+          image: mirzaeimahdi409/dish_dash_delivery
+          tags: latest
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push product Docker Image
-        uses: docker/build-push-action@v4
+        uses: mr-smithers-excellent/docker-build-push@v6
         with:
           context: ./product
-          file: ./product/DockerFile
+          dockerfile: ./product/DockerFile
           build-args: JAR_FILE=${{ env.PRODUCT_JAR_NAME }}
-          push: true
-          tags: mirzaeimahdi409/dish_dash_product:latest
-          platforms: linux/amd64,linux/arm64
+          image: mirzaeimahdi409/dish_dash_product
+          tags: latest
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push payment Docker Image
-        uses: docker/build-push-action@v4
+        uses: mr-smithers-excellent/docker-build-push@v6
         with:
           context: ./payment
-          file: ./payment/DockerFile
+          dockerfile: ./payment/DockerFile
           build-args: JAR_FILE=${{ env.PAYMENT_JAR_NAME }}
-          push: true
-          tags: mirzaeimahdi409/dish_dash_payment:latest
-          platforms: linux/amd64,linux/arm64
+          image: mirzaeimahdi409/dish_dash_payment
+          tags: latest
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Copy docker-compose.yml to server
         uses: appleboy/scp-action@v0.1.0
