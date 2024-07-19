@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
     steps:
@@ -22,44 +23,36 @@ jobs:
         run: mvn -B install
 
       - name: Get discovery JAR name
-        id: discovery
         run: echo "DISCOVERY_JAR_NAME=$(ls discovery/target/*.jar)" >> $GITHUB_ENV
 
       - name: Get authentication JAR name
-        id: authentication
         run: echo "AUTHENTICATION_JAR_NAME=$(ls authentication/target/*.jar)" >> $GITHUB_ENV
 
       - name: Get order JAR name
-        id: order
         run: echo "ORDER_JAR_NAME=$(ls order/target/*.jar)" >> $GITHUB_ENV
 
       - name: Get gateway JAR name
-        id: gateway
         run: echo "GATEWAY_JAR_NAME=$(ls gateway/target/*.jar)" >> $GITHUB_ENV
 
       - name: Get user JAR name
-        id: user
         run: echo "USER_JAR_NAME=$(ls user/target/*.jar)" >> $GITHUB_ENV
 
       - name: Get delivery JAR name
-        id: delivery
         run: echo "DELIVERY_JAR_NAME=$(ls delivery/target/*.jar)" >> $GITHUB_ENV
 
       - name: Get product JAR name
-        id: product
         run: echo "PRODUCT_JAR_NAME=$(ls product/target/*.jar)" >> $GITHUB_ENV
 
       - name: Get payment JAR name
-        id: payment
         run: echo "PAYMENT_JAR_NAME=$(ls payment/target/*.jar)" >> $GITHUB_ENV
 
       - name: Build and Push discovery Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          directory: ./discovery
-          dockerfile: ./discovery/Dockerfile
-          buildArgs: JAR_FILE=${{ env.DISCOVERY_JAR_NAME }}
-          image: mirzaeimahdi409/dish_dash:discovery
+          context: ./discovery
+          file: ./discovery/Dockerfile
+          build-args: JAR_FILE=${{ env.DISCOVERY_JAR_NAME }}
+          image: mirzaeimahdi409/dish_dash_discovery
           tags: latest
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -68,10 +61,10 @@ jobs:
       - name: Build and Push authentication Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          directory: ./authentication
-          dockerfile: ./authentication/Dockerfile
-          buildArgs: JAR_FILE=${{ env.AUTHENTICATION_JAR_NAME }}
-          image: mirzaeimahdi409/dish_dash:authentication
+          context: ./authentication
+          file: ./authentication/Dockerfile
+          build-args: JAR_FILE=${{ env.AUTHENTICATION_JAR_NAME }}
+          image: mirzaeimahdi409/dish_dash_authentication
           tags: latest
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -80,10 +73,10 @@ jobs:
       - name: Build and Push order Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          directory: ./order
-          dockerfile: ./order/Dockerfile
-          buildArgs: JAR_FILE=${{ env.ORDER_JAR_NAME }}
-          image: mirzaeimahdi409/dish_dash:order
+          context: ./order
+          file: ./order/Dockerfile
+          build-args: JAR_FILE=${{ env.ORDER_JAR_NAME }}
+          image: mirzaeimahdi409/dish_dash_order
           tags: latest
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -92,10 +85,10 @@ jobs:
       - name: Build and Push gateway Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          directory: ./gateway
-          dockerfile: ./gateway/Dockerfile
-          buildArgs: JAR_FILE=${{ env.GATEWAY_JAR_NAME }}
-          image: mirzaeimahdi409/dish_dash:gateway
+          context: ./gateway
+          file: ./gateway/Dockerfile
+          build-args: JAR_FILE=${{ env.GATEWAY_JAR_NAME }}
+          image: mirzaeimahdi409/dish_dash_gateway
           tags: latest
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -104,10 +97,10 @@ jobs:
       - name: Build and Push user Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          directory: ./user
-          dockerfile: ./user/Dockerfile
-          buildArgs: JAR_FILE=${{ env.USER_JAR_NAME }}
-          image: mirzaeimahdi409/dish_dash:user
+          context: ./user
+          file: ./user/Dockerfile
+          build-args: JAR_FILE=${{ env.USER_JAR_NAME }}
+          image: mirzaeimahdi409/dish_dash_user
           tags: latest
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -116,10 +109,10 @@ jobs:
       - name: Build and Push delivery Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          directory: ./delivery
-          dockerfile: ./delivery/Dockerfile
-          buildArgs: JAR_FILE=${{ env.DELIVERY_JAR_NAME }}
-          image: mirzaeimahdi409/dish_dash:delivery
+          context: ./delivery
+          file: ./delivery/Dockerfile
+          build-args: JAR_FILE=${{ env.DELIVERY_JAR_NAME }}
+          image: mirzaeimahdi409/dish_dash_delivery
           tags: latest
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -128,10 +121,10 @@ jobs:
       - name: Build and Push product Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          directory: ./product
-          dockerfile: ./product/Dockerfile
-          buildArgs: JAR_FILE=${{ env.PRODUCT_JAR_NAME }}
-          image: mirzaeimahdi409/dish_dash:product
+          context: ./product
+          file: ./product/Dockerfile
+          build-args: JAR_FILE=${{ env.PRODUCT_JAR_NAME }}
+          image: mirzaeimahdi409/dish_dash_product
           tags: latest
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -140,10 +133,10 @@ jobs:
       - name: Build and Push payment Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          directory: ./payment
-          dockerfile: ./payment/Dockerfile
-          buildArgs: JAR_FILE=${{ env.PAYMENT_JAR_NAME }}
-          image: mirzaeimahdi409/dish_dash:payment
+          context: ./payment
+          file: ./payment/Dockerfile
+          build-args: JAR_FILE=${{ env.PAYMENT_JAR_NAME }}
+          image: mirzaeimahdi409/dish_dash_payment
           tags: latest
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
