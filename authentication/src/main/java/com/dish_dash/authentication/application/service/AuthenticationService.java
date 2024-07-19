@@ -35,7 +35,7 @@ public class AuthenticationService {
   private final RedisTemplate<String, Long> redisTemplate;
   private final UserApi userApi;
 
-  private static final String SECRET_KEY = "your-256-bit-secret";
+  private static final String SECRET_KEY = "ag3Md4EPHdtxFzYdnQVNt1mGPJwlSVLY45cGRyMwmN4";
 
   public String login(String username, String password) {
     AuthenticationInfo authInfo = authRepository.findByUsername(username);

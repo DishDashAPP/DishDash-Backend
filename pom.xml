@@ -36,7 +36,6 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <spring.boot.version>2.7.18</spring.boot.version>
-        <spring.security.version>5.7.3</spring.security.version>
         <eureka.version>3.1.2</eureka.version>
         <spring-cloud.version>2021.0.2</spring-cloud.version>
     </properties>
