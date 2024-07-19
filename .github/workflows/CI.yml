@@ -70,14 +70,14 @@ jobs:
 
       - name: Build and Push Docker Images
         run: |
-          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=discovery/target/discovery-0.0.1-SNAPSHOT.jar -t mirzaeimahdi409/dish_dash_discovery:latest -f ./discovery/DockerFile ./discovery --push
-          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=authentication/target/authentication-0.0.1-SNAPSHOT.jar -t mirzaeimahdi409/dish_dash_authentication:latest -f ./authentication/DockerFile ./authentication --push
-          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=order/target/order-0.0.1-SNAPSHOT.jar -t mirzaeimahdi409/dish_dash_order:latest -f ./order/DockerFile ./order --push
-          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=gateway/target/gateway-0.0.1-SNAPSHOT.jar -t mirzaeimahdi409/dish_dash_gateway:latest -f ./gateway/DockerFile ./gateway --push
-          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=user/target/user-0.0.1-SNAPSHOT.jar -t mirzaeimahdi409/dish_dash_user:latest -f ./user/DockerFile ./user --push
-          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=delivery/target/delivery-0.0.1-SNAPSHOT.jar -t mirzaeimahdi409/dish_dash_delivery:latest -f ./delivery/DockerFile ./delivery --push
-          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=product/target/product-0.0.1-SNAPSHOT.jar -t mirzaeimahdi409/dish_dash_product:latest -f ./product/DockerFile ./product --push
-          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=payment/target/payment-0.0.1-SNAPSHOT.jar -t mirzaeimahdi409/dish_dash_payment:latest -f ./payment/DockerFile ./payment --push
+          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=app/app.jar -t mirzaeimahdi409/dish_dash_discovery:latest -f ./discovery/DockerFile ./discovery --push
+          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=app/app.jar -t mirzaeimahdi409/dish_dash_authentication:latest -f ./authentication/DockerFile ./authentication --push
+          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=app/app.jar -t mirzaeimahdi409/dish_dash_order:latest -f ./order/DockerFile ./order --push
+          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=app/app.jar -t mirzaeimahdi409/dish_dash_gateway:latest -f ./gateway/DockerFile ./gateway --push
+          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=app/app.jar -t mirzaeimahdi409/dish_dash_user:latest -f ./user/DockerFile ./user --push
+          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=app/app.jar -t mirzaeimahdi409/dish_dash_delivery:latest -f ./delivery/DockerFile ./delivery --push
+          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=app/app.jar -t mirzaeimahdi409/dish_dash_product:latest -f ./product/DockerFile ./product --push
+          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=app/app.jar -t mirzaeimahdi409/dish_dash_payment:latest -f ./payment/DockerFile ./payment --push
 
       - name: Copy docker-compose.yml to server
         uses: appleboy/scp-action@v0.1.0
