@@ -23,34 +23,34 @@ jobs:
         run: mvn -B install
 
       - name: Get discovery JAR name
-        run: echo "DISCOVERY_JAR_NAME=$(ls ./target/*.jar)" >> $GITHUB_ENV
+        run: echo "DISCOVERY_JAR_NAME=$(ls discovery/target/*.jar)" >> $GITHUB_ENV
 
       - name: Get authentication JAR name
-        run: echo "AUTHENTICATION_JAR_NAME=$(ls ./target/*.jar)" >> $GITHUB_ENV
+        run: echo "AUTHENTICATION_JAR_NAME=$(ls authentication/target/*.jar)" >> $GITHUB_ENV
 
       - name: Get order JAR name
-        run: echo "ORDER_JAR_NAME=$(ls ./target/*.jar)" >> $GITHUB_ENV
+        run: echo "ORDER_JAR_NAME=$(ls order/target/*.jar)" >> $GITHUB_ENV
 
       - name: Get gateway JAR name
-        run: echo "GATEWAY_JAR_NAME=$(ls ./target/*.jar)" >> $GITHUB_ENV
+        run: echo "GATEWAY_JAR_NAME=$(ls gateway/target/*.jar)" >> $GITHUB_ENV
 
       - name: Get user JAR name
-        run: echo "USER_JAR_NAME=$(ls ./target/*.jar)" >> $GITHUB_ENV
+        run: echo "USER_JAR_NAME=$(ls user/target/*.jar)" >> $GITHUB_ENV
 
       - name: Get delivery JAR name
-        run: echo "DELIVERY_JAR_NAME=$(ls ./target/*.jar)" >> $GITHUB_ENV
+        run: echo "DELIVERY_JAR_NAME=$(ls delivery/target/*.jar)" >> $GITHUB_ENV
 
       - name: Get product JAR name
-        run: echo "PRODUCT_JAR_NAME=$(ls ./target/*.jar)" >> $GITHUB_ENV
+        run: echo "PRODUCT_JAR_NAME=$(ls product/target/*.jar)" >> $GITHUB_ENV
 
       - name: Get payment JAR name
-        run: echo "PAYMENT_JAR_NAME=$(ls ./target/*.jar)" >> $GITHUB_ENV
+        run: echo "PAYMENT_JAR_NAME=$(ls payment/target/*.jar)" >> $GITHUB_ENV
 
       - name: Build and Push discovery Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           directory: ./discovery
-          dockerfile: Dockerfile
+          dockerfile: ./discovery/target/Dockerfile
           buildArgs: JAR_FILE=${{ env.DISCOVERY_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_discovery
           tags: latest
@@ -62,7 +62,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           directory: ./authentication
-          dockerfile: Dockerfile
+          dockerfile: ./authentication/target/Dockerfile
           buildArgs: JAR_FILE=${{ env.AUTHENTICATION_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_authentication
           tags: latest
@@ -74,7 +74,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           directory: ./order
-          dockerfile: Dockerfile
+          dockerfile: ./order/target/Dockerfile
           buildArgs: JAR_FILE=${{ env.ORDER_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_order
           tags: latest
@@ -86,7 +86,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           directory: ./gateway
-          dockerfile: Dockerfile
+          dockerfile: ./gateway/target/Dockerfile
           buildArgs: JAR_FILE=${{ env.GATEWAY_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_gateway
           tags: latest
@@ -98,7 +98,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           directory: ./user
-          dockerfile: Dockerfile
+          dockerfile: ./user/target/Dockerfile
           buildArgs: JAR_FILE=${{ env.USER_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_user
           tags: latest
@@ -110,7 +110,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           directory: ./delivery
-          dockerfile: Dockerfile
+          dockerfile: ./delivery/target/Dockerfile
           buildArgs: JAR_FILE=${{ env.DELIVERY_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_delivery
           tags: latest
@@ -122,7 +122,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           directory: ./product
-          dockerfile: Dockerfile
+          dockerfile: ./product/target/Dockerfile
           buildArgs: JAR_FILE=${{ env.PRODUCT_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_product
           tags: latest
@@ -134,7 +134,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           directory: ./payment
-          dockerfile: Dockerfile
+          dockerfile: ./payment/target/Dockerfile
           buildArgs: JAR_FILE=${{ env.PAYMENT_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_payment
           tags: latest
