@@ -24,8 +24,7 @@ public class AuthenticationController {
     authenticationApi.register(
         registerRequest.getUsername(),
         registerRequest.getPassword(),
-        // TODO REMOVE .toString()
-        registerRequest.getRole().toString());
+        registerRequest.getRole());
   }
 
   @GetMapping("/validate")

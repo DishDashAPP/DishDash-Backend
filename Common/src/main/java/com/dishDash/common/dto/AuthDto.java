@@ -1,5 +1,6 @@
 package com.dishDash.common.dto;
 
+import com.dishDash.common.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,8 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LocationDto {
-  private long id;
-  private long latitude;
-  private long longitude;
+public class AuthDto {
+  private boolean isValid;
+  private long userId;
+  private Role role;
 }

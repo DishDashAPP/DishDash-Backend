@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.*;
 public class RestaurantOwnerController {
   private final UserApi userApi;
 
-  @PutMapping()
+  @PutMapping
   @Authentication
-  Boolean modifyRestaurantProfile(
-      String username, @RequestBody RestaurantOwnerDto restaurantOwnerDto) {
-    return userApi.modifyRestaurantProfile(Long.parseLong(username), restaurantOwnerDto);
+  Boolean modifyRestaurantProfile(long userId, @RequestBody RestaurantOwnerDto restaurantOwnerDto) {
+    return userApi.modifyRestaurantProfile(userId, restaurantOwnerDto);
   }
-
 }

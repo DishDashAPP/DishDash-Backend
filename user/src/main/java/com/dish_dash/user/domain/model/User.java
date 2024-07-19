@@ -3,9 +3,9 @@ package com.dish_dash.user.domain.model;
 public interface User {
   Long getId();
 
-  String getName();
+  String getFirstName();
+
+  String getLastName();
 
   String getPhoneNumber();
-
-  String getUsername();
 }

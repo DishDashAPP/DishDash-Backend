@@ -28,6 +28,10 @@ public class Food {
   private Integer stock;
 
   @ManyToOne
+  @JoinColumn(name = "category_id")
+  private Category category;
+
+  @ManyToOne
   @JoinColumn(name = "menu_id")
   private Menu menu;
 }

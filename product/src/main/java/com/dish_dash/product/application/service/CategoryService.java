@@ -2,6 +2,7 @@ package com.dish_dash.product.application.service;
 
 import com.dishDash.common.dto.CategoryDto;
 import com.dish_dash.product.domain.mapper.ProductMapper;
+import com.dish_dash.product.domain.model.Category;
 import com.dish_dash.product.infrastructure.repository.CategoryRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,5 +32,9 @@ public class CategoryService {
 
   public void deleteCategory(Long id) {
     categoryRepository.deleteById(id);
+  }
+
+  public Category getReferenceCategory(Long id) {
+    return categoryRepository.getReferenceById(id);
   }
 }

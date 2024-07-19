@@ -1,8 +1,7 @@
 package com.dish_dash.user.domain.model;
 
-import javax.persistence.*;
-
 import com.dishDash.common.enums.DeliveryPersonStatus;
+import javax.persistence.*;
 import lombok.*;
 
 @Getter
@@ -16,11 +15,10 @@ import lombok.*;
 @Table(name = "delivery_persons")
 public class DeliveryPerson implements User {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @Id private Long id;
 
-  private String name;
+  private String firstName;
+  private String lastName;
   private String phoneNumber;
 
   @ManyToOne
@@ -29,5 +27,4 @@ public class DeliveryPerson implements User {
 
   private Long currentOrderId;
   private DeliveryPersonStatus status;
-  private String username;
 }

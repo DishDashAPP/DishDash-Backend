@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class FoodController {
   private final FoodApi foodApi;
 
-  @GetMapping()
+  @GetMapping
   @Authentication
   List<FoodDto> getAllFoods() {
     return foodApi.getAllFoods();
@@ -25,7 +25,7 @@ public class FoodController {
     return foodApi.getFoodById(id);
   }
 
-  @PostMapping()
+  @PostMapping
   @Authentication
   FoodDto createFood(@RequestBody FoodDto foodDto) {
     return foodApi.createFood(foodDto);

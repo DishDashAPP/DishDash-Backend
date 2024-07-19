@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerController {
   private final UserApi userApi;
 
-  @PutMapping()
+  @PutMapping
   @Authentication
-  Boolean modifyCustomerProfile(String username, @RequestBody CustomerDto customerDto) {
-    return userApi.modifyCustomerProfile(Long.parseLong(username), customerDto);
+  Boolean modifyCustomerProfile(long userId, @RequestBody CustomerDto customerDto) {
+    return userApi.modifyCustomerProfile(userId, customerDto);
   }
 
-  @PostMapping()
+  @GetMapping()
   @Authentication
-  public CustomerDto getUserProfile(String username) {
-    return userApi.getUserProfile(Long.valueOf(username));
+  public CustomerDto getUserProfile(long userId) {
+    return userApi.getUserProfile(userId);
   }
 }

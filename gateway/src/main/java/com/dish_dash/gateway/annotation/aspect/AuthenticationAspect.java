@@ -1,9 +1,13 @@
 package com.dish_dash.gateway.annotation.aspect;
 
+import com.dishDash.common.dto.AuthDto;
 import com.dishDash.common.enums.ErrorCode;
+import com.dishDash.common.enums.Role;
+import com.dishDash.common.exception.CustomException;
 import com.dishDash.common.feign.authentication.AuthenticationApi;
 import com.dishDash.common.util.HttpHeaders;
-import com.dish_dash.gateway.exception.CustomException;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +27,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @RequiredArgsConstructor
 public class AuthenticationAspect {
   private final AuthenticationApi authenticationApi;
+  private static final Map<String, List<Role>> ROLE_PATH_ACCESS =
+      Map.of(
+          "/user", List.of(Role.USER, Role.CUSTOMER),
+          "/restaurantOwner", List.of(Role.RESTAURANT_OWNER));
 
   @Around(
       "@annotation(com.dish_dash.gateway.annotation.Authentication) "
@@ -42,30 +50,40 @@ public class AuthenticationAspect {
       throw new CustomException(ErrorCode.INVALID_TOKEN, "Invalid token");
     }
 
-    String username = authenticationApi.validate(token);
-    if (Objects.isNull(username)) {
+    AuthDto authDto = authenticationApi.validate(token);
+    if (!authDto.isValid()) {
       log.error("Invalid token: {}", token);
       throw new CustomException(ErrorCode.UNAUTHORIZED, "Unauthorized");
     }
+    String requestPath = httpServletRequestOptional.get().getRequestURI();
 
-    injectTokenIntoArgs(joinPoint, methodSignature, token, username);
+    if (!isAccessAllowed(authDto.getRole(), requestPath)) {
+      log.error(
+          "Access denied for user with roles: {} to path: {}", authDto.getRole(), requestPath);
+      throw new CustomException(ErrorCode.FORBIDDEN, "Access denied");
+    }
+    injectTokenIntoArgs(joinPoint, methodSignature, token, authDto.getUserId());
     return joinPoint.proceed(joinPoint.getArgs());
   }
 
+  private boolean isAccessAllowed(Role role, String requestPath) {
+    return ROLE_PATH_ACCESS.entrySet().stream()
+        .filter(entry -> requestPath.startsWith(entry.getKey()))
+        .flatMap(entry -> entry.getValue().stream())
+        .anyMatch(allowedRole -> allowedRole.equals(role));
+  }
+
   private void injectTokenIntoArgs(
-      ProceedingJoinPoint joinPoint,
-      MethodSignature methodSignature,
-      String token,
-      String username) {
+      ProceedingJoinPoint joinPoint, MethodSignature methodSignature, String token, Long userId) {
     Object[] args = joinPoint.getArgs();
     String[] parameterNames = methodSignature.getParameterNames();
     for (int i = 0; i < args.length; i++) {
       if ("token".equals(parameterNames[i]) && args[i] instanceof String) {
         log.info("Injecting token into method parameter: {}", parameterNames[i]);
         args[i] = token;
-      } else if ("username".equals(parameterNames[i]) && args[i] instanceof String) {
-        log.info("Injecting username into method parameter: {}", parameterNames[i]);
-        args[i] = username;
+      } else if ("userId".equals(parameterNames[i]) && args[i] instanceof Long) {
+        log.info("Injecting userId into method parameter: {}", parameterNames[i]);
+        args[i] = userId;
       }
     }
   }

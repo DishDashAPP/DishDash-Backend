@@ -15,14 +15,12 @@ import lombok.*;
 @Table(name = "restaurant_owners")
 public class RestaurantOwner implements User {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @Id private Long id;
 
-  private String name;
+  private String firstName;
+  private String lastName;
   private String phoneNumber;
   private String address;
-  private String username;
 
   @ElementCollection
   @CollectionTable(

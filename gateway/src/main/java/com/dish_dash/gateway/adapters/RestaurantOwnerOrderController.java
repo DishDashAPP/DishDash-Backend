@@ -15,20 +15,21 @@ public class RestaurantOwnerOrderController {
   private final RestaurantOwnerOrderApi restaurantOwnerOrderApi;
 
   @PostMapping("/status")
+  @Authentication
   public boolean updateOrderStatusByRestaurantOwner(
-      @RequestParam Long orderID, OrderStatus orderStatus) {
-    return restaurantOwnerOrderApi.updateOrderStatusByRestaurantOwner(orderID, orderStatus);
+      @RequestParam Long orderId, @RequestParam OrderStatus status) {
+    return restaurantOwnerOrderApi.updateOrderStatusByRestaurantOwner(orderId, status);
   }
 
   @GetMapping("/orderHistory")
   @Authentication
-  List<OrderDto> getRestaurantOwnerOrderHistory(String username) {
-    return restaurantOwnerOrderApi.getRestaurantOwnerOrderHistory(Long.valueOf(username));
+  List<OrderDto> getRestaurantOwnerOrderHistory(long userId) {
+    return restaurantOwnerOrderApi.getRestaurantOwnerOrderHistory(userId);
   }
 
   @GetMapping("/activeOrders")
   @Authentication
-  List<OrderDto> getRestaurantOwnerActiveOrders(String username) {
-    return restaurantOwnerOrderApi.getRestaurantOwnerActiveOrders(Long.valueOf(username));
+  List<OrderDto> getRestaurantOwnerActiveOrders(long userId) {
+    return restaurantOwnerOrderApi.getRestaurantOwnerActiveOrders(userId);
   }
 }

@@ -17,13 +17,12 @@ import lombok.*;
 public class Customer implements User {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String name;
+  private String firstName;
+  private String lastName;
   private String phoneNumber;
   private String address;
-  private String username;
 
   @ElementCollection
   @CollectionTable(name = "customer_orders", joinColumns = @JoinColumn(name = "customer_id"))

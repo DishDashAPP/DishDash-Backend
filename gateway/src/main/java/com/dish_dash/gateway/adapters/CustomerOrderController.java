@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerOrderController {
   private final CustomerOrderAPi customerOrderAPi;
 
-  @PostMapping()
+  @PostMapping
   @Authentication
   public OrderDto createOrder(
-      String username,
+      long userId,
       @RequestParam Long restaurantOwnerId,
       @RequestBody List<OrderItemDto> orderItemsDto) {
-    return customerOrderAPi.createOrder(Long.valueOf(username), restaurantOwnerId, orderItemsDto);
+    return customerOrderAPi.createOrder(userId, restaurantOwnerId, orderItemsDto);
   }
 
   @PostMapping("/modifyOrder")
@@ -31,25 +31,25 @@ public class CustomerOrderController {
 
   @PostMapping("/orderRate")
   @Authentication
-  boolean setOrderRate(String username, @RequestParam Long orderId, @RequestParam int point) {
-    return customerOrderAPi.setOrderRate(Long.valueOf(username), orderId, point);
+  boolean setOrderRate(long userId, @RequestParam Long orderId, @RequestParam int point) {
+    return customerOrderAPi.setOrderRate(userId, orderId, point);
   }
 
   @PostMapping("/deliveryRate")
   @Authentication
-  boolean setDeliveryRate(String username, @RequestParam Long orderId, @RequestParam int point) {
-    return customerOrderAPi.setDeliveryRate(Long.valueOf(username), orderId, point);
+  boolean setDeliveryRate(long userId, @RequestParam Long orderId, @RequestParam int point) {
+    return customerOrderAPi.setDeliveryRate(userId, orderId, point);
   }
 
   @GetMapping("/customerOrders")
   @Authentication
-  List<OrderDto> getCustomerOrders(String username) {
-    return customerOrderAPi.getCustomerOrders(Long.valueOf(username));
+  List<OrderDto> getCustomerOrders(long userId) {
+    return customerOrderAPi.getCustomerOrders(userId);
   }
 
   @GetMapping("/current")
   @Authentication
-  OrderDto getCustomerCurrentOrder(String username) {
-    return customerOrderAPi.getCustomerCurrentOrder(Long.valueOf(username));
+  OrderDto getCustomerCurrentOrder(long userId) {
+    return customerOrderAPi.getCustomerCurrentOrder(userId);
   }
 }

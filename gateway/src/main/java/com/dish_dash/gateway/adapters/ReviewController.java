@@ -14,7 +14,7 @@ public class ReviewController {
   @PostMapping("/order")
   @Authentication
   public boolean setOrderReview(
-      String username, @RequestParam Long orderID, @RequestParam String comment) {
-    return reviewApi.setOrderReview(Long.valueOf(username), orderID, comment);
+      long userId, @RequestParam Long orderId, @RequestParam String comment) {
+    return reviewApi.setOrderReview(userId, orderId, comment);
   }
 }

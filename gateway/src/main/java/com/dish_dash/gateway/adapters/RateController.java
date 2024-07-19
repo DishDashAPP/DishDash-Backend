@@ -14,19 +14,19 @@ public class RateController {
 
   @PostMapping("/order")
   @Authentication
-  boolean setOrderRate(String username, @RequestParam Long orderId, @RequestParam int point) {
-    return rateApi.setOrderRate(Long.valueOf(username), orderId, point);
+  boolean setOrderRate(long userId, @RequestParam Long orderId, @RequestParam int point) {
+    return rateApi.setOrderRate(userId, orderId, point);
   }
 
   @PostMapping("/delivery")
   @Authentication
-  boolean setDeliveryRate(String username, @RequestParam Long orderID, @RequestParam int point) {
-    return rateApi.setDeliveryRate(Long.valueOf(username), orderID, point);
+  boolean setDeliveryRate(long userId, @RequestParam Long orderId, @RequestParam int point) {
+    return rateApi.setDeliveryRate(userId, orderId, point);
   }
 
-  @GetMapping("/delivery/{deliveryPersonID}")
+  @GetMapping("/delivery/{deliveryPersonId}")
   @Authentication
-  RateDto getDeliveryRate(@PathVariable String deliveryPersonID) {
-    return rateApi.getDeliveryRate(deliveryPersonID);
+  RateDto getDeliveryRate(@PathVariable String deliveryPersonId) {
+    return rateApi.getDeliveryRate(deliveryPersonId);
   }
 }

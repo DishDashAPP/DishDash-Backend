@@ -1,106 +1,128 @@
 package com.dish_dash.authentication.application.service;
 
+import com.dishDash.common.dto.AuthDto;
+import com.dishDash.common.dto.CustomerDto;
+import com.dishDash.common.dto.DeliveryPersonDto;
+import com.dishDash.common.enums.ErrorCode;
+import com.dishDash.common.enums.Role;
+import com.dishDash.common.exception.CustomException;
+import com.dishDash.common.feign.user.UserApi;
 import com.dish_dash.authentication.domain.model.AuthenticationInfo;
-import com.dish_dash.authentication.domain.model.Token;
 import com.dish_dash.authentication.infrastructure.repository.AuthenticationRepository;
-import com.dish_dash.authentication.infrastructure.repository.TokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import java.security.Key;
+import java.util.Date;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationService {
+  private final AuthenticationRepository authRepository;
+  private final BCryptPasswordEncoder passwordEncoder;
+  private final RedisTemplate<String, Long> redisTemplate;
+  private final UserApi userApi;
 
-    private final AuthenticationRepository authRepository;
-    private final TokenRepository tokenRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
-    private final StringRedisTemplate redisTemplate;
+  private static final String SECRET_KEY = "your-256-bit-secret";
 
-    private static final String SECRET_KEY = "your-256-bit-secret"; // Replace with your actual secret key
-
-    public String login(String username, String password) {
-        AuthenticationInfo authInfo = authRepository.findByUsername(username);
-        if (authInfo != null && passwordEncoder.matches(password, authInfo.getPassword())) {
-            Token token = generateToken();
-            return token.getValue();
-        }
-        return null;
+  public String login(String username, String password) {
+    AuthenticationInfo authInfo = authRepository.findByUsername(username);
+    if (authInfo != null && passwordEncoder.matches(password, authInfo.getPassword())) {
+      return generateToken(authInfo.getUserId());
     }
+    return null;
+  }
 
-    public boolean validateToken(String tokenValue) {
-        Token token = tokenRepository.findById(tokenValue).orElse(null);
-        if (token != null) {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
-                    .build()
-                    .parseClaimsJws(token.getValue())
-                    .getBody();
-            String redisKey = "token:" + token.getValue();
-            String storedToken = redisTemplate.opsForValue().get(redisKey);
-            return storedToken == null && new Date().before(claims.getExpiration());
-        }
-        return false;
+  public AuthDto validateToken(String tokenValue) {
+    Claims claims = extractAllClaims(tokenValue);
+    claims.getSubject();
+    String userId = claims.getSubject();
+    if (Boolean.TRUE.equals(redisTemplate.hasKey(tokenValue))
+        && Objects.nonNull(userId)
+        && new Date().before(claims.getExpiration())) {
+      Optional<AuthenticationInfo> authenticationInfoOptional =
+          authRepository.findById(Long.valueOf(userId));
+      if (authenticationInfoOptional.isPresent())
+        return AuthDto.builder()
+            .isValid(true)
+            .userId(Long.parseLong(userId))
+            .role(authenticationInfoOptional.get().getRole())
+            .build();
     }
+    return AuthDto.builder().isValid(false).build();
+  }
 
-    public boolean invalidateToken(String tokenValue) {
-        Token token = tokenRepository.findById(tokenValue).orElse(null);
-        if (token != null) {
-            String redisKey = "token:" + token.getValue();
-            redisTemplate.opsForValue().set(redisKey, "revoked", 24, TimeUnit.HOURS);
-            return true;
-        }
-        return false;
+  public void invalidateToken(String token) {
+    if (Boolean.TRUE.equals(redisTemplate.hasKey(token))) {
+      redisTemplate.delete(token);
     }
+  }
 
-    private Token generateToken() {
-        Token token = new Token();
-        token.setValue(generateTokenValue());
-        tokenRepository.save(token);
-        return token;
-    }
+  private String generateToken(Long userId) {
+    long nowMillis = System.currentTimeMillis();
+    long expMillis = nowMillis + 24 * 60 * 60 * 1000;
+    String token = generateTokenValue(userId, expMillis, nowMillis);
+    redisTemplate.opsForValue().set(token, userId, expMillis, TimeUnit.MILLISECONDS);
+    return token;
+  }
 
-    private String generateTokenValue() {
-        long nowMillis = System.currentTimeMillis();
-        long expMillis = nowMillis + 24 * 60 * 60 * 1000; // 1 day validity
-        return Jwts.builder()
-                .setIssuer("https://auth.example.com")
-                .setSubject("user")
-                .setAudience("https://api.example.com")
-                .setIssuedAt(new Date(nowMillis))
-                .setExpiration(new Date(expMillis))
-                .setId(UUID.randomUUID().toString())
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY.getBytes(StandardCharsets.UTF_8))
-                .compact();
-    }
+  private String generateTokenValue(Long userId, long expMillis, long nowMillis) {
+    return Jwts.builder()
+        .setSubject(String.valueOf(userId))
+        .setIssuedAt(new Date(nowMillis))
+        .setExpiration(new Date(expMillis))
+        .setId(UUID.randomUUID().toString())
+        .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+        .compact();
+  }
 
-    public boolean register(String username, String password, String role) {
-    // 1. Check if the username already exists
+  private Key getSignInKey() {
+    byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+    return Keys.hmacShaKeyFor(keyBytes);
+  }
+
+  private Claims extractAllClaims(String token) {
+    return Jwts.parserBuilder()
+        .setSigningKey(getSignInKey())
+        .build()
+        .parseClaimsJws(token)
+        .getBody();
+  }
+
+  public void register(String username, String password, Role role) {
     AuthenticationInfo existingUser = authRepository.findByUsername(username);
-    if (existingUser != null) {
-        // Username already exists
-        return false; // Or throw an exception
+    if (Objects.nonNull(existingUser)) {
+      log.info("User already exists: {}", existingUser);
+      throw new CustomException(ErrorCode.USER_ALREADY_EXISTS, "User already exists");
     }
-
-    // 2. Encode the password
     String encodedPassword = passwordEncoder.encode(password);
 
-    // 3. Create and save the AuthenticationInfo object
-    AuthenticationInfo newUser = new AuthenticationInfo();
-    newUser.setUsername(username);
-    newUser.setPassword(encodedPassword);
-    newUser.setRoles(role);
-    authRepository.save(newUser);
+    AuthenticationInfo authenticationInfo =
+        authRepository.save(
+            AuthenticationInfo.builder()
+                .username(username)
+                .password(encodedPassword)
+                .role(role)
+                .build());
 
-    return true;
-}
+    switch (role) {
+      case CUSTOMER ->
+          userApi.createCustomer(CustomerDto.builder().id(authenticationInfo.getUserId()).build());
+      case DELIVERY_PERSON ->
+          userApi.createDeliveryPerson(
+              DeliveryPersonDto.builder().id(authenticationInfo.getUserId()).build());
+    }
+  }
 }

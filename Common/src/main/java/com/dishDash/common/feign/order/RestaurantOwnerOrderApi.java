@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.*;
 @FeignClient(name = "order-service", contextId = "restaurant-owner-order-service")
 public interface RestaurantOwnerOrderApi {
   @PostMapping("/status")
-  boolean updateOrderStatusByRestaurantOwner(@RequestParam Long orderID, OrderStatus orderStatus);
+  boolean updateOrderStatusByRestaurantOwner(
+      @RequestParam Long orderID, @RequestParam OrderStatus orderStatus);
 
   @GetMapping("/orderHistory")
   List<OrderDto> getRestaurantOwnerOrderHistory(@RequestParam Long restaurantOwnerID);

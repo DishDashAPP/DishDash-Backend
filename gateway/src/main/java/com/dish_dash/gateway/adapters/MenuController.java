@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class MenuController {
   private final MenuApi menuApi;
 
-  @GetMapping()
+  @GetMapping
   public List<MenuDto> getAllMenus() {
     return menuApi.getAllMenus();
   }
@@ -22,7 +22,7 @@ public class MenuController {
     return menuApi.getMenuById(id);
   }
 
-  @PostMapping()
+  @PostMapping
   public MenuDto createMenu(@RequestBody MenuDto menuDto) {
     return menuApi.createMenu(menuDto);
   }

@@ -1,4 +1,4 @@
-package com.dish_dash.gateway.exception;
+package com.dishDash.common.exception;
 
 import com.dishDash.common.enums.ErrorCode;
 import lombok.Getter;

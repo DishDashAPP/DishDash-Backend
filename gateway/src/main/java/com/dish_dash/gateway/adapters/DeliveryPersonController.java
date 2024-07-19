@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class DeliveryPersonController {
   private final UserApi userApi;
 
-  @PutMapping()
+  @PutMapping
   @Authentication
   public Boolean modifyDeliveryPersonProfile(
       String username, @RequestBody DeliveryPersonDto deliveryPersonDto) {
