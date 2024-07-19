@@ -31,7 +31,7 @@ public class AuthenticationController {
   @GetMapping("/validate")
   @Authentication
   boolean validate(String token) {
-    return Objects.nonNull(token);
+    return authenticationApi.validate(token).isValid();
   }
 
   @PostMapping("/logout")
