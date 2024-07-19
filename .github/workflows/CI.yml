@@ -151,12 +151,15 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: copy docker-compose file to server
-        uses: appleboy/scp-action@v0.1.7
+        run: ls -l docker-compose.yaml
+
+      - name: Deploy with SSH
+        uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
-          source: "docker-compose.yaml"
+          source: "./docker-compose.yaml"
           target: "/root"
 
       - name: Deploy with SSH
