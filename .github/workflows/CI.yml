@@ -49,7 +49,6 @@ jobs:
       - name: Build and Push discovery Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          directory: ./discovery
           dockerfile: Dockerfile
           buildArgs: JAR_FILE=${{ env.DISCOVERY_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_discovery
@@ -61,7 +60,6 @@ jobs:
       - name: Build and Push authentication Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          directory: ./authentication
           dockerfile: Dockerfile
           buildArgs: JAR_FILE=${{ env.AUTHENTICATION_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_authentication
@@ -73,7 +71,6 @@ jobs:
       - name: Build and Push order Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          directory: ./order
           dockerfile: Dockerfile
           buildArgs: JAR_FILE=${{ env.ORDER_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_order
@@ -85,7 +82,6 @@ jobs:
       - name: Build and Push gateway Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          directory: ./gateway
           dockerfile: Dockerfile
           buildArgs: JAR_FILE=${{ env.GATEWAY_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_gateway
@@ -97,7 +93,6 @@ jobs:
       - name: Build and Push user Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          directory: ./user
           dockerfile: Dockerfile
           buildArgs: JAR_FILE=${{ env.USER_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_user
@@ -109,7 +104,6 @@ jobs:
       - name: Build and Push delivery Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          directory: ./delivery
           dockerfile: Dockerfile
           buildArgs: JAR_FILE=${{ env.DELIVERY_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_delivery
@@ -121,7 +115,6 @@ jobs:
       - name: Build and Push product Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          directory: ./product
           dockerfile: Dockerfile
           buildArgs: JAR_FILE=${{ env.PRODUCT_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_product
@@ -133,7 +126,6 @@ jobs:
       - name: Build and Push payment Docker Image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          directory: ./payment
           dockerfile: Dockerfile
           buildArgs: JAR_FILE=${{ env.PAYMENT_JAR_NAME }}
           image: mirzaeimahdi409/dish_dash_payment
