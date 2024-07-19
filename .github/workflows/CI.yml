@@ -54,14 +54,6 @@ jobs:
         id: payment_jar
         run: echo "PAYMENT_JAR_NAME=$(ls payment/target/*.jar)" >> $GITHUB_ENV
 
-      - name: Build and Push discovery Docker Image
-        run: |
-          docker buildx build --platform linux/amd64,linux/arm64 \
-            --build-arg JAR_FILE=${{ env.DISCOVERY_JAR_NAME }} \
-            -t mirzaeimahdi409/dish_dash_discovery:latest \
-            --push \
-            -f ./discovery/DockerFile ./discovery
-
       - name: Build and Push authentication Docker Image
         run: |
           docker buildx build --platform linux/amd64,linux/arm64 \
@@ -69,6 +61,14 @@ jobs:
             -t mirzaeimahdi409/dish_dash_authentication:latest \
             --push \
             -f ./authentication/DockerFile ./authentication
+
+      - name: Build and Push discovery Docker Image
+        run: |
+          docker buildx build --platform linux/amd64,linux/arm64 \
+            --build-arg JAR_FILE=${{ env.DISCOVERY_JAR_NAME }} \
+            -t mirzaeimahdi409/dish_dash_discovery:latest \
+            --push \
+            -f ./discovery/DockerFile ./discovery
 
       - name: Build and Push order Docker Image
         run: |
