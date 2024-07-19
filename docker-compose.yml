@@ -23,7 +23,7 @@ services:
   #volumes:
   #  postgres_data:
   discovery:
-    image: mirzaeimahdi409/dish_dash:discovery
+    image: mirzaeimahdi409/dish_dash_discovery
     build:
       context: ./discovery
       dockerfile: Dockerfile
@@ -34,7 +34,7 @@ services:
     restart: always
 
   authentication:
-    image: mirzaeimahdi409/dish_dash:authentication
+    image: mirzaeimahdi409/dish_dash_authentication
     build:
       context: ./authentication
       dockerfile: Dockerfile
@@ -47,7 +47,7 @@ services:
     restart: always
 
   order:
-    image: mirzaeimahdi409/dish_dash:order
+    image: mirzaeimahdi409/dish_dash_order
     build:
       context: ./order
       dockerfile: Dockerfile
@@ -60,7 +60,7 @@ services:
     restart: always
 
   gateway:
-    image: mirzaeimahdi409/dish_dash:gateway
+    image: mirzaeimahdi409/dish_dash_gateway
     build:
       context: ./gateway
       dockerfile: Dockerfile
@@ -73,7 +73,7 @@ services:
     restart: always
 
   user:
-    image: mirzaeimahdi409/dish_dash:user
+    image: mirzaeimahdi409/dish_dash_user
     build:
       context: ./user
       dockerfile: Dockerfile
@@ -86,7 +86,7 @@ services:
     restart: always
 
   delivery:
-    image: mirzaeimahdi409/dish_dash:delivery
+    image: mirzaeimahdi409/dish_dash_delivery
     build:
       context: ./delivery
       dockerfile: Dockerfile
@@ -99,7 +99,7 @@ services:
     restart: always
 
   product:
-    image: mirzaeimahdi409/dish_dash:product
+    image: mirzaeimahdi409/dish_dash_product
     build:
       context: ./product
       dockerfile: Dockerfile
@@ -119,7 +119,7 @@ services:
   #      - redis-data:/data
 
   payment:
-    image: mirzaeimahdi409/dish_dash:payment
+    image: mirzaeimahdi409/dish_dash_payment
     build:
       context: ./payment
       dockerfile: Dockerfile
