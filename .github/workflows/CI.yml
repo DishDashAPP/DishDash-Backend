@@ -6,78 +6,147 @@ on:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-        with:
-          platforms: all
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
           cache: maven
-
       - name: Build all modules with Maven
         run: mvn -B install
 
-      - name: Verify JAR files
-        run: |
-          ls discovery/target/*.jar
-          ls authentication/target/*.jar
-          ls order/target/*.jar
-          ls gateway/target/*.jar
-          ls user/target/*.jar
-          ls delivery/target/*.jar
-          ls product/target/*.jar
-          ls payment/target/*.jar
+      - name: Get discovery JAR name
+        id: discovery_jar
+        run: echo "DISCOVERY_JAR_NAME=$(ls discovery/target/*.jar)" >> $GITHUB_ENV
 
-      - name: Get JAR names
-        id: get_jars
-        run: |
-          echo "DISCOVERY_JAR_NAME=$(ls discovery/target/*.jar)" >> $GITHUB_ENV
-          echo "AUTHENTICATION_JAR_NAME=$(ls authentication/target/*.jar)" >> $GITHUB_ENV
-          echo "ORDER_JAR_NAME=$(ls order/target/*.jar)" >> $GITHUB_ENV
-          echo "GATEWAY_JAR_NAME=$(ls gateway/target/*.jar)" >> $GITHUB_ENV
-          echo "USER_JAR_NAME=$(ls user/target/*.jar)" >> $GITHUB_ENV
-          echo "DELIVERY_JAR_NAME=$(ls delivery/target/*.jar)" >> $GITHUB_ENV
-          echo "PRODUCT_JAR_NAME=$(ls product/target/*.jar)" >> $GITHUB_ENV
-          echo "PAYMENT_JAR_NAME=$(ls payment/target/*.jar)" >> $GITHUB_ENV
+      - name: Get authentication JAR name
+        id: auth_jar
+        run: echo "AUTHENTICATION_JAR_NAME=$(ls authentication/target/*.jar)" >> $GITHUB_ENV
 
-      - name: Copy JAR files to build context
-        run: |
-          cp ${{ env.DISCOVERY_JAR_NAME }} discovery/app.jar
-          cp ${{ env.AUTHENTICATION_JAR_NAME }} authentication/app.jar
-          cp ${{ env.ORDER_JAR_NAME }} order/app.jar
-          cp ${{ env.GATEWAY_JAR_NAME }} gateway/app.jar
-          cp ${{ env.USER_JAR_NAME }} user/app.jar
-          cp ${{ env.DELIVERY_JAR_NAME }} delivery/app.jar
-          cp ${{ env.PRODUCT_JAR_NAME }} product/app.jar
-          cp ${{ env.PAYMENT_JAR_NAME }} payment/app.jar
+      - name: Get order JAR name
+        id: order_jar
+        run: echo "ORDER_JAR_NAME=$(ls order/target/*.jar)" >> $GITHUB_ENV
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+      - name: Get gateway JAR name
+        id: gateway_jar
+        run: echo "GATEWAY_JAR_NAME=$(ls gateway/target/*.jar)" >> $GITHUB_ENV
+
+      - name: Get user JAR name
+        id: user_jar
+        run: echo "USER_JAR_NAME=$(ls user/target/*.jar)" >> $GITHUB_ENV
+
+      - name: Get delivery JAR name
+        id: delivery_jar
+        run: echo "DELIVERY_JAR_NAME=$(ls delivery/target/*.jar)" >> $GITHUB_ENV
+
+      - name: Get product JAR name
+        id: product_jar
+        run: echo "PRODUCT_JAR_NAME=$(ls product/target/*.jar)" >> $GITHUB_ENV
+
+      - name: Get payment JAR name
+        id: payment_jar
+        run: echo "PAYMENT_JAR_NAME=$(ls payment/target/*.jar)" >> $GITHUB_ENV
+
+      - name: Build and Push discovery Docker Image
+        uses: mr-smithers-excellent/docker-build-push@v6
         with:
+          context: ./discovery
+          dockerfile: ./discovery/DockerFile
+          build-args: JAR_FILE=${{ env.DISCOVERY_JAR_NAME }}
+          image: mirzaeimahdi409/dish_dash_discovery
+          tags: latest
+          registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and Push Docker Images
-        run: |
-          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=discovery/target/discovery-0.0.1-SNAPSHOT.jar -t mirzaeimahdi409/dish_dash_discovery:latest -f ./discovery/DockerFile ./discovery --push
-          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=authentication/target/authentication-0.0.1-SNAPSHOT.jar -t mirzaeimahdi409/dish_dash_authentication:latest -f ./authentication/DockerFile ./authentication --push
-          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=order/target/order-0.0.1-SNAPSHOT.jar -t mirzaeimahdi409/dish_dash_order:latest -f ./order/DockerFile ./order --push
-          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=gateway/target/gateway-0.0.1-SNAPSHOT.jar -t mirzaeimahdi409/dish_dash_gateway:latest -f ./gateway/DockerFile ./gateway --push
-          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=user/target/user-0.0.1-SNAPSHOT.jar -t mirzaeimahdi409/dish_dash_user:latest -f ./user/DockerFile ./user --push
-          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=delivery/target/delivery-0.0.1-SNAPSHOT.jar -t mirzaeimahdi409/dish_dash_delivery:latest -f ./delivery/DockerFile ./delivery --push
-          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=product/target/product-0.0.1-SNAPSHOT.jar -t mirzaeimahdi409/dish_dash_product:latest -f ./product/DockerFile ./product --push
-          docker buildx build --platform linux/amd64,linux/arm64 --build-arg JAR_FILE=payment/target/payment-0.0.1-SNAPSHOT.jar -t mirzaeimahdi409/dish_dash_payment:latest -f ./payment/DockerFile ./payment --push
+      - name: Build and Push authentication Docker Image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          context: ./authentication
+          dockerfile: ./authentication/DockerFile
+          build-args: JAR_FILE=${{ env.AUTHENTICATION_JAR_NAME }}
+          image: mirzaeimahdi409/dish_dash_authentication
+          tags: latest
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push order Docker Image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          context: ./order
+          dockerfile: ./order/DockerFile
+          build-args: JAR_FILE=${{ env.ORDER_JAR_NAME }}
+          image: mirzaeimahdi409/dish_dash_order
+          tags: latest
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push gateway Docker Image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          context: ./gateway
+          dockerfile: ./gateway/DockerFile
+          build-args: JAR_FILE=${{ env.GATEWAY_JAR_NAME }}
+          image: mirzaeimahdi409/dish_dash_gateway
+          tags: latest
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push user Docker Image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          context: ./user
+          dockerfile: ./user/DockerFile
+          build-args: JAR_FILE=${{ env.USER_JAR_NAME }}
+          image: mirzaeimahdi409/dish_dash_user
+          tags: latest
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push delivery Docker Image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          context: ./delivery
+          dockerfile: ./delivery/DockerFile
+          build-args: JAR_FILE=${{ env.DELIVERY_JAR_NAME }}
+          image: mirzaeimahdi409/dish_dash_delivery
+          tags: latest
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push product Docker Image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          context: ./product
+          dockerfile: ./product/DockerFile
+          build-args: JAR_FILE=${{ env.PRODUCT_JAR_NAME }}
+          image: mirzaeimahdi409/dish_dash_product
+          tags: latest
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push payment Docker Image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          context: ./payment
+          dockerfile: ./payment/DockerFile
+          build-args: JAR_FILE=${{ env.PAYMENT_JAR_NAME }}
+          image: mirzaeimahdi409/dish_dash_payment
+          tags: latest
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Copy docker-compose.yml to server
         uses: appleboy/scp-action@v0.1.0
