@@ -23,20 +23,18 @@ public class AuthenticationController {
   @PostMapping("/register")
   public void register(@RequestBody RegisterRequest registerRequest) {
     authenticationApi.register(
-        registerRequest.getUsername(),
-        registerRequest.getPassword(),
-        registerRequest.getRole());
+        registerRequest.getUsername(), registerRequest.getPassword(), registerRequest.getRole());
   }
 
   @GetMapping("/validate")
-  @Authentication
-  boolean validate(String token) {
+   @Authentication
+  boolean validate(@RequestHeader("Authorization") String token) {
     return authenticationApi.validate(token).isValid();
   }
 
   @PostMapping("/logout")
-  @Authentication
-  public void logout(String token) {
+   @Authentication
+  public void logout(@RequestHeader("Authorization") String token) {
     authenticationApi.logout(token);
   }
 }
