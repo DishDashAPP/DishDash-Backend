@@ -1,17 +1,21 @@
 package com.dish_dash.product.domain.mapper;
 
-import com.dishDash.common.dto.*;
+import com.dishDash.common.dto.CategoryCreationDto;
+import com.dishDash.common.dto.CategoryViewDto;
+import com.dishDash.common.dto.FoodDto;
+import com.dishDash.common.dto.MenuDto;
 import com.dish_dash.product.domain.model.Category;
 import com.dish_dash.product.domain.model.Food;
 import com.dish_dash.product.domain.model.Menu;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-
 @Mapper
 public interface ProductMapper {
   ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
-  CategoryDto categoryToDto(Category category);
+  CategoryCreationDto categoryToDto(Category category);
+  CategoryViewDto categoryToViewDto(Category category);
 
   FoodDto foodToDto(Food food);
 
@@ -21,5 +25,5 @@ public interface ProductMapper {
 
   Food dtoToFood(FoodDto foodDto);
 
-  Category dtoToCategory(CategoryDto categoryDto);
+  Category dtoToCategory(CategoryCreationDto categoryCreationDto);
 }
