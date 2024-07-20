@@ -28,7 +28,7 @@ services:
       context: ./discovery
       dockerfile: Dockerfile
     ports:
-      - "8971:8971"
+      - "18761:18761"
     networks:
       - app_network
     restart: always
@@ -41,7 +41,7 @@ services:
     networks:
       - app_network
     deploy:
-      replicas: 2
+      replicas: 1
     depends_on:
       - discovery
     environment:
@@ -57,7 +57,7 @@ services:
     networks:
       - app_network
     deploy:
-      replicas: 2
+      replicas: 1
     depends_on:
       - discovery
     environment:
@@ -73,7 +73,7 @@ services:
     networks:
       - app_network
     deploy:
-      replicas: 2
+      replicas: 1
     depends_on:
       - discovery
     environment:
@@ -89,7 +89,7 @@ services:
     networks:
       - app_network
     deploy:
-      replicas: 2
+      replicas: 1
     depends_on:
       - discovery
     environment:
@@ -105,7 +105,7 @@ services:
     networks:
       - app_network
     deploy:
-      replicas: 2
+      replicas: 1
     depends_on:
       - discovery
     environment:
@@ -121,7 +121,7 @@ services:
     networks:
       - app_network
     deploy:
-      replicas: 2
+      replicas: 1
     depends_on:
       - discovery
     environment:
@@ -137,7 +137,7 @@ services:
     networks:
       - app_network
     deploy:
-      replicas: 2
+      replicas: 1
     depends_on:
       - discovery
     environment:
