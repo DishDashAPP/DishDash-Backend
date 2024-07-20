@@ -44,6 +44,9 @@ services:
       replicas: 2
     depends_on:
       - discovery
+    entrypoint:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
     restart: always
 
   order:
@@ -57,6 +60,9 @@ services:
       replicas: 2
     depends_on:
       - discovery
+    entrypoint:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
     restart: always
 
   gateway:
@@ -70,6 +76,9 @@ services:
       replicas: 2
     depends_on:
       - discovery
+    entrypoint:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
     restart: always
 
   user:
@@ -83,6 +92,9 @@ services:
       replicas: 2
     depends_on:
       - discovery
+    entrypoint:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
     restart: always
 
   delivery:
@@ -96,6 +108,9 @@ services:
       replicas: 2
     depends_on:
       - discovery
+    entrypoint:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
     restart: always
 
   product:
@@ -109,6 +124,9 @@ services:
       replicas: 2
     depends_on:
       - discovery
+    entrypoint:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
     restart: always
 
   payment:
@@ -122,6 +140,9 @@ services:
       replicas: 2
     depends_on:
       - discovery
+    entrypoint:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
     restart: always
 
 networks:
