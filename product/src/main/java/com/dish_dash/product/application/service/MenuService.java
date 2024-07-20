@@ -25,7 +25,7 @@ public class MenuService {
   }
 
   public MenuDto getMenuById(Long id) {
-    return menuRepository.findById(id).map(ProductMapper.INSTANCE::menuToDto).orElse(null);
+    return menuRepository.findByRestaurantId(id).map(ProductMapper.INSTANCE::menuToDto).orElse(null);
   }
 
   public MenuDto saveMenu(MenuDto menu) {
