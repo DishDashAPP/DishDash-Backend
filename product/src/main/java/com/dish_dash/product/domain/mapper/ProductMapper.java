@@ -1,6 +1,7 @@
 package com.dish_dash.product.domain.mapper;
 
 import com.dishDash.common.dto.CategoryCreationDto;
+import com.dishDash.common.dto.CategoryViewDto;
 import com.dishDash.common.dto.FoodDto;
 import com.dishDash.common.dto.MenuDto;
 import com.dish_dash.product.domain.model.Category;
@@ -14,6 +15,7 @@ public interface ProductMapper {
   ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
   CategoryCreationDto categoryToDto(Category category);
+  CategoryViewDto categoryToViewDto(Category category);
 
   FoodDto foodToDto(Food food);
 

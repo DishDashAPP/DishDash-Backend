@@ -3,6 +3,8 @@ package com.dishDash.common.feign.Product;
 import com.dishDash.common.dto.CategoryCreationDto;
 
 import java.util.List;
+
+import com.dishDash.common.dto.CategoryViewDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 public interface CategoryApi {
 
   @GetMapping()
-  List<CategoryCreationDto> getAllCategories();
+  List<CategoryViewDto> getAllCategories();
 
   @GetMapping("/{id}")
-  CategoryCreationDto getCategoryById(@PathVariable Long id);
+  CategoryViewDto getCategoryById(@PathVariable Long id);
 
   @PostMapping()
   CategoryCreationDto createCategory(@RequestBody CategoryCreationDto categoryDto);

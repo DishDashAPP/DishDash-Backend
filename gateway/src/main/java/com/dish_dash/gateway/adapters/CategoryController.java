@@ -1,6 +1,7 @@
 package com.dish_dash.gateway.adapters;
 
 import com.dishDash.common.dto.CategoryCreationDto;
+import com.dishDash.common.dto.CategoryViewDto;
 import com.dishDash.common.feign.Product.CategoryApi;
 import com.dish_dash.gateway.annotation.Authentication;
 import java.util.List;
@@ -15,13 +16,13 @@ public class CategoryController {
 
   @GetMapping
   @Authentication
-  public List<CategoryCreationDto> getAllCategories() {
+  public List<CategoryViewDto> getAllCategories() {
     return categoryApi.getAllCategories();
   }
 
   @GetMapping("/{id}")
   @Authentication
-  public CategoryCreationDto getCategoryById(@PathVariable Long id) {
+  public CategoryViewDto getCategoryById(@PathVariable Long id) {
     return categoryApi.getCategoryById(id);
   }
 

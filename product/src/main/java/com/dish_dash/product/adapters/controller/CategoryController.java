@@ -1,6 +1,7 @@
 package com.dish_dash.product.adapters.controller;
 
 import com.dishDash.common.dto.CategoryCreationDto;
+import com.dishDash.common.dto.CategoryViewDto;
 import com.dishDash.common.feign.Product.CategoryApi;
 import com.dish_dash.product.application.service.CategoryService;
 import java.util.List;
@@ -14,12 +15,12 @@ public class CategoryController implements CategoryApi {
   private final CategoryService categoryService;
 
   @Override
-  public List<CategoryCreationDto> getAllCategories() {
+  public List<CategoryViewDto> getAllCategories() {
     return categoryService.getAllCategories();
   }
 
   @Override
-  public CategoryCreationDto getCategoryById(Long id) {
+  public CategoryViewDto getCategoryById(Long id) {
     return categoryService.getCategoryById(id);
   }
 
