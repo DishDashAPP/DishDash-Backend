@@ -13,14 +13,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DeliveryPersonRepository
     extends JpaRepository<DeliveryPerson, Long>, UserRepository<DeliveryPerson> {
-  Optional<DeliveryPerson> findByUsername(String username);
 
   @Query(
-      "UPDATE DeliveryPerson SET name =:name, phoneNumber =:phoneNumber, username =:username where id=:id")
+      "UPDATE DeliveryPerson SET firstName =:firstName, phoneNumber =:phoneNumber where id=:id")
   @Modifying
   @Transactional
   void modify(
-      @Param("name") String name,
+      @Param("firstName") String firstName,
       @Param("phoneNumber") String phoneNumber,
       @Param("username") String username,
       @Param("id") Long id);
