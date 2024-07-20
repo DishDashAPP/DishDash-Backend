@@ -1,6 +1,7 @@
 package com.dish_dash.product.adapters.controller;
 
 import com.dishDash.common.dto.FoodDto;
+import com.dishDash.common.dto.FoodViewDto;
 import com.dishDash.common.feign.Product.FoodApi;
 import com.dish_dash.product.application.service.FoodService;
 import java.util.List;
@@ -14,12 +15,12 @@ public class FoodController implements FoodApi {
   private final FoodService foodService;
 
   @Override
-  public List<FoodDto> getAllFoods() {
+  public List<FoodViewDto> getAllFoods() {
     return foodService.getAllFoods();
   }
 
   @Override
-  public FoodDto getFoodById(Long id) {
+  public FoodViewDto getFoodById(Long id) {
     return foodService.getFoodById(id);
   }
 

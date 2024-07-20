@@ -1,9 +1,6 @@
 package com.dish_dash.product.domain.mapper;
 
-import com.dishDash.common.dto.CategoryCreationDto;
-import com.dishDash.common.dto.CategoryViewDto;
-import com.dishDash.common.dto.FoodDto;
-import com.dishDash.common.dto.MenuDto;
+import com.dishDash.common.dto.*;
 import com.dish_dash.product.domain.model.Category;
 import com.dish_dash.product.domain.model.Food;
 import com.dish_dash.product.domain.model.Menu;
@@ -18,6 +15,7 @@ public interface ProductMapper {
   CategoryViewDto categoryToViewDto(Category category);
 
   FoodDto foodToDto(Food food);
+  FoodViewDto foodToViewDto(Food food);
 
   MenuDto menuToDto(Menu menu);
 

@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FoodDto {
+public class FoodViewDto {
+  private Long id;
   private String name;
   private String description;
   private int stock;
