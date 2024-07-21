@@ -12,7 +12,7 @@ public class ReviewController {
   private final ReviewApi reviewApi;
 
   @PostMapping("/order")
-  @Authentication
+  @Authentication(userId = "#userId")
   public boolean setOrderReview(
       long userId, @RequestParam Long orderId, @RequestParam String comment) {
     return reviewApi.setOrderReview(userId, orderId, comment);

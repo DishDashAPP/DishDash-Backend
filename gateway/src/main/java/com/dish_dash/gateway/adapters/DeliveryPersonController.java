@@ -15,16 +15,16 @@ public class DeliveryPersonController {
   private final UserApi userApi;
 
   @PutMapping
-  @Authentication
+  @Authentication(userId = "#userId")
   public Boolean modifyDeliveryPersonProfile(
-      String username, @RequestBody DeliveryPersonDto deliveryPersonDto) {
-    return userApi.modifyDeliveryPersonProfile(Long.parseLong(username), deliveryPersonDto);
+      long userId, @RequestBody DeliveryPersonDto deliveryPersonDto) {
+    return userApi.modifyDeliveryPersonProfile(userId, deliveryPersonDto);
   }
 
   @GetMapping("/status")
-  @Authentication
-  public DeliveryPersonStatus getDeliveryPersonStatus(String username) {
-    return userApi.getDeliveryPersonStatus(Long.parseLong(username));
+  @Authentication(userId = "#userId")
+  public DeliveryPersonStatus getDeliveryPersonStatus(long userId) {
+    return userApi.getDeliveryPersonStatus(userId);
   }
 
   @PostMapping("/location")
@@ -34,8 +34,8 @@ public class DeliveryPersonController {
   }
 
   @GetMapping("/location")
-  @Authentication
-  public LocationDto getLocation(String username) {
-    return userApi.getLocation(Long.parseLong(username));
+  @Authentication(userId = "#userId")
+  public LocationDto getLocation(long userId) {
+    return userApi.getLocation(userId);
   }
 }

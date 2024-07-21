@@ -6,6 +6,7 @@ import com.dishDash.common.enums.Role;
 import com.dishDash.common.exception.CustomException;
 import com.dishDash.common.feign.authentication.AuthenticationApi;
 import com.dishDash.common.util.HttpHeaders;
+import com.dish_dash.gateway.annotation.Authentication;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -17,6 +18,9 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -32,13 +36,23 @@ public class AuthenticationAspect {
           "/user", List.of(Role.USER, Role.CUSTOMER),
           "/restaurantOwner", List.of(Role.RESTAURANT_OWNER));
 
-  @Around(
-      "@annotation(com.dish_dash.gateway.annotation.Authentication) "
-          + "|| within(@com.dish_dash.gateway.annotation.Authentication *)")
-  public Object authentication(ProceedingJoinPoint joinPoint) throws Throwable {
+  @Around("@annotation(authentication)")
+  public Object authentication(ProceedingJoinPoint joinPoint, Authentication authentication)
+      throws Throwable {
     MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+    String[] parameterNames = methodSignature.getParameterNames();
+    Object[] args = joinPoint.getArgs();
     Optional<HttpServletRequest> httpServletRequestOptional = getRequest();
 
+    ExpressionParser parser = new SpelExpressionParser();
+    StandardEvaluationContext context = new StandardEvaluationContext();
+
+    for (int i = 0; i < parameterNames.length; i++) {
+      context.setVariable(parameterNames[i], args[i]);
+    }
+
+    String tokenExpression = authentication.token();
+    String userIdExpression = authentication.token();
     if (httpServletRequestOptional.isEmpty()) {
       log.error("HttpServletRequest not found");
       throw new CustomException(ErrorCode.INVALID_TOKEN, "Invalid token");
@@ -55,15 +69,26 @@ public class AuthenticationAspect {
       log.error("Invalid token: {}", token);
       throw new CustomException(ErrorCode.UNAUTHORIZED, "Unauthorized");
     }
-    String requestPath = httpServletRequestOptional.get().getRequestURI();
+    /// *    String requestPath = httpServletRequestOptional.get().getRequestURI();
+    //
+    //        if (!isAccessAllowed(authDto.getRole(), requestPath)) {
+    //          log.error(
+    //              "Access denied for user with roles: {} to path: {}", authDto.getRole(),
+    //     requestPath);
+    //          throw new CustomException(ErrorCode.FORBIDDEN, "Access denied");
+    //        }
+    //        injectTokenIntoArgs(joinPoint, methodSignature, token, authDto.getUserId());*/
+    if (!tokenExpression.isBlank()) {
+      parser.parseExpression(tokenExpression).setValue(context, token);
+    }
+    if (!userIdExpression.isBlank()) {
+      parser.parseExpression(userIdExpression).setValue(context, authDto.getUserId());
+    }
+    for (int i = 0; i < parameterNames.length; i++) {
+      args[i] = parser.parseExpression("#" + parameterNames[i]).getValue(context);
+    }
 
-//    if (!isAccessAllowed(authDto.getRole(), requestPath)) {
-//      log.error(
-//          "Access denied for user with roles: {} to path: {}", authDto.getRole(), requestPath);
-//      throw new CustomException(ErrorCode.FORBIDDEN, "Access denied");
-//    }
-    injectTokenIntoArgs(joinPoint, methodSignature, token, authDto.getUserId());
-    return joinPoint.proceed(joinPoint.getArgs());
+    return joinPoint.proceed(args);
   }
 
   private boolean isAccessAllowed(Role role, String requestPath) {
@@ -71,21 +96,6 @@ public class AuthenticationAspect {
         .filter(entry -> requestPath.startsWith(entry.getKey()))
         .flatMap(entry -> entry.getValue().stream())
         .anyMatch(allowedRole -> allowedRole.equals(role));
-  }
-
-  private void injectTokenIntoArgs(
-      ProceedingJoinPoint joinPoint, MethodSignature methodSignature, String token, Long userId) {
-    Object[] args = joinPoint.getArgs();
-    String[] parameterNames = methodSignature.getParameterNames();
-    for (int i = 0; i < args.length; i++) {
-      if ("token".equals(parameterNames[i]) && args[i] instanceof String) {
-        log.info("Injecting token into method parameter: {}", parameterNames[i]);
-        args[i] = token;
-      } else if ("userId".equals(parameterNames[i]) && args[i] instanceof Long) {
-        log.info("Injecting userId into method parameter: {}", parameterNames[i]);
-        args[i] = userId;
-      }
-    }
   }
 
   private Optional<HttpServletRequest> getRequest() {

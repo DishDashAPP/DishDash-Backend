@@ -13,13 +13,13 @@ public class CustomerController {
   private final UserApi userApi;
 
   @PutMapping
-  @Authentication
+  @Authentication(userId = "#userId")
   Boolean modifyCustomerProfile(long userId, @RequestBody CustomerDto customerDto) {
     return userApi.modifyCustomerProfile(userId, customerDto);
   }
 
   @GetMapping()
-  @Authentication
+  @Authentication(userId = "#userId")
   public CustomerDto getUserProfile(long userId) {
     return userApi.getUserProfile(userId);
   }

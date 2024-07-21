@@ -22,13 +22,13 @@ public class RestaurantOwnerOrderController {
   }
 
   @GetMapping("/orderHistory")
-  @Authentication
+  @Authentication(userId = "#userId")
   List<OrderDto> getRestaurantOwnerOrderHistory(long userId) {
     return restaurantOwnerOrderApi.getRestaurantOwnerOrderHistory(userId);
   }
 
   @GetMapping("/activeOrders")
-  @Authentication
+  @Authentication(userId = "#userId")
   List<OrderDto> getRestaurantOwnerActiveOrders(long userId) {
     return restaurantOwnerOrderApi.getRestaurantOwnerActiveOrders(userId);
   }

@@ -46,12 +46,13 @@ public class AuthenticationService {
   }
 
   public AuthDto validateToken(String tokenValue) {
-    Claims claims = extractAllClaims(tokenValue);
-    claims.getSubject();
-    String userId = claims.getSubject();
+    Optional<Claims> claims = extractAllClaims(tokenValue);
+    if (claims.isEmpty()) return AuthDto.builder().isValid(false).build();
+    claims.get().getSubject();
+    String userId = claims.get().getSubject();
     if (Boolean.TRUE.equals(redisTemplate.hasKey(tokenValue))
         && Objects.nonNull(userId)
-        && new Date().before(claims.getExpiration())) {
+        && new Date().before(claims.get().getExpiration())) {
       Optional<AuthenticationInfo> authenticationInfoOptional =
           authRepository.findById(Long.valueOf(userId));
       if (authenticationInfoOptional.isPresent())
@@ -93,12 +94,17 @@ public class AuthenticationService {
     return Keys.hmacShaKeyFor(keyBytes);
   }
 
-  private Claims extractAllClaims(String token) {
-    return Jwts.parserBuilder()
-        .setSigningKey(getSignInKey())
-        .build()
-        .parseClaimsJws(token)
-        .getBody();
+  private Optional<Claims> extractAllClaims(String token) {
+    try {
+      return Optional.ofNullable(
+          Jwts.parserBuilder()
+              .setSigningKey(getSignInKey())
+              .build()
+              .parseClaimsJws(token)
+              .getBody());
+    } catch (Exception e) {
+      return Optional.empty();
+    }
   }
 
   public void register(String username, String password, Role role) {
