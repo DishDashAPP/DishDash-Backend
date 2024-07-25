@@ -24,5 +24,5 @@ public interface CustomerRepository
       @Param("firstName") String firstName,
       @Param("address") String address,
       @Param("phoneNumber") String phoneNumber,
-      @Param("id") Long id);
+      @Param("id") long id);
 }

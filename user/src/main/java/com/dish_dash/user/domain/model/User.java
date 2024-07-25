@@ -1,7 +1,7 @@
 package com.dish_dash.user.domain.model;
 
 public interface User {
-  Long getId();
+  long getId();
 
   String getFirstName();
 

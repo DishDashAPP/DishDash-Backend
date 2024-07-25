@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FoodViewDto {
-  private Long id;
+  private long id;
   private String name;
   private String description;
   private int stock;
   private Price price;
 
   @JsonProperty("category_id")
-  private Long CategoryId;
+  private long categoryId;
 }

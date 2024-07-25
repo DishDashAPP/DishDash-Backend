@@ -18,7 +18,7 @@ public class DeliveryService {
 
     private final InvoiceRepository invoiceRepository;
 
-    public boolean assignOrder(Long orderId, Long deliveryPersonId) {
+    public boolean assignOrder(long orderId, long deliveryPersonId) {
         Optional<Invoice> invoiceOptional = invoiceRepository.findById(orderId);
         if (invoiceOptional.isEmpty()) return false;
         invoiceOptional.get().setDeliveryPersonId(deliveryPersonId);
@@ -26,7 +26,7 @@ public class DeliveryService {
         return true;
     }
 
-    public InvoiceDto getInvoice(Long orderId) {
+    public InvoiceDto getInvoice(long orderId) {
         return invoiceRepository.findById(orderId).map(DeliveryMapper.INSTANCE::invoiceToDto).orElse(null);
     }
 }

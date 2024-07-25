@@ -16,7 +16,7 @@ public class DeliveryPersonOrderController {
   @PutMapping("/status")
   @Authentication
   public boolean updateOrderStatusByDeliveryPerson(
-      @RequestParam Long orderId, @RequestParam OrderStatus status) {
+      @RequestParam long orderId, @RequestParam OrderStatus status) {
     return deliveryPersonOrderApi.updateOrderStatusByDeliveryPerson(orderId, status);
   }
 

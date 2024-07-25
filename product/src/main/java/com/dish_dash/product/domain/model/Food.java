@@ -17,7 +17,7 @@ import lombok.*;
 public class Food {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private long id;
 
   private String name;
   private String description;

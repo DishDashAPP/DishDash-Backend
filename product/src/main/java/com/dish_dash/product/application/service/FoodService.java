@@ -22,7 +22,7 @@ public class FoodService {
         .collect(Collectors.toList());
   }
 
-  public FoodViewDto getFoodById(Long id) {
+  public FoodViewDto getFoodById(long id) {
     return foodRepository.findById(id).map(ProductMapper.INSTANCE::foodToViewDto).orElse(null);
   }
 
@@ -32,7 +32,7 @@ public class FoodService {
     return ProductMapper.INSTANCE.foodToDto(foodRepository.save(food));
   }
 
-  public void deleteFood(Long id) {
+  public void deleteFood(long id) {
     foodRepository.deleteById(id);
   }
 }

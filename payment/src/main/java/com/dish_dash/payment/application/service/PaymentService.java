@@ -32,7 +32,7 @@ public class PaymentService {
     return false;
   }
 
-  public Transaction createOrderTransaction(Long orderId, Price price) {
+  public Transaction createOrderTransaction(long orderId, Price price) {
     return transactionRepository.save(Transaction.builder().orderId(orderId).price(price).build());
   }
 }

@@ -21,5 +21,5 @@ public interface DeliveryPersonRepository
   void modify(
       @Param("firstName") String firstName,
       @Param("phoneNumber") String phoneNumber,
-      @Param("id") Long id);
+      @Param("id") long id);
 }

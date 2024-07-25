@@ -17,7 +17,7 @@ public class DeliveryPersonService {
   private final LocationRepository locationRepository;
   private final DeliveryPersonRepository deliveryPersonRepository;
 
-  public Boolean modifyProfile(Long id, DeliveryPersonDto deliveryPersonDto) {
+  public Boolean modifyProfile(long id, DeliveryPersonDto deliveryPersonDto) {
     return deliveryPersonRepository
         .findById(id)
         .map(
@@ -33,11 +33,11 @@ public class DeliveryPersonService {
     deliveryPersonRepository.save(UserMapper.INSTANCE.dtoToDeliveryPerson(deliveryPersonDto));
   }
 
-  public DeliveryPerson getUserProfile(Long deliveryPersonId) {
+  public DeliveryPerson getUserProfile(long deliveryPersonId) {
     return deliveryPersonRepository.findById(deliveryPersonId).orElse(null);
   }
 
-  public DeliveryPersonStatus getDeliveryPersonStatus(Long deliveryPersonId) {
+  public DeliveryPersonStatus getDeliveryPersonStatus(long deliveryPersonId) {
     return deliveryPersonRepository
         .findById(deliveryPersonId)
         .map(DeliveryPerson::getStatus)

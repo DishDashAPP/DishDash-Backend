@@ -14,11 +14,11 @@ public class OrderService {
 
   private final OrderRepository orderRepository;
 
-  public OrderDto viewOrder(Long orderID) {
+  public OrderDto viewOrder(long orderID) {
     return orderRepository.findById(orderID).map(OrderMapper.INSTANCE::orderToDto).orElse(null);
   }
 
-  public OrderStatus getOrderStatus(Long orderID) {
+  public OrderStatus getOrderStatus(long orderID) {
     Order order = orderRepository.findById(orderID).orElse(null);
     if (order != null) {
       return order.getStatus();

@@ -14,12 +14,12 @@ public class OrderController implements OrderApi {
   private final OrderService orderService;
 
   @Override
-  public OrderDto viewOrder(Long orderID) {
+  public OrderDto viewOrder(long orderID) {
     return orderService.viewOrder(orderID);
   }
 
   @Override
-  public OrderStatus getOrderStatus(Long orderID) {
+  public OrderStatus getOrderStatus(long orderID) {
     return orderService.getOrderStatus(orderID);
   }
 

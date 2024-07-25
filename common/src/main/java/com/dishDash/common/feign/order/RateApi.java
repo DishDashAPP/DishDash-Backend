@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.*;
 public interface RateApi {
   @PostMapping("/order")
   boolean setOrderRate(
-      @RequestParam Long customerId, @RequestParam Long orderId, @RequestParam int point);
+      @RequestParam long customerId, @RequestParam long orderId, @RequestParam int point);
 
   @PostMapping("/delivery")
   boolean setDeliveryRate(
-      @RequestParam Long customerID, @RequestParam Long orderID, @RequestParam int point);
+      @RequestParam long customerID, @RequestParam long orderID, @RequestParam int point);
 
   @GetMapping("/delivery/{deliveryPersonID}")
   RateDto getDeliveryRate(@PathVariable String deliveryPersonID);

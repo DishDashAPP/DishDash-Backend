@@ -16,7 +16,7 @@ import lombok.*;
 public class AuthenticationInfo {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long userId;
+  private long userId;
 
   private String username;
   private String password;

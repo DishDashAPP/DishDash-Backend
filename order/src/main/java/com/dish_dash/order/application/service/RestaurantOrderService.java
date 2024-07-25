@@ -17,7 +17,7 @@ public class RestaurantOrderService {
 
   private final OrderRepository orderRepository;
 
-  public boolean updateOrderStatusByRestaurantOwner(Long orderId, OrderStatus status) {
+  public boolean updateOrderStatusByRestaurantOwner(long orderId, OrderStatus status) {
     Optional<Order> orderOptional = orderRepository.findById(orderId);
     if (orderOptional.isPresent()) {
       orderOptional.get().setStatus(status);
@@ -27,7 +27,7 @@ public class RestaurantOrderService {
     return false;
   }
 
-  public List<OrderDto> getRestaurantOwnerOrderHistory(Long restaurantOwnerID) {
+  public List<OrderDto> getRestaurantOwnerOrderHistory(long restaurantOwnerID) {
     return orderRepository
         .findAllByRestaurantOwnerIdAndStatusIn(
             restaurantOwnerID,
@@ -41,7 +41,7 @@ public class RestaurantOrderService {
         .collect(Collectors.toList());
   }
 
-  public List<OrderDto> getRestaurantOwnerActiveOrders(Long restaurantOwnerID) {
+  public List<OrderDto> getRestaurantOwnerActiveOrders(long restaurantOwnerID) {
     return orderRepository
         .findAllByRestaurantOwnerIdAndStatusIn(
             restaurantOwnerID, List.of(OrderStatus.PREPARING, OrderStatus.DELIVERING))

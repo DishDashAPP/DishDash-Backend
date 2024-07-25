@@ -14,12 +14,12 @@ public class DeliveryController implements DeliveryApi {
   private final DeliveryService deliveryService;
 
   @Override
-  public boolean assignOrder(Long orderId, Long deliveryPersonId) {
+  public boolean assignOrder(long orderId, long deliveryPersonId) {
     return deliveryService.assignOrder(orderId, deliveryPersonId);
   }
 
   @Override
-  public InvoiceDto getInvoice(Long orderId) {
+  public InvoiceDto getInvoice(long orderId) {
     return deliveryService.getInvoice(orderId);
   }
 }

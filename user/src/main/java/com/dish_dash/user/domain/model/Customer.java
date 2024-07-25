@@ -17,7 +17,7 @@ import lombok.*;
 public class Customer implements User {
 
   @Id
-  private Long id;
+  private long id;
 
   private String firstName;
   private String lastName;

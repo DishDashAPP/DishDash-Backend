@@ -17,13 +17,13 @@ public class Review {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
-  private Long id;
+  private long id;
 
   private String comment;
 
   @Column(name = "customer_id")
-  private Long customerId;
+  private long customerId;
 
   @Column(name = "order_id")
-  private Long orderId;
+  private long orderId;
 }

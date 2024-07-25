@@ -15,11 +15,11 @@ public interface CategoryApi {
   List<CategoryViewDto> getAllCategories();
 
   @GetMapping("/{id}")
-  CategoryViewDto getCategoryById(@PathVariable Long id);
+  CategoryViewDto getCategoryById(@PathVariable long id);
 
   @PostMapping()
   CategoryCreationDto createCategory(@RequestBody CategoryCreationDto categoryDto);
 
   @DeleteMapping("/{id}")
-  void deleteCategory(@PathVariable Long id);
+  void deleteCategory(@PathVariable long id);
 }

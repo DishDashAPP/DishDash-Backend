@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.*;
 @FeignClient(name = "order-service",contextId = "order-service")
 public interface OrderApi {
   @GetMapping()
-  OrderDto viewOrder(@RequestParam Long orderID);
+  OrderDto viewOrder(@RequestParam long orderID);
 
   @GetMapping("/status")
-  OrderStatus getOrderStatus(@RequestParam Long orderID);
+  OrderStatus getOrderStatus(@RequestParam long orderID);
 
   @PutMapping("")
   boolean prepareOrder(@RequestParam OrderDto order);

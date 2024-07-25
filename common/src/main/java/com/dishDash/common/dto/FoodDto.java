@@ -18,5 +18,5 @@ public class FoodDto {
   private Price price;
 
   @JsonProperty("category_id")
-  private Long CategoryId;
+  private long CategoryId;
 }

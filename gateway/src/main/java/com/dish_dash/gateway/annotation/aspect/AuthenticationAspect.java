@@ -74,14 +74,14 @@ public class AuthenticationAspect {
   }
 
   private void injectTokenIntoArgs(
-      ProceedingJoinPoint joinPoint, MethodSignature methodSignature, String token, Long userId) {
+      ProceedingJoinPoint joinPoint, MethodSignature methodSignature, String token, long userId) {
     Object[] args = joinPoint.getArgs();
     String[] parameterNames = methodSignature.getParameterNames();
     for (int i = 0; i < args.length; i++) {
-      if ("token".equals(parameterNames[i]) && args[i] instanceof String) {
+      if ("token".equals(parameterNames[i]) /*&& args[i] instanceof String*/) {
         log.info("Injecting token into method parameter: {}", parameterNames[i]);
         args[i] = token;
-      } else if ("userId".equals(parameterNames[i]) && args[i] instanceof Long) {
+      } else if ("userId".equals(parameterNames[i]) /*&& args[i] instanceof Long*/) {
         log.info("Injecting userId into method parameter: {}", parameterNames[i]);
         args[i] = userId;
       }

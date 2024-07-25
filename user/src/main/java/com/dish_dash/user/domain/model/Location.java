@@ -23,5 +23,5 @@ public class Location {
   private LocalDateTime timestamp;
 
   @Column(name = "delivery_id")
-  private Long deliveryID;
+  private long deliveryID;
 }

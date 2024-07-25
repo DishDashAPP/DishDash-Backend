@@ -27,5 +27,5 @@ public class Transaction {
   private TransactionStatus status;
 
   @Embedded private Price price;
-  private Long orderId;
+  private long orderId;
 }

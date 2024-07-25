@@ -15,6 +15,8 @@ public interface ProductMapper {
   CategoryViewDto categoryToViewDto(Category category);
 
   FoodDto foodToDto(Food food);
+
+  @Mapping(source = "category.id", target = "categoryId")
   FoodViewDto foodToViewDto(Food food);
 
   MenuDto menuToDto(Menu menu);

@@ -23,7 +23,7 @@ public class CategoryService {
         .collect(Collectors.toList());
   }
 
-  public CategoryViewDto getCategoryById(Long id) {
+  public CategoryViewDto getCategoryById(long id) {
     return categoryRepository.findById(id).map(ProductMapper.INSTANCE::categoryToViewDto).orElse(null);
   }
 
@@ -32,11 +32,11 @@ public class CategoryService {
         categoryRepository.save(ProductMapper.INSTANCE.dtoToCategory(categoryCreationDto)));
   }
 
-  public void deleteCategory(Long id) {
+  public void deleteCategory(long id) {
     categoryRepository.deleteById(id);
   }
 
-  public Category getReferenceCategory(Long id) {
+  public Category getReferenceCategory(long id) {
     return categoryRepository.getReferenceById(id);
   }
 }
