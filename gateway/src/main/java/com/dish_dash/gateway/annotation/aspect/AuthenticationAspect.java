@@ -34,6 +34,7 @@ public class AuthenticationAspect {
   private static final Map<String, List<Role>> ROLE_PATH_ACCESS =
       Map.of(
           "/user", List.of(Role.USER, Role.CUSTOMER),
+          "/v1/customer", List.of(Role.USER, Role.CUSTOMER),
           "/restaurantOwner", List.of(Role.RESTAURANT_OWNER));
 
   @Around("@annotation(authentication)")
@@ -69,15 +70,14 @@ public class AuthenticationAspect {
       log.error("Invalid token: {}", token);
       throw new CustomException(ErrorCode.UNAUTHORIZED, "Unauthorized");
     }
-    /// *    String requestPath = httpServletRequestOptional.get().getRequestURI();
-    //
-    //        if (!isAccessAllowed(authDto.getRole(), requestPath)) {
-    //          log.error(
-    //              "Access denied for user with roles: {} to path: {}", authDto.getRole(),
-    //     requestPath);
-    //          throw new CustomException(ErrorCode.FORBIDDEN, "Access denied");
-    //        }
-    //        injectTokenIntoArgs(joinPoint, methodSignature, token, authDto.getUserId());*/
+    String requestPath = httpServletRequestOptional.get().getRequestURI();
+
+    if (!isAccessAllowed(authDto.getRole(), requestPath)) {
+      log.error(
+          "Access denied for user with roles: {} to path: {}", authDto.getRole(), requestPath);
+      throw new CustomException(ErrorCode.FORBIDDEN, "Access denied");
+    }
+
     if (!tokenExpression.isBlank()) {
       parser.parseExpression(tokenExpression).setValue(context, token);
     }
