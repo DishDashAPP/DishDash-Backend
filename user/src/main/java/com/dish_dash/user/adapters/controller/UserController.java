@@ -28,7 +28,7 @@ public class UserController implements UserApi {
   }
 
   @Override
-  public CustomerDto getUserProfile(long id) {
+  public CustomerDto getCustomerProfile(long id) {
     return customerService.getUserProfile(id);
   }
 
