@@ -18,8 +18,9 @@ public class OrderItem {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "order_id", nullable = false)
+  @ToString.Exclude
   private Order order;
 
   @Column(name = "food_id")

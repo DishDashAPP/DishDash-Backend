@@ -1,5 +1,7 @@
 package com.dish_dash.gateway.annotation.aspect;
 
+import static java.util.Map.entry;
+
 import com.dishDash.common.dto.AuthDto;
 import com.dishDash.common.enums.ErrorCode;
 import com.dishDash.common.enums.Role;
@@ -32,10 +34,18 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class AuthenticationAspect {
   private final AuthenticationApi authenticationApi;
   private static final Map<String, List<Role>> ROLE_PATH_ACCESS =
-      Map.of(
-          "/user", List.of(Role.USER, Role.CUSTOMER),
-          "/v1/customer", List.of(Role.USER, Role.CUSTOMER),
-          "/restaurantOwner", List.of(Role.RESTAURANT_OWNER));
+      Map.ofEntries(
+          entry("/v1/rate", List.of(Role.USER, Role.CUSTOMER)),
+          entry("/user", List.of(Role.USER, Role.CUSTOMER)),
+          entry("/v1/customer", List.of(Role.USER, Role.CUSTOMER)),
+          entry("/v1/order/customer", List.of(Role.USER, Role.CUSTOMER)),
+          entry("/v1/food", List.of(Role.RESTAURANT_OWNER)),
+          entry("/v1/category", List.of(Role.RESTAURANT_OWNER)),
+          entry("/v1/restaurantOwner", List.of(Role.RESTAURANT_OWNER)),
+          entry("/v1/order/restaurantOwner", List.of(Role.RESTAURANT_OWNER)),
+          entry("/v1/deliveryPerson", List.of(Role.DELIVERY_PERSON)),
+          entry("/v1/order/deliveryPerson", List.of(Role.DELIVERY_PERSON)),
+          entry("/v1/menu", List.of(Role.DELIVERY_PERSON)));
 
   @Around("@annotation(authentication)")
   public Object authentication(ProceedingJoinPoint joinPoint, Authentication authentication)

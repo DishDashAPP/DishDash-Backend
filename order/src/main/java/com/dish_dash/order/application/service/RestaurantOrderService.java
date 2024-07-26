@@ -1,7 +1,9 @@
 package com.dish_dash.order.application.service;
 
 import com.dishDash.common.dto.OrderDto;
+import com.dishDash.common.enums.ErrorCode;
 import com.dishDash.common.enums.OrderStatus;
+import com.dishDash.common.exception.CustomException;
 import com.dish_dash.order.domain.mapper.OrderMapper;
 import com.dish_dash.order.domain.model.Order;
 import com.dish_dash.order.domain.repository.OrderRepository;
@@ -17,9 +19,12 @@ public class RestaurantOrderService {
 
   private final OrderRepository orderRepository;
 
-  public boolean updateOrderStatusByRestaurantOwner(long orderId, OrderStatus status) {
+  public boolean updateOrderStatusByRestaurantOwner(
+      Long restaurantOwnerId, long orderId, OrderStatus status) {
     Optional<Order> orderOptional = orderRepository.findById(orderId);
     if (orderOptional.isPresent()) {
+      if (orderOptional.get().getRestaurantOwnerId() != restaurantOwnerId)
+        throw new CustomException(ErrorCode.FORBIDDEN, "Restaurant owner id mismatch");
       orderOptional.get().setStatus(status);
       orderRepository.updateStatus(status, orderId);
       return true;

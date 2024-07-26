@@ -2,7 +2,6 @@ package com.dishDash.common.feign.order;
 
 import com.dishDash.common.dto.OrderDto;
 import com.dishDash.common.dto.OrderItemCreateDto;
-import com.dishDash.common.dto.OrderItemDto;
 import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +15,10 @@ public interface CustomerOrderAPi {
       @RequestBody List<OrderItemCreateDto> orderItemsDto);
 
   @PostMapping("/modifyOrder")
-  OrderDto modifyOrder(@RequestParam long orderId, @RequestBody List<OrderItemCreateDto> orderItems);
+  OrderDto modifyOrder(
+      @RequestParam long customerId,
+      @RequestParam long orderId,
+      @RequestBody List<OrderItemCreateDto> orderItems);
 
   @PostMapping("/setOrderRate")
   boolean setOrderRate(
