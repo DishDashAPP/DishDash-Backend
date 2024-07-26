@@ -15,17 +15,17 @@ public class RestaurantOrderController implements RestaurantOwnerOrderApi {
   private final RestaurantOrderService restaurantOrderService;
 
   @Override
-  public boolean updateOrderStatusByRestaurantOwner(Long orderID, OrderStatus orderStatus) {
+  public boolean updateOrderStatusByRestaurantOwner(long orderID, OrderStatus orderStatus) {
     return restaurantOrderService.updateOrderStatusByRestaurantOwner(orderID, orderStatus);
   }
 
   @Override
-  public List<OrderDto> getRestaurantOwnerOrderHistory(Long restaurantOwnerID) {
+  public List<OrderDto> getRestaurantOwnerOrderHistory(long restaurantOwnerID) {
     return restaurantOrderService.getRestaurantOwnerOrderHistory(restaurantOwnerID);
   }
 
   @Override
-  public List<OrderDto> getRestaurantOwnerActiveOrders(Long restaurantOwnerID) {
+  public List<OrderDto> getRestaurantOwnerActiveOrders(long restaurantOwnerID) {
     return restaurantOrderService.getRestaurantOwnerActiveOrders(restaurantOwnerID);
   }
 }

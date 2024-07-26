@@ -24,5 +24,5 @@ public class Location {
   @UpdateTimestamp private Timestamp timestamp;
 
   @Column(name = "delivery_id")
-  private Long deliveryID;
+  private long deliveryID;
 }

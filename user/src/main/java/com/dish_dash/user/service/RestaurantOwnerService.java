@@ -13,7 +13,7 @@ public class RestaurantOwnerService {
 
   private final RestaurantOwnerRepository restaurantOwnerRepository;
 
-  public Boolean modifyProfile(Long id, RestaurantOwnerDto restaurantOwnerDto) {
+  public Boolean modifyProfile(long id, RestaurantOwnerDto restaurantOwnerDto) {
     return restaurantOwnerRepository
         .findById(id)
         .map(
@@ -34,7 +34,7 @@ public class RestaurantOwnerService {
         RestaurantOwner.builder().id(restaurantOwnerDto.getId()).build());
   }
 
-  public RestaurantOwnerDto getUserProfile(Long restaurantOwnerId) {
+  public RestaurantOwnerDto getUserProfile(long restaurantOwnerId) {
     return restaurantOwnerRepository
         .findById(restaurantOwnerId)
         .map(UserMapper.INSTANCE::restaurantOwnerToDto)

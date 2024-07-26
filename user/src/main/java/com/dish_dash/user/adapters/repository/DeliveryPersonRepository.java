@@ -22,5 +22,5 @@ public interface DeliveryPersonRepository
       @Param("firstName") String firstName,
       @Param("lastName") String lastName,
       @Param("phoneNumber") String phoneNumber,
-      @Param("id") Long id);
+      @Param("id") long id);
 }

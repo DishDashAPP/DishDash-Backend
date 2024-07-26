@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.*;
 public interface RestaurantOwnerOrderApi {
   @PostMapping("/status")
   boolean updateOrderStatusByRestaurantOwner(
-      @RequestParam Long orderID, @RequestParam OrderStatus orderStatus);
+      @RequestParam long orderID, @RequestParam OrderStatus orderStatus);
 
   @GetMapping("/orderHistory")
-  List<OrderDto> getRestaurantOwnerOrderHistory(@RequestParam Long restaurantOwnerID);
+  List<OrderDto> getRestaurantOwnerOrderHistory(@RequestParam long restaurantOwnerID);
 
   @GetMapping("/activeOrders")
-  List<OrderDto> getRestaurantOwnerActiveOrders(@RequestParam Long restaurantOwnerID);
+  List<OrderDto> getRestaurantOwnerActiveOrders(@RequestParam long restaurantOwnerID);
 }

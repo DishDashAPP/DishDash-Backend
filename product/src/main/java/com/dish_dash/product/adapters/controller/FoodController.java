@@ -20,7 +20,7 @@ public class FoodController implements FoodApi {
   }
 
   @Override
-  public FoodViewDto getFoodById(Long id) {
+  public FoodViewDto getFoodById(long id) {
     return foodService.getFoodById(id);
   }
 
@@ -30,7 +30,7 @@ public class FoodController implements FoodApi {
   }
 
   @Override
-  public void deleteFood(Long id) {
+  public void deleteFood(long id) {
     foodService.deleteFood(id);
   }
 }

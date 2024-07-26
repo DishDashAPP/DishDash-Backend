@@ -14,11 +14,11 @@ public interface FoodApi {
   List<FoodViewDto> getAllFoods();
 
   @GetMapping("/{id}")
-  FoodViewDto getFoodById(@PathVariable Long id);
+  FoodViewDto getFoodById(@PathVariable long id);
 
   @PostMapping()
   FoodDto createFood(@RequestBody FoodDto foodDto);
 
   @DeleteMapping("/{id}")
-  void deleteFood(@PathVariable Long id);
+  void deleteFood(@PathVariable long id);
 }

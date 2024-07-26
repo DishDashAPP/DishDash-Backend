@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderItemDto {
   @JsonProperty("order_id")
-  private Long orderId;
+  private long orderId;
 
   @JsonProperty("food_id")
-  private Long foodId;
+  private long foodId;
 
   private Price price;
   private Integer quantity;

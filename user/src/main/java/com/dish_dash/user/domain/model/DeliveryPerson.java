@@ -15,7 +15,7 @@ import lombok.*;
 @Table(name = "delivery_persons")
 public class DeliveryPerson implements User {
 
-  @Id private Long id;
+  @Id private long id;
 
   private String firstName;
   private String lastName;
@@ -25,7 +25,7 @@ public class DeliveryPerson implements User {
   @JoinColumn(name = "location_id")
   private Location location;
 
-  private Long currentOrderId;
+  private long currentOrderId;
 
   @Column(name = "status", length = 32, columnDefinition = "varchar(32) default 'ACTIVE' ")
   @Enumerated(EnumType.STRING)

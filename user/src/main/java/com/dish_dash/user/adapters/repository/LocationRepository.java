@@ -18,8 +18,8 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
   @Modifying
   @Transactional
   void modify(
-      @Param("latitude") Long latitude,
-      @Param("longitude") Long longitude,
-      @Param("timestamp") Long timestamp,
-      @Param("id") Long id);
+      @Param("latitude") long latitude,
+      @Param("longitude") long longitude,
+      @Param("timestamp") long timestamp,
+      @Param("id") long id);
 }

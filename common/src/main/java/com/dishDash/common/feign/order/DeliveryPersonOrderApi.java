@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface DeliveryPersonOrderApi {
   @PutMapping("/status")
   boolean updateOrderStatusByDeliveryPerson(
-      @RequestParam Long orderID, @RequestParam OrderStatus status);
+      @RequestParam long orderID, @RequestParam OrderStatus status);
 
   @GetMapping("/current")
   OrderDto getDeliveryPersonCurrentOrder(@RequestParam String deliveryPersonID);

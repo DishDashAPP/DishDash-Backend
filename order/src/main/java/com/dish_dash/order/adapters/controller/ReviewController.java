@@ -12,7 +12,7 @@ public class ReviewController implements ReviewApi {
   private final ReviewService reviewService;
 
   @Override
-  public boolean setOrderReview(Long customerID, Long orderID, String comment) {
+  public boolean setOrderReview(long customerID, long orderID, String comment) {
     return reviewService.setOrderReview(customerID, orderID, comment);
   }
 }

@@ -13,13 +13,13 @@ public class RateService {
 
   private final RateRepository rateRepository;
 
-  public boolean setOrderRate(Long customerId, Long orderId, int point) {
+  public boolean setOrderRate(long customerId, long orderId, int point) {
     //    Rate rate = Rate.builder().customerId(customerId).orderId(orderId).point(point).build();
     //    rateRepository.save(rate);
     return true;
   }
 
-  public boolean setDeliveryRate(Long customerId, Long orderId, int point) {
+  public boolean setDeliveryRate(long customerId, long orderId, int point) {
     //    Rate rate = Rate.builder().customerId(customerId).orderId(orderId).point(point).build();
     //    rateRepository.save(rate);
     return true;

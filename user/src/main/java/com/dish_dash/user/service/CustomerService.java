@@ -13,7 +13,7 @@ public class CustomerService {
 
   private final CustomerRepository customerRepository;
 
-  public Boolean modifyProfile(Long id, CustomerDto customerDto) {
+  public Boolean modifyProfile(long id, CustomerDto customerDto) {
     return customerRepository
         .findById(id)
         .map(
@@ -33,11 +33,11 @@ public class CustomerService {
     customerRepository.save(Customer.builder().id(customerDto.getId()).build());
   }
 
-  public String getCustomerAddress(Long customerID) {
+  public String getCustomerAddress(long customerID) {
     return customerRepository.findById(customerID).map(Customer::getAddress).orElse(null);
   }
 
-  public CustomerDto getUserProfile(Long customerId) {
+  public CustomerDto getUserProfile(long customerId) {
     return customerRepository
         .findById(customerId)
         .map(UserMapper.INSTANCE::customerToDto)

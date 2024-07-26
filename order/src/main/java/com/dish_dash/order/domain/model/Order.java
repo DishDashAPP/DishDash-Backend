@@ -23,7 +23,7 @@ public class Order {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private long id;
 
   @Column(name = "create_time")
   @CreationTimestamp
@@ -33,14 +33,14 @@ public class Order {
   @Enumerated(EnumType.STRING)
   private OrderStatus status;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "orderId")
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order")
   private List<OrderItem> orderItems;
 
   @Column(name = "restaurant_owner_id")
-  private Long restaurantOwnerId;
+  private long restaurantOwnerId;
 
   @Column(name = "customer_id")
-  private Long customerId;
+  private long customerId;
 
   @OneToOne(cascade = CascadeType.ALL)
   @PrimaryKeyJoinColumn
@@ -59,8 +59,6 @@ public class Order {
   private Price totalPrice;
 
   @PostLoad
-  @PrePersist
-  @PreUpdate
   private void calculateTotalPrice() {
     double total = orderItems.stream().mapToDouble(item -> item.getPrice().getAmount()).sum();
     this.totalPrice = new Price(total, CurrencyUnit.TOMAN);

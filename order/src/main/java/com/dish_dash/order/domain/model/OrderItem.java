@@ -16,13 +16,14 @@ import lombok.*;
 public class OrderItem {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private long id;
 
-  @Column(name = "order_id")
-  private Long orderId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "order_id", nullable = false)
+  private Order order;
 
   @Column(name = "food_id")
-  private Long foodId;
+  private long foodId;
 
   @Embedded private Price price;
 

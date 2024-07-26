@@ -20,7 +20,7 @@ public class PaymentController {
 
   @PostMapping("/createOrderTransaction")
   @Authentication
-  TransactionDto createOrderTransaction(@RequestParam Long orderId, @RequestParam double amount) {
+  TransactionDto createOrderTransaction(@RequestParam long orderId, @RequestParam double amount) {
     return paymentApi.createOrderTransaction(orderId, amount);
   }
 }

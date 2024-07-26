@@ -15,7 +15,7 @@ public class DeliveryPersonOrderService {
 
   private final OrderRepository orderRepository;
 
-  public boolean updateOrderStatusByDeliveryPerson(Long orderID, OrderStatus status) {
+  public boolean updateOrderStatusByDeliveryPerson(long orderID, OrderStatus status) {
     Optional<Order> order = orderRepository.findById(orderID);
     if (order.isPresent()) {
       order.get().setStatus(status);

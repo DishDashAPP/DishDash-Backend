@@ -16,7 +16,7 @@ import lombok.*;
 public class Menu {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private long id;
 
   @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)
   private List<Food> foodList;
@@ -29,5 +29,5 @@ public class Menu {
   private List<Category> categories;
 
   @Column(name = "restaurant_id")
-  private Long restaurantId;
+  private long restaurantId;
 }

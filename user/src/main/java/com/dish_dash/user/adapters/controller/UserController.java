@@ -23,32 +23,32 @@ public class UserController implements UserApi {
   private final RestaurantOwnerService restaurantOwnerService;
 
   @Override
-  public Boolean modifyCustomerProfile(Long id, CustomerDto customerDto) {
+  public Boolean modifyCustomerProfile(long id, CustomerDto customerDto) {
     return customerService.modifyProfile(id, customerDto);
   }
 
   @Override
-  public CustomerDto getCustomerProfile(Long id) {
+  public CustomerDto getUserProfile(long id) {
     return customerService.getUserProfile(id);
   }
 
   @Override
-  public RestaurantOwnerDto getRestaurantOwnerProfile(Long id) {
+  public RestaurantOwnerDto getRestaurantOwnerProfile(long id) {
     return restaurantOwnerService.getUserProfile(id);
   }
 
   @Override
-  public DeliveryPersonDto getDeliveryPersonProfile(Long id) {
+  public DeliveryPersonDto getDeliveryPersonProfile(long id) {
     return deliveryPersonService.getUserProfile(id);
   }
 
   @Override
-  public Boolean modifyRestaurantProfile(Long id, RestaurantOwnerDto restaurantOwnerDto) {
+  public Boolean modifyRestaurantProfile(long id, RestaurantOwnerDto restaurantOwnerDto) {
     return restaurantOwnerService.modifyProfile(id, restaurantOwnerDto);
   }
 
   @Override
-  public Boolean modifyDeliveryPersonProfile(Long id, DeliveryPersonDto deliveryPersonDto) {
+  public Boolean modifyDeliveryPersonProfile(long id, DeliveryPersonDto deliveryPersonDto) {
     return deliveryPersonService.modifyProfile(id, deliveryPersonDto);
   }
 
@@ -68,7 +68,7 @@ public class UserController implements UserApi {
   }
 
   @Override
-  public DeliveryPersonStatus getDeliveryPersonStatus(Long id) {
+  public DeliveryPersonStatus getDeliveryPersonStatus(long id) {
     return deliveryPersonService.getDeliveryPersonStatus(id);
   }
 

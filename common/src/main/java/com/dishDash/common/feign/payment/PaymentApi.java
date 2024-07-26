@@ -11,5 +11,5 @@ public interface PaymentApi {
   boolean pay(@RequestParam String transactionID);
 
   @PostMapping("/createOrderTransaction")
-  TransactionDto createOrderTransaction(@RequestParam Long orderId, @RequestParam double amount);
+  TransactionDto createOrderTransaction(@RequestParam long orderId, @RequestParam double amount);
 }

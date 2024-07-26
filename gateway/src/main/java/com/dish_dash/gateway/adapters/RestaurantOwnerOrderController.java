@@ -17,7 +17,7 @@ public class RestaurantOwnerOrderController {
   @PostMapping("/status")
   @Authentication
   public boolean updateOrderStatusByRestaurantOwner(
-      @RequestParam Long orderId, @RequestParam OrderStatus status) {
+      @RequestParam long orderId, @RequestParam OrderStatus status) {
     return restaurantOwnerOrderApi.updateOrderStatusByRestaurantOwner(orderId, status);
   }
 

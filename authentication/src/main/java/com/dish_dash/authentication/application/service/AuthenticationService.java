@@ -72,7 +72,7 @@ public class AuthenticationService {
     }
   }
 
-  private String generateToken(Long userId) {
+  private String generateToken(long userId) {
     long nowMillis = System.currentTimeMillis();
     long expMillis = nowMillis + 24 * 60 * 60 * 1000;
     String token = generateTokenValue(userId, expMillis, nowMillis);
@@ -80,7 +80,7 @@ public class AuthenticationService {
     return token;
   }
 
-  private String generateTokenValue(Long userId, long expMillis, long nowMillis) {
+  private String generateTokenValue(long userId, long expMillis, long nowMillis) {
     return Jwts.builder()
         .setSubject(String.valueOf(userId))
         .setIssuedAt(new Date(nowMillis))

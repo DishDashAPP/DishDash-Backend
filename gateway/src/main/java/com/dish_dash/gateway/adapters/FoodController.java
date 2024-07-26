@@ -22,7 +22,7 @@ public class FoodController {
 
   @GetMapping("/{id}")
   @Authentication
-  public FoodViewDto getFoodById(@PathVariable Long id) {
+  public FoodViewDto getFoodById(@PathVariable long id) {
     return foodApi.getFoodById(id);
   }
 
@@ -34,7 +34,7 @@ public class FoodController {
 
   @DeleteMapping("/{id}")
   @Authentication
-  public void deleteFood(@PathVariable Long id) {
+  public void deleteFood(@PathVariable long id) {
     foodApi.deleteFood(id);
   }
 }

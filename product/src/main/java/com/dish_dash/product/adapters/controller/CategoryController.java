@@ -20,7 +20,7 @@ public class CategoryController implements CategoryApi {
   }
 
   @Override
-  public CategoryViewDto getCategoryById(Long id) {
+  public CategoryViewDto getCategoryById(long id) {
     return categoryService.getCategoryById(id);
   }
 
@@ -30,7 +30,7 @@ public class CategoryController implements CategoryApi {
   }
 
   @Override
-  public void deleteCategory(Long id) {
+  public void deleteCategory(long id) {
     categoryService.deleteCategory(id);
   }
 }
