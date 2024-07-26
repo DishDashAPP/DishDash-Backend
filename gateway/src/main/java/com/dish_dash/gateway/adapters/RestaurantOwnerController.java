@@ -14,7 +14,13 @@ public class RestaurantOwnerController {
 
   @PutMapping
   @Authentication(userId = "#userId")
-  Boolean modifyRestaurantProfile(long userId, @RequestBody RestaurantOwnerDto restaurantOwnerDto) {
+  Boolean modifyRestaurantProfile(Long userId, @RequestBody RestaurantOwnerDto restaurantOwnerDto) {
     return userApi.modifyRestaurantProfile(userId, restaurantOwnerDto);
+  }
+
+  @GetMapping()
+  @Authentication(userId = "#userId")
+  public RestaurantOwnerDto getUserProfile(Long userId) {
+    return userApi.getRestaurantOwnerProfile(userId);
   }
 }

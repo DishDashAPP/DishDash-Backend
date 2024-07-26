@@ -18,15 +18,19 @@ public class CustomerService {
         .findById(id)
         .map(
             customer -> {
-              UserMapper.INSTANCE.updateCustomerFromDto(customerDto, customer);
-              customerRepository.save(customer);
+              customerRepository.modify(
+                  customerDto.getFirstName(),
+                  customerDto.getLastName(),
+                  customerDto.getAddress(),
+                  customerDto.getPhoneNumber(),
+                  customer.getId());
               return true;
             })
         .orElse(false);
   }
 
   public void createCustomer(CustomerDto customerDto) {
-    customerRepository.save(UserMapper.INSTANCE.dtoToCustomer(customerDto));
+    customerRepository.save(Customer.builder().id(customerDto.getId()).build());
   }
 
   public String getCustomerAddress(Long customerID) {

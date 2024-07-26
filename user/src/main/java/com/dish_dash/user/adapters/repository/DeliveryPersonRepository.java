@@ -2,7 +2,6 @@ package com.dish_dash.user.adapters.repository;
 
 import com.dish_dash.user.domain.model.DeliveryPerson;
 import com.dish_dash.user.domain.repository.UserRepository;
-import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,11 +14,13 @@ public interface DeliveryPersonRepository
     extends JpaRepository<DeliveryPerson, Long>, UserRepository<DeliveryPerson> {
 
   @Query(
-      "UPDATE DeliveryPerson SET firstName =:firstName, phoneNumber =:phoneNumber where id=:id")
+      "UPDATE DeliveryPerson SET firstName =:firstName,lastName=:lastName,"
+          + " phoneNumber =:phoneNumber where id=:id")
   @Modifying
   @Transactional
   void modify(
       @Param("firstName") String firstName,
+      @Param("lastName") String lastName,
       @Param("phoneNumber") String phoneNumber,
       @Param("id") Long id);
 }

@@ -1,5 +1,6 @@
 package com.dish_dash.gateway.adapters;
 
+import com.dishDash.common.dto.CustomerDto;
 import com.dishDash.common.dto.DeliveryPersonDto;
 import com.dishDash.common.dto.LocationDto;
 import com.dishDash.common.enums.DeliveryPersonStatus;
@@ -17,25 +18,30 @@ public class DeliveryPersonController {
   @PutMapping
   @Authentication(userId = "#userId")
   public Boolean modifyDeliveryPersonProfile(
-      long userId, @RequestBody DeliveryPersonDto deliveryPersonDto) {
+      Long userId, @RequestBody DeliveryPersonDto deliveryPersonDto) {
     return userApi.modifyDeliveryPersonProfile(userId, deliveryPersonDto);
   }
 
   @GetMapping("/status")
   @Authentication(userId = "#userId")
-  public DeliveryPersonStatus getDeliveryPersonStatus(long userId) {
+  public DeliveryPersonStatus getDeliveryPersonStatus(Long userId) {
     return userApi.getDeliveryPersonStatus(userId);
   }
 
   @PostMapping("/location")
-  @Authentication
-  public boolean setLocation(@RequestBody LocationDto locationDto, String username) {
-    return userApi.setLocation(locationDto, Long.parseLong(username));
+  @Authentication(userId = "#userId")
+  public boolean setLocation(Long userId, @RequestBody LocationDto locationDto) {
+    return userApi.setLocation(locationDto, userId);
   }
 
   @GetMapping("/location")
   @Authentication(userId = "#userId")
-  public LocationDto getLocation(long userId) {
+  public LocationDto getLocation(Long userId) {
     return userApi.getLocation(userId);
+  }
+  @GetMapping()
+  @Authentication(userId = "#userId")
+  public DeliveryPersonDto getUserProfile(Long userId) {
+    return userApi.getDeliveryPersonProfile(userId);
   }
 }

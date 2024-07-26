@@ -21,10 +21,14 @@ public class DeliveryPerson implements User {
   private String lastName;
   private String phoneNumber;
 
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name = "location_id")
   private Location location;
 
   private Long currentOrderId;
-  private DeliveryPersonStatus status;
+
+  @Column(name = "status", length = 32, columnDefinition = "varchar(32) default 'ACTIVE' ")
+  @Enumerated(EnumType.STRING)
+  @Builder.Default
+  private DeliveryPersonStatus status = DeliveryPersonStatus.ACTIVE;
 }

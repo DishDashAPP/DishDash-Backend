@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController implements UserApi {
 
@@ -29,8 +28,18 @@ public class UserController implements UserApi {
   }
 
   @Override
-  public CustomerDto getUserProfile(Long id) {
+  public CustomerDto getCustomerProfile(Long id) {
     return customerService.getUserProfile(id);
+  }
+
+  @Override
+  public RestaurantOwnerDto getRestaurantOwnerProfile(Long id) {
+    return restaurantOwnerService.getUserProfile(id);
+  }
+
+  @Override
+  public DeliveryPersonDto getDeliveryPersonProfile(Long id) {
+    return deliveryPersonService.getUserProfile(id);
   }
 
   @Override

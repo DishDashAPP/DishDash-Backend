@@ -16,7 +16,13 @@ public interface UserApi {
   Boolean modifyCustomerProfile(@PathVariable Long id, @RequestBody CustomerDto customerDto);
 
   @GetMapping(CUSTOMER + "/{id}")
-  CustomerDto getUserProfile(@PathVariable Long id);
+  CustomerDto getCustomerProfile(@PathVariable Long id);
+
+  @GetMapping(RESTAURANT_OWNER + "/{id}")
+  RestaurantOwnerDto getRestaurantOwnerProfile(@PathVariable Long id);
+
+  @GetMapping(DELIVERY_PERSON + "/{id}")
+  DeliveryPersonDto getDeliveryPersonProfile(@PathVariable Long id);
 
   @PutMapping(RESTAURANT_OWNER + "/{id}")
   Boolean modifyRestaurantProfile(

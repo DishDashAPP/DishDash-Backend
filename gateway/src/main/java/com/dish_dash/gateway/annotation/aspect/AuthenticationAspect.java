@@ -52,7 +52,7 @@ public class AuthenticationAspect {
     }
 
     String tokenExpression = authentication.token();
-    String userIdExpression = authentication.token();
+    String userIdExpression = authentication.userId();
     if (httpServletRequestOptional.isEmpty()) {
       log.error("HttpServletRequest not found");
       throw new CustomException(ErrorCode.INVALID_TOKEN, "Invalid token");

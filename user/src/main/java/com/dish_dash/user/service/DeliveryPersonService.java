@@ -7,6 +7,7 @@ import com.dish_dash.user.adapters.repository.DeliveryPersonRepository;
 import com.dish_dash.user.adapters.repository.LocationRepository;
 import com.dish_dash.user.domain.mapper.UserMapper;
 import com.dish_dash.user.domain.model.DeliveryPerson;
+import com.dish_dash.user.domain.model.Location;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,19 +23,25 @@ public class DeliveryPersonService {
         .findById(id)
         .map(
             deliveryPerson -> {
-              UserMapper.INSTANCE.updateDeliveryPersonFromDto(deliveryPersonDto, deliveryPerson);
-              deliveryPersonRepository.save(deliveryPerson);
+              deliveryPersonRepository.modify(
+                  deliveryPersonDto.getFirstName(),
+                  deliveryPersonDto.getLastName(),
+                  deliveryPersonDto.getPhoneNumber(),
+                  id);
               return true;
             })
         .orElse(false);
   }
 
   public void createDeliveryPerson(DeliveryPersonDto deliveryPersonDto) {
-    deliveryPersonRepository.save(UserMapper.INSTANCE.dtoToDeliveryPerson(deliveryPersonDto));
+    deliveryPersonRepository.save(DeliveryPerson.builder().id(deliveryPersonDto.getId()).build());
   }
 
-  public DeliveryPerson getUserProfile(Long deliveryPersonId) {
-    return deliveryPersonRepository.findById(deliveryPersonId).orElse(null);
+  public DeliveryPersonDto getUserProfile(Long deliveryPersonId) {
+    return deliveryPersonRepository
+        .findById(deliveryPersonId)
+        .map(UserMapper.INSTANCE::deliveryPersonToDto)
+        .orElse(null);
   }
 
   public DeliveryPersonStatus getDeliveryPersonStatus(Long deliveryPersonId) {
@@ -45,12 +52,21 @@ public class DeliveryPersonService {
   }
 
   public boolean setLocation(LocationDto locationDto, long deliveryPersonId) {
-    return locationRepository
-        .findById(locationDto.getId())
+    return deliveryPersonRepository
+        .findById(deliveryPersonId)
         .map(
-            location -> {
-              UserMapper.INSTANCE.updateLocationFromDto(locationDto, location);
-              locationRepository.save(location);
+            deliveryPerson -> {
+              Location location =
+                  locationRepository
+                      .findByDeliveryID(deliveryPersonId)
+                      .orElse(
+                          Location.builder()
+                              .deliveryID(deliveryPersonId)
+                              .latitude(locationDto.getLatitude())
+                              .longitude(locationDto.getLongitude())
+                              .build());
+              deliveryPerson.setLocation(location);
+              deliveryPersonRepository.save(deliveryPerson);
               return true;
             })
         .orElse(false);
@@ -58,7 +74,7 @@ public class DeliveryPersonService {
 
   public LocationDto getLocation(long deliveryPersonId) {
     return locationRepository
-        .findById(deliveryPersonId)
+        .findByDeliveryID(deliveryPersonId)
         .map(UserMapper.INSTANCE::locationToDto)
         .orElse(null);
   }

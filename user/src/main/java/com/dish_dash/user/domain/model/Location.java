@@ -1,8 +1,9 @@
 package com.dish_dash.user.domain.model;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import javax.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Getter
 @Setter
@@ -20,7 +21,7 @@ public class Location {
 
   private long latitude;
   private long longitude;
-  private LocalDateTime timestamp;
+  @UpdateTimestamp private Timestamp timestamp;
 
   @Column(name = "delivery_id")
   private Long deliveryID;

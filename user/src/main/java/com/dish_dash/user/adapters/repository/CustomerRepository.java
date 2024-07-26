@@ -17,11 +17,13 @@ public interface CustomerRepository
   Optional<Customer> findByPhoneNumber(String phoneNumber);
 
   @Query(
-      "UPDATE Customer SET firstName =:firstName, address =:address, phoneNumber =:phoneNumber where id=:id")
+      "UPDATE Customer SET firstName =:firstName,lastName=:lastName," +
+              " address =:address, phoneNumber =:phoneNumber where id=:id")
   @Modifying
   @Transactional
   void modify(
       @Param("firstName") String firstName,
+      @Param("lastName") String lastName,
       @Param("address") String address,
       @Param("phoneNumber") String phoneNumber,
       @Param("id") Long id);

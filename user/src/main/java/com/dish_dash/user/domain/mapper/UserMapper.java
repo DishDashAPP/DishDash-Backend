@@ -31,12 +31,4 @@ public interface UserMapper {
   LocationDto locationToDto(Location location);
 
   void updateCustomerFromDto(CustomerDto customerDto, @MappingTarget Customer customer);
-
-  void updateRestaurantOwnerFromDto(
-      RestaurantOwnerDto restaurantOwnerDto, @MappingTarget RestaurantOwner restaurantOwner);
-
-  void updateDeliveryPersonFromDto(
-      DeliveryPersonDto deliveryPersonDto, @MappingTarget DeliveryPerson deliveryPerson);
-
-  void updateLocationFromDto(LocationDto locationDto, @MappingTarget Location location);
 }

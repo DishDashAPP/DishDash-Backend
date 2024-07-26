@@ -3,6 +3,7 @@ package com.dish_dash.authentication.application.service;
 import com.dishDash.common.dto.AuthDto;
 import com.dishDash.common.dto.CustomerDto;
 import com.dishDash.common.dto.DeliveryPersonDto;
+import com.dishDash.common.dto.RestaurantOwnerDto;
 import com.dishDash.common.enums.ErrorCode;
 import com.dishDash.common.enums.Role;
 import com.dishDash.common.exception.CustomException;
@@ -129,6 +130,9 @@ public class AuthenticationService {
       case DELIVERY_PERSON ->
           userApi.createDeliveryPerson(
               DeliveryPersonDto.builder().id(authenticationInfo.getUserId()).build());
+      case RESTAURANT_OWNER ->
+          userApi.createRestaurantOwner(
+              RestaurantOwnerDto.builder().id(authenticationInfo.getUserId()).build());
     }
   }
 }
