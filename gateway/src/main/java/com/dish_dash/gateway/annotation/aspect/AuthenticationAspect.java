@@ -36,6 +36,8 @@ public class AuthenticationAspect {
   private static final Map<String, List<Role>> ROLE_PATH_ACCESS =
       Map.ofEntries(
           entry("/v1/rate", List.of(Role.USER, Role.CUSTOMER)),
+          entry("/v1/rate/order", List.of(Role.USER, Role.CUSTOMER)),
+          entry("/v1/auth/validate", List.of(Role.USER, Role.CUSTOMER)),
           entry("/user", List.of(Role.USER, Role.CUSTOMER)),
           entry("/v1/customer", List.of(Role.USER, Role.CUSTOMER)),
           entry("/v1/order/customer", List.of(Role.USER, Role.CUSTOMER)),

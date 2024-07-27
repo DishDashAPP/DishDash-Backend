@@ -14,13 +14,13 @@ public class RateController {
 
   @PostMapping("/order")
   @Authentication(userId = "#userId")
-  public boolean setOrderRate(long userId, @RequestParam long orderId, @RequestParam int point) {
+  public boolean setOrderRate(Long userId, @RequestParam long orderId, @RequestParam int point) {
     return rateApi.setOrderRate(userId, orderId, point);
   }
 
   @PostMapping("/delivery")
   @Authentication(userId = "#userId")
-  public boolean setDeliveryRate(long userId, @RequestParam long orderId, @RequestParam int point) {
+  public boolean setDeliveryRate(Long userId, @RequestParam long orderId, @RequestParam int point) {
     return rateApi.setDeliveryRate(userId, orderId, point);
   }
 
