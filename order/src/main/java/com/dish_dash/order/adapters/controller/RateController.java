@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/rates")
+@RequestMapping("/rate/order")
 @RequiredArgsConstructor
 public class RateController implements RateApi {
   private final RateService rateService;

@@ -7,6 +7,7 @@ import com.dishDash.common.dto.OrderItemCreateDto;
 import com.dishDash.common.enums.ErrorCode;
 import com.dishDash.common.enums.OrderStatus;
 import com.dishDash.common.exception.CustomException;
+import com.dishDash.common.exception.MoreThanOneOrderException;
 import com.dishDash.common.feign.Product.FoodApi;
 import com.dish_dash.order.domain.mapper.OrderMapper;
 import com.dish_dash.order.domain.model.Order;
@@ -33,6 +34,9 @@ public class CustomerOrderService {
   @Transactional
   public OrderDto createOrder(
       long customerId, long restaurantOwnerId, List<OrderItemCreateDto> orderItemsDto) {
+    if (orderRepository.findByCustomerIdAndStatusNot(customerId, OrderStatus.DELIVERED).isPresent())
+      throw new MoreThanOneOrderException(
+          ErrorCode.BAD_REQUEST, "There is an active order for the customer");
     AtomicReference<Double> totalPrice = new AtomicReference<>(0.0);
 
     // Calculate the total price for the order items
@@ -160,6 +164,10 @@ public class CustomerOrderService {
   public OrderDto getCustomerCurrentOrder(long customerId) {
     return orderRepository
         .findByCustomerIdAndStatusNot(customerId, OrderStatus.DELIVERED)
+        .filter(
+            order ->
+                order.getStatus() == OrderStatus.PREPARING
+                    || order.getStatus() == OrderStatus.DELIVERING)
         .map(OrderMapper.INSTANCE::orderToDto)
         .orElse(null);
   }

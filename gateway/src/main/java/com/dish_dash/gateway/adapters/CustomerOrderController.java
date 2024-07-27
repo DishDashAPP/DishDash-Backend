@@ -17,7 +17,7 @@ public class CustomerOrderController {
   @PostMapping
   @Authentication(userId = "#userId")
   public OrderDto createOrder(
-      Long userId,
+      long userId,
       @RequestParam Long restaurantOwnerId,
       @RequestBody List<OrderItemCreateDto> orderItemsDto) {
     return customerOrderAPi.createOrder(userId, restaurantOwnerId, orderItemsDto);
