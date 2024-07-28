@@ -7,6 +7,8 @@ import com.dish_dash.product.domain.model.Food;
 import com.dish_dash.product.infrastructure.repository.FoodRepository;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.dish_dash.product.infrastructure.repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class FoodService {
   private final FoodRepository foodRepository;
   private final CategoryService categoryService;
+  private final MenuRepository menuRepository;
 
   public List<FoodViewDto> getAllFoods() {
     return foodRepository.findAll().stream()
@@ -26,9 +29,13 @@ public class FoodService {
     return foodRepository.findById(id).map(ProductMapper.INSTANCE::foodToViewDto).orElse(null);
   }
 
-  public FoodDto saveFood(FoodDto foodDto) {
+  public FoodDto saveFood(FoodDto foodDto, long userId) {
     Food food = ProductMapper.INSTANCE.dtoToFood(foodDto);
     food.setCategory(categoryService.getReferenceCategory(foodDto.getCategoryId()));
+
+    var menu = menuRepository.findByRestaurantId(userId);
+    food.setMenu(menu.get());
+
     return ProductMapper.INSTANCE.foodToDto(foodRepository.save(food));
   }
 

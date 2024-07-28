@@ -4,6 +4,7 @@ import com.dishDash.common.dto.OrderDto;
 import com.dishDash.common.enums.ErrorCode;
 import com.dishDash.common.enums.OrderStatus;
 import com.dishDash.common.exception.CustomException;
+import com.dishDash.common.feign.user.UserApi;
 import com.dish_dash.order.domain.mapper.OrderMapper;
 import com.dish_dash.order.domain.model.Order;
 import com.dish_dash.order.domain.repository.OrderRepository;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class RestaurantOrderService {
 
   private final OrderRepository orderRepository;
+  private final UserApi userApi;
 
   public boolean updateOrderStatusByRestaurantOwner(
       Long restaurantOwnerId, long orderId, OrderStatus status) {
@@ -26,10 +28,18 @@ public class RestaurantOrderService {
       if (orderOptional.get().getRestaurantOwnerId() != restaurantOwnerId)
         throw new CustomException(ErrorCode.FORBIDDEN, "Restaurant owner id mismatch");
       orderOptional.get().setStatus(status);
+    }
+    // we should set a delivery person to the order or throw an exception
+    var setDeliveryPerson = userApi.setActiveOrder(orderId);
+    if (setDeliveryPerson != null) {
+      orderOptional.get().setStatus(status);
+      orderOptional.get().setDeliveryPersonId(setDeliveryPerson);
+      orderRepository.updateDeliveryPerson(setDeliveryPerson, orderId);
       orderRepository.updateStatus(status, orderId);
       return true;
+    } else {
+      throw new CustomException(ErrorCode.BAD_REQUEST, "No delivery person available");
     }
-    return false;
   }
 
   public List<OrderDto> getRestaurantOwnerOrderHistory(long restaurantOwnerID) {

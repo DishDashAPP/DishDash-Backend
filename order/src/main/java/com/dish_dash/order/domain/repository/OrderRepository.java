@@ -17,7 +17,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
   List<Order> findAllByRestaurantOwnerIdAndStatusIn(
       long restaurantOwnerId, List<OrderStatus> status);
 
-  //  Order findCurrentOrderByDeliveryPersonID(String deliveryPersonId);
+  Order findByDeliveryPersonId(long deliveryPersonId);
 
   List<Order> findByCustomerId(long customerID);
 
@@ -25,6 +25,11 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
   @Modifying
   @Transactional
   void updateStatus(@Param("status") OrderStatus status, @Param("id") long id);
+
+  @Query("Update Order set deliveryPersonId =:deliveryPersonId where id =:id")
+  @Modifying
+  @Transactional
+  void updateDeliveryPerson(@Param("deliveryPersonId") long deliveryPersonId, @Param("id") long id);
 
   Optional<Order> findByCustomerIdAndStatusNot(long customerId, OrderStatus status);
 }

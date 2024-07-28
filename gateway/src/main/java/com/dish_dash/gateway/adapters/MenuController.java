@@ -18,7 +18,7 @@ public class MenuController {
   }
 
   @GetMapping("/{id}")
-  public MenuDto getMenuById(@PathVariable long id) {
+  public MenuDto getMenuById(@PathVariable Long id) {
     return menuApi.getMenuById(id);
   }
 
@@ -28,7 +28,7 @@ public class MenuController {
   }
 
   @DeleteMapping("/{id}")
-  public void deleteMenu(@PathVariable long id) {
+  public void deleteMenu(@PathVariable Long id) {
     menuApi.deleteMenu(id);
   }
 }

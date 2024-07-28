@@ -17,7 +17,7 @@ public class CustomerOrderController {
   @PostMapping
   @Authentication(userId = "#userId")
   public OrderDto createOrder(
-      long userId,
+      Long userId,
       @RequestParam Long restaurantOwnerId,
       @RequestBody List<OrderItemCreateDto> orderItemsDto) {
     return customerOrderAPi.createOrder(userId, restaurantOwnerId, orderItemsDto);
@@ -32,13 +32,13 @@ public class CustomerOrderController {
 
   @PostMapping("/orderRate")
   @Authentication(userId = "#userId")
-  boolean setOrderRate(Long userId, @RequestParam long orderId, @RequestParam int point) {
+  boolean setOrderRate(Long userId, @RequestParam Long orderId, @RequestParam int point) {
     return customerOrderAPi.setOrderRate(userId, orderId, point);
   }
 
   @PostMapping("/deliveryRate")
   @Authentication(userId = "#userId")
-  boolean setDeliveryRate(long userId, @RequestParam long orderId, @RequestParam int point) {
+  boolean setDeliveryRate(Long userId, @RequestParam Long orderId, @RequestParam int point) {
     return customerOrderAPi.setDeliveryRate(userId, orderId, point);
   }
 

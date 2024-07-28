@@ -24,7 +24,7 @@ public class RateController {
     return rateApi.setDeliveryRate(userId, orderId, point);
   }
 
-  @GetMapping("/delivery/{deliveryPersonId}")
+  @GetMapping("/delivery//{deliveryPersonId}")
   @Authentication
   public RateDto getDeliveryRate(@PathVariable String deliveryPersonId) {
     return rateApi.getDeliveryRate(deliveryPersonId);

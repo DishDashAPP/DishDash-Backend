@@ -12,12 +12,12 @@ public class DeliveryController {
   private final DeliveryApi deleteApi;
 
   @PostMapping("/assignOrder")
-  boolean assignOrder(@RequestParam long orderId, @RequestParam long deliveryPersonId) {
+  boolean assignOrder(@RequestParam Long orderId, @RequestParam Long deliveryPersonId) {
     return deleteApi.assignOrder(orderId, deliveryPersonId);
   }
 
   @GetMapping("/getInvoice")
-  InvoiceDto getInvoice(@RequestParam long orderId) {
+  InvoiceDto getInvoice(@RequestParam Long orderId) {
     return deleteApi.getInvoice(orderId);
   }
 }

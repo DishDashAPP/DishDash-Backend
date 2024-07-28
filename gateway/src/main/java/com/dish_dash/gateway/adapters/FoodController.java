@@ -28,8 +28,8 @@ public class FoodController {
 
   @PostMapping
   @Authentication
-  public FoodDto createFood(@RequestBody FoodDto foodDto) {
-    return foodApi.createFood(foodDto);
+  public FoodDto createFood(@RequestBody FoodDto foodDto, long userId) {
+    return foodApi.createFood(userId, foodDto);
   }
 
   @DeleteMapping("/{id}")

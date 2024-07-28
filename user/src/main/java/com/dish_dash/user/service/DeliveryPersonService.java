@@ -78,4 +78,20 @@ public class DeliveryPersonService {
         .map(UserMapper.INSTANCE::locationToDto)
         .orElse(null);
   }
+
+  public long setActiveOrder(long orderId) {
+    // it shoud find the delivery person who is not busy and set the order to him and return false
+    // if not found
+
+      return deliveryPersonRepository.findByStatus(DeliveryPersonStatus.ACTIVE).stream()
+          .findFirst()
+          .map(
+              deliveryPerson -> {
+                deliveryPerson.setCurrentOrderId(orderId);
+                deliveryPerson.setStatus(DeliveryPersonStatus.BUSY);
+                deliveryPersonRepository.save(deliveryPerson);
+                return deliveryPerson.getId();
+              })
+          .orElse(null);
+  }
 }

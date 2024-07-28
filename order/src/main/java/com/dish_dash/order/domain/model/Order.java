@@ -39,6 +39,9 @@ public class Order {
   @Column(name = "restaurant_owner_id")
   private long restaurantOwnerId;
 
+  @Column(name = "delivery_person_id", columnDefinition = "bigint default -1")
+  private long deliveryPersonId;
+
   @Column(name = "customer_id")
   private long customerId;
 

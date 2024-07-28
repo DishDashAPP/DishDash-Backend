@@ -15,12 +15,12 @@ public class DeliveryPersonOrderController implements DeliveryPersonOrderApi {
   private final DeliveryPersonOrderService deliveryPersonOrderService;
 
   @Override
-  public boolean updateOrderStatusByDeliveryPerson(long orderID, OrderStatus status) {
+  public boolean updateOrderStatusByDeliveryPerson(Long orderID, OrderStatus status) {
     return deliveryPersonOrderService.updateOrderStatusByDeliveryPerson(orderID, status);
   }
 
   @Override
-  public OrderDto getDeliveryPersonCurrentOrder(String deliveryPersonID) {
+  public OrderDto getDeliveryPersonCurrentOrder(Long deliveryPersonID) {
     return deliveryPersonOrderService.getDeliveryPersonCurrentOrder(deliveryPersonID);
   }
 }

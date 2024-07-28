@@ -17,7 +17,7 @@ public class RestaurantOwnerOrderController {
   @PutMapping("/status")
   @Authentication(userId = "#userId")
   public boolean updateOrderStatusByRestaurantOwner(
-      Long userId, @RequestParam long orderId, @RequestParam OrderStatus status) {
+      Long userId, @RequestParam Long orderId, @RequestParam OrderStatus status) {
     return restaurantOwnerOrderApi.updateOrderStatusByRestaurantOwner(userId, orderId, status);
   }
 

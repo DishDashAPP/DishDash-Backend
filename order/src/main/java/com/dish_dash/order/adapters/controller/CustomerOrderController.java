@@ -17,32 +17,32 @@ public class CustomerOrderController implements CustomerOrderAPi {
 
   @Override
   public OrderDto createOrder(
-      long customerId, long restaurantOwnerId, List<OrderItemCreateDto> orderItemsDto) {
+          Long customerId, Long restaurantOwnerId, List<OrderItemCreateDto> orderItemsDto) {
     return customerOrderService.createOrder(customerId, restaurantOwnerId, orderItemsDto);
   }
 
   @Override
-  public OrderDto modifyOrder(long customerId, long orderId, List<OrderItemCreateDto> orderItems) {
+  public OrderDto modifyOrder(Long customerId, Long orderId, List<OrderItemCreateDto> orderItems) {
     return customerOrderService.modifyOrder(customerId, orderId, orderItems);
   }
 
   @Override
-  public boolean setOrderRate(long customerId, long orderId, int point) {
+  public boolean setOrderRate(Long customerId, Long orderId, int point) {
     return customerOrderService.setOrderRate(customerId, orderId, point);
   }
 
   @Override
-  public boolean setDeliveryRate(long customerId, long orderId, int point) {
+  public boolean setDeliveryRate(Long customerId, Long orderId, int point) {
     return customerOrderService.setDeliveryRate(customerId, orderId, point);
   }
 
   @Override
-  public List<OrderDto> getCustomerOrders(long customerId) {
+  public List<OrderDto> getCustomerOrders(Long customerId) {
     return customerOrderService.getCustomerOrders(customerId);
   }
 
   @Override
-  public OrderDto getCustomerCurrentOrder(long customerId) {
+  public OrderDto getCustomerCurrentOrder(Long customerId) {
     return customerOrderService.getCustomerCurrentOrder(customerId);
   }
 }

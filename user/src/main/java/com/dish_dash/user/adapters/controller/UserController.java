@@ -82,4 +82,9 @@ public class UserController implements UserApi {
   public LocationDto getLocation(@RequestParam long deliveryPersonId) {
     return deliveryPersonService.getLocation(deliveryPersonId);
   }
+
+    @Override
+    public Long setActiveOrder(@RequestParam long orderId) {
+        return deliveryPersonService.setActiveOrder(orderId);
+    }
 }

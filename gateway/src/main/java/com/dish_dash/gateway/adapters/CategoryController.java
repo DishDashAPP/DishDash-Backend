@@ -22,7 +22,7 @@ public class CategoryController {
 
   @GetMapping("/{id}")
   @Authentication
-  public CategoryViewDto getCategoryById(@PathVariable long id) {
+  public CategoryViewDto getCategoryById(@PathVariable Long id) {
     return categoryApi.getCategoryById(id);
   }
 
@@ -34,7 +34,7 @@ public class CategoryController {
 
   @DeleteMapping("/{id}")
   @Authentication
-  public void deleteCategory(@PathVariable long id) {
+  public void deleteCategory(@PathVariable Long id) {
     categoryApi.deleteCategory(id);
   }
 }
