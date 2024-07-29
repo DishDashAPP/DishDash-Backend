@@ -13,4 +13,6 @@ import lombok.NoArgsConstructor;
 public class MenuDto {
   @JsonProperty("restaurant_id")
   private String restaurantId;
+
+  private long id;
 }

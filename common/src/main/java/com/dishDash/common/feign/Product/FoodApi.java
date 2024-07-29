@@ -17,7 +17,7 @@ public interface FoodApi {
   FoodViewDto getFoodById(@PathVariable long id);
 
   @PostMapping()
-  FoodDto createFood(@RequestBody FoodDto foodDto);
+  FoodDto createFood( @RequestParam long userId, @RequestBody FoodDto foodDto);
 
   @DeleteMapping("/{id}")
   void deleteFood(@PathVariable long id);

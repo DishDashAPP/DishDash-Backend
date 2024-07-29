@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "order-service", contextId = "delivery-person-order-service")
+@FeignClient(name = "order-service", contextId = "delivery-person-order-service", path = "/order/deliveryPerson")
 public interface DeliveryPersonOrderApi {
   @PutMapping("/status")
   boolean updateOrderStatusByDeliveryPerson(
-      @RequestParam long orderID, @RequestParam OrderStatus status);
+      @RequestParam Long orderID, @RequestParam OrderStatus status);
 
   @GetMapping("/current")
-  OrderDto getDeliveryPersonCurrentOrder(@RequestParam String deliveryPersonID);
+  OrderDto getDeliveryPersonCurrentOrder(@RequestParam Long deliveryPersonID);
 }

@@ -10,27 +10,27 @@ import org.springframework.web.bind.annotation.*;
 public interface CustomerOrderAPi {
   @PostMapping("/createOrder")
   OrderDto createOrder(
-      @RequestParam long customerId,
-      @RequestParam long restaurantOwnerId,
+      @RequestParam Long customerId,
+      @RequestParam Long restaurantOwnerId,
       @RequestBody List<OrderItemCreateDto> orderItemsDto);
 
   @PostMapping("/modifyOrder")
   OrderDto modifyOrder(
-      @RequestParam long customerId,
-      @RequestParam long orderId,
+      @RequestParam Long customerId,
+      @RequestParam Long orderId,
       @RequestBody List<OrderItemCreateDto> orderItems);
 
   @PostMapping("/setOrderRate")
   boolean setOrderRate(
-      @RequestParam long customerId, @RequestParam long orderId, @RequestParam int point);
+      @RequestParam Long customerId, @RequestParam Long orderId, @RequestParam int point);
 
   @PostMapping("/setDeliveryRate")
   boolean setDeliveryRate(
-      @RequestParam long customerId, @RequestParam long orderId, @RequestParam int point);
+      @RequestParam Long customerId, @RequestParam Long orderId, @RequestParam int point);
 
   @GetMapping("/getCustomerOrders")
-  List<OrderDto> getCustomerOrders(@RequestParam long customerId);
+  List<OrderDto> getCustomerOrders(@RequestParam Long customerId);
 
   @GetMapping("/getCustomerCurrentOrder")
-  OrderDto getCustomerCurrentOrder(@RequestParam long customerId);
+  OrderDto getCustomerCurrentOrder(@RequestParam Long customerId);
 }
