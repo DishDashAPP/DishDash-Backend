@@ -7,5 +7,5 @@ import org.springframework.web.bind.annotation.*;
 public interface ReviewApi {
   @PostMapping("/order")
   boolean setOrderReview(
-      @RequestParam Long customerID, @RequestParam Long orderID, @RequestParam String comment);
+      @RequestParam long customerID, @RequestParam long orderID, @RequestParam String comment);
 }

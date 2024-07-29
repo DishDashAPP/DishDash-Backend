@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DeliveryPersonDto {
-  private Long id;
+  private long id;
 
   @JsonProperty("first_name")
   private String firstName;

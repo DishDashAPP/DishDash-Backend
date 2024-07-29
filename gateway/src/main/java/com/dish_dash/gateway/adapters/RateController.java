@@ -7,26 +7,26 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/rate")
+@RequestMapping("v1/rate")
 @RequiredArgsConstructor
 public class RateController {
   private final RateApi rateApi;
 
   @PostMapping("/order")
-  @Authentication
-  boolean setOrderRate(long userId, @RequestParam Long orderId, @RequestParam int point) {
+  @Authentication(userId = "#userId")
+  public boolean setOrderRate(Long userId, @RequestParam long orderId, @RequestParam int point) {
     return rateApi.setOrderRate(userId, orderId, point);
   }
 
   @PostMapping("/delivery")
-  @Authentication
-  boolean setDeliveryRate(long userId, @RequestParam Long orderId, @RequestParam int point) {
+  @Authentication(userId = "#userId")
+  public boolean setDeliveryRate(Long userId, @RequestParam long orderId, @RequestParam int point) {
     return rateApi.setDeliveryRate(userId, orderId, point);
   }
 
-  @GetMapping("/delivery/{deliveryPersonId}")
+  @GetMapping("/delivery//{deliveryPersonId}")
   @Authentication
-  RateDto getDeliveryRate(@PathVariable String deliveryPersonId) {
+  public RateDto getDeliveryRate(@PathVariable String deliveryPersonId) {
     return rateApi.getDeliveryRate(deliveryPersonId);
   }
 }

@@ -1,5 +1,6 @@
 package com.dishDash.common.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryDto {
-  private String name;
+public class CategoryViewDto {
+    private long id;
+
+    private String name;
 }

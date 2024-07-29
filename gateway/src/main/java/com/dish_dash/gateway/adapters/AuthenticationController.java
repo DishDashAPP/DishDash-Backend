@@ -4,7 +4,6 @@ import com.dishDash.common.feign.authentication.AuthenticationApi;
 import com.dish_dash.gateway.annotation.Authentication;
 import com.dish_dash.gateway.request.LoginRequest;
 import com.dish_dash.gateway.request.RegisterRequest;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +15,7 @@ public class AuthenticationController {
 
   @PostMapping("/login")
   public String login(@RequestBody LoginRequest loginRequest) {
-    var respose = authenticationApi.login(loginRequest.getUsername(), loginRequest.getPassword());
-    return respose;
+    return authenticationApi.login(loginRequest.getUsername(), loginRequest.getPassword());
   }
 
   @PostMapping("/register")
@@ -27,14 +25,14 @@ public class AuthenticationController {
   }
 
   @GetMapping("/validate")
-   @Authentication
-  boolean validate(@RequestHeader("Authorization") String token) {
+  @Authentication(token = "#token")
+  boolean validate(String token) {
     return authenticationApi.validate(token).isValid();
   }
 
   @PostMapping("/logout")
-   @Authentication
-  public void logout(@RequestHeader("Authorization") String token) {
+  @Authentication(token = "#token")
+  public void logout(String token) {
     authenticationApi.logout(token);
   }
 }

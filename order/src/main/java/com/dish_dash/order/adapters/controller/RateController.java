@@ -7,18 +7,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/rates")
+@RequestMapping("/rate/order")
 @RequiredArgsConstructor
 public class RateController implements RateApi {
   private final RateService rateService;
 
   @Override
-  public boolean setOrderRate(Long customerId, Long orderId, int point) {
+  public boolean setOrderRate(long customerId, long orderId, int point) {
     return rateService.setOrderRate(customerId, orderId, point);
   }
 
   @Override
-  public boolean setDeliveryRate(Long customerID, Long orderID, int point) {
+  public boolean setDeliveryRate(long customerID, long orderID, int point) {
     return rateService.setDeliveryRate(customerID, orderID, point);
   }
 

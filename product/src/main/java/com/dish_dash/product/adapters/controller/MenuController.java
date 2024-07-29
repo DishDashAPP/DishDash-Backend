@@ -20,7 +20,7 @@ public class MenuController implements MenuApi {
   }
 
   @Override
-  public MenuDto getMenuById(Long id) {
+  public MenuDto getMenuById(long id) {
     return menuService.getMenuById(id);
   }
 
@@ -30,12 +30,12 @@ public class MenuController implements MenuApi {
   }
 
   @Override
-  public void deleteMenu(Long id) {
+  public void deleteMenu(long id) {
     menuService.deleteMenu(id);
   }
 
   @Override
-  public FoodDto addFoodToMenu(Long menuId, FoodDto foodDto) {
+  public FoodDto addFoodToMenu(long menuId, FoodDto foodDto) {
     return menuService.addFoodToMenu(menuId, foodDto);
   }
 }

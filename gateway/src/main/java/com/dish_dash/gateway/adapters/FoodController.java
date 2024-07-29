@@ -1,6 +1,7 @@
 package com.dish_dash.gateway.adapters;
 
 import com.dishDash.common.dto.FoodDto;
+import com.dishDash.common.dto.FoodViewDto;
 import com.dishDash.common.feign.Product.FoodApi;
 import com.dish_dash.gateway.annotation.Authentication;
 import java.util.List;
@@ -15,25 +16,25 @@ public class FoodController {
 
   @GetMapping
   @Authentication
-  List<FoodDto> getAllFoods() {
+  public List<FoodViewDto> getAllFoods() {
     return foodApi.getAllFoods();
   }
 
   @GetMapping("/{id}")
   @Authentication
-  FoodDto getFoodById(@PathVariable Long id) {
+  public FoodViewDto getFoodById(@PathVariable long id) {
     return foodApi.getFoodById(id);
   }
 
   @PostMapping
   @Authentication
-  FoodDto createFood(@RequestBody FoodDto foodDto) {
-    return foodApi.createFood(foodDto);
+  public FoodDto createFood(@RequestBody FoodDto foodDto, long userId) {
+    return foodApi.createFood(userId, foodDto);
   }
 
   @DeleteMapping("/{id}")
   @Authentication
-  void deleteFood(@PathVariable Long id) {
+  public void deleteFood(@PathVariable long id) {
     foodApi.deleteFood(id);
   }
 }

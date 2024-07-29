@@ -3,6 +3,7 @@ package com.dish_dash.authentication.application.service;
 import com.dishDash.common.dto.AuthDto;
 import com.dishDash.common.dto.CustomerDto;
 import com.dishDash.common.dto.DeliveryPersonDto;
+import com.dishDash.common.dto.RestaurantOwnerDto;
 import com.dishDash.common.enums.ErrorCode;
 import com.dishDash.common.enums.Role;
 import com.dishDash.common.exception.CustomException;
@@ -46,12 +47,13 @@ public class AuthenticationService {
   }
 
   public AuthDto validateToken(String tokenValue) {
-    Claims claims = extractAllClaims(tokenValue);
-    claims.getSubject();
-    String userId = claims.getSubject();
+    Optional<Claims> claims = extractAllClaims(tokenValue);
+    if (claims.isEmpty()) return AuthDto.builder().isValid(false).build();
+    claims.get().getSubject();
+    String userId = claims.get().getSubject();
     if (Boolean.TRUE.equals(redisTemplate.hasKey(tokenValue))
         && Objects.nonNull(userId)
-        && new Date().before(claims.getExpiration())) {
+        && new Date().before(claims.get().getExpiration())) {
       Optional<AuthenticationInfo> authenticationInfoOptional =
           authRepository.findById(Long.valueOf(userId));
       if (authenticationInfoOptional.isPresent())
@@ -70,7 +72,7 @@ public class AuthenticationService {
     }
   }
 
-  private String generateToken(Long userId) {
+  private String generateToken(long userId) {
     long nowMillis = System.currentTimeMillis();
     long expMillis = nowMillis + 24 * 60 * 60 * 1000;
     String token = generateTokenValue(userId, expMillis, nowMillis);
@@ -78,7 +80,7 @@ public class AuthenticationService {
     return token;
   }
 
-  private String generateTokenValue(Long userId, long expMillis, long nowMillis) {
+  private String generateTokenValue(long userId, long expMillis, long nowMillis) {
     return Jwts.builder()
         .setSubject(String.valueOf(userId))
         .setIssuedAt(new Date(nowMillis))
@@ -93,12 +95,17 @@ public class AuthenticationService {
     return Keys.hmacShaKeyFor(keyBytes);
   }
 
-  private Claims extractAllClaims(String token) {
-    return Jwts.parserBuilder()
-        .setSigningKey(getSignInKey())
-        .build()
-        .parseClaimsJws(token)
-        .getBody();
+  private Optional<Claims> extractAllClaims(String token) {
+    try {
+      return Optional.ofNullable(
+          Jwts.parserBuilder()
+              .setSigningKey(getSignInKey())
+              .build()
+              .parseClaimsJws(token)
+              .getBody());
+    } catch (Exception e) {
+      return Optional.empty();
+    }
   }
 
   public void register(String username, String password, Role role) {
@@ -123,6 +130,9 @@ public class AuthenticationService {
       case DELIVERY_PERSON ->
           userApi.createDeliveryPerson(
               DeliveryPersonDto.builder().id(authenticationInfo.getUserId()).build());
+      case RESTAURANT_OWNER ->
+          userApi.createRestaurantOwner(
+              RestaurantOwnerDto.builder().id(authenticationInfo.getUserId()).build());
     }
   }
 }

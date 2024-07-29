@@ -11,18 +11,21 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 @Entity
-@Table(name = "rete")
+@Table(name = "rate")
 public class Rate {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
-  private Long id;
+  private long id;
 
   private Integer point;
 
   @Column(name = "customer_id")
-  private Long customerId;
+  private long customerId;
 
   @Column(name = "order_id")
-  private Long orderId;
+  private long orderId;
+
+  @Column(name = "delivery_person_id")
+  private String deliveryPersonID;
 }

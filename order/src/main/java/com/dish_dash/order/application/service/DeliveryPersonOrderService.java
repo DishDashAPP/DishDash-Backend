@@ -15,7 +15,7 @@ public class DeliveryPersonOrderService {
 
   private final OrderRepository orderRepository;
 
-  public boolean updateOrderStatusByDeliveryPerson(Long orderID, OrderStatus status) {
+  public boolean updateOrderStatusByDeliveryPerson(long orderID, OrderStatus status) {
     Optional<Order> order = orderRepository.findById(orderID);
     if (order.isPresent()) {
       order.get().setStatus(status);
@@ -25,9 +25,7 @@ public class DeliveryPersonOrderService {
     return false;
   }
 
-  public OrderDto getDeliveryPersonCurrentOrder(String deliveryPersonID) {
-    //    todo This is wrong
-    //    return orderRepository.findCurrentOrderByDeliveryPersonID(deliveryPersonID);
-    return OrderMapper.INSTANCE.orderToDto(Order.builder().build());
+  public OrderDto getDeliveryPersonCurrentOrder(long deliveryPersonID) {
+    return OrderMapper.INSTANCE.orderToDto(orderRepository.findByDeliveryPersonId(deliveryPersonID));
   }
 }

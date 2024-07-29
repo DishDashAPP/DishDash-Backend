@@ -1,7 +1,6 @@
 package com.dishDash.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.sql.Time;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,18 +10,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class InvoiceDto {
-  private String id;
-
-  @JsonProperty("customer_id")
-  private long customerId;
-
+public class OrderItemCreateDto {
   @JsonProperty("order_id")
   private long orderId;
 
-  @JsonProperty("delivery_person_id")
-  private long deliveryPersonId;
+  @JsonProperty("food_id")
+  private long foodId;
 
-  @JsonProperty("create_time")
-  private Time creationTime;
+//  private Price price;   this should be calculated by the system not comming from the client
+  private Integer quantity;
 }

@@ -24,8 +24,8 @@ public class MenuService {
         .collect(Collectors.toList());
   }
 
-  public MenuDto getMenuById(Long id) {
-    return menuRepository.findById(id).map(ProductMapper.INSTANCE::menuToDto).orElse(null);
+  public MenuDto getMenuById(long id) {
+    return menuRepository.findByRestaurantId(id).map(ProductMapper.INSTANCE::menuToDto).orElse(null);
   }
 
   public MenuDto saveMenu(MenuDto menu) {
@@ -33,11 +33,11 @@ public class MenuService {
         menuRepository.save(ProductMapper.INSTANCE.dtoToMenu(menu)));
   }
 
-  public void deleteMenu(Long id) {
-    menuRepository.deleteById(id);
+  public void deleteMenu(long id) {
+    menuRepository.deleteByRestaurantOwnerId(id);
   }
 
-  public FoodDto addFoodToMenu(Long menuId, FoodDto foodDto) {
+  public FoodDto addFoodToMenu(long menuId, FoodDto foodDto) {
     Menu menu =
         menuRepository
             .findById(menuId)

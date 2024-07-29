@@ -15,12 +15,13 @@ import javax.transaction.Transactional;
 public interface RestaurantOwnerRepository
     extends JpaRepository<RestaurantOwner, Long>, UserRepository<RestaurantOwner> {
   @Query(
-          "UPDATE RestaurantOwner SET firstName =:firstName, address =:address, phoneNumber =:phoneNumber where id=:id")
+          "UPDATE RestaurantOwner SET firstName =:firstName,lastName=:lastName, address =:address, phoneNumber =:phoneNumber where id=:id")
   @Modifying
   @Transactional
   void modify(
           @Param("firstName") String firstName,
+          @Param("lastName") String lastName,
           @Param("address") String address,
           @Param("phoneNumber") String phoneNumber,
-          @Param("id") Long id);
+          @Param("id") long id);
 }

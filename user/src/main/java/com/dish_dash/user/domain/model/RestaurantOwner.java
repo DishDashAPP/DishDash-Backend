@@ -15,7 +15,7 @@ import lombok.*;
 @Table(name = "restaurant_owners")
 public class RestaurantOwner implements User {
 
-  @Id private Long id;
+  @Id private long id;
 
   private String firstName;
   private String lastName;

@@ -9,27 +9,27 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/order/restaurantOwner")
+@RequestMapping("/v1/order/restaurantOwner")
 @RequiredArgsConstructor
 public class RestaurantOwnerOrderController {
   private final RestaurantOwnerOrderApi restaurantOwnerOrderApi;
 
-  @PostMapping("/status")
-  @Authentication
+  @PutMapping("/status")
+  @Authentication(userId = "#userId")
   public boolean updateOrderStatusByRestaurantOwner(
-      @RequestParam Long orderId, @RequestParam OrderStatus status) {
-    return restaurantOwnerOrderApi.updateOrderStatusByRestaurantOwner(orderId, status);
+      Long userId, @RequestParam Long orderId, @RequestParam OrderStatus status) {
+    return restaurantOwnerOrderApi.updateOrderStatusByRestaurantOwner(userId, orderId, status);
   }
 
   @GetMapping("/orderHistory")
-  @Authentication
-  List<OrderDto> getRestaurantOwnerOrderHistory(long userId) {
+  @Authentication(userId = "#userId")
+  List<OrderDto> getRestaurantOwnerOrderHistory(Long userId) {
     return restaurantOwnerOrderApi.getRestaurantOwnerOrderHistory(userId);
   }
 
   @GetMapping("/activeOrders")
-  @Authentication
-  List<OrderDto> getRestaurantOwnerActiveOrders(long userId) {
+  @Authentication(userId = "#userId")
+  List<OrderDto> getRestaurantOwnerActiveOrders(Long userId) {
     return restaurantOwnerOrderApi.getRestaurantOwnerActiveOrders(userId);
   }
 }

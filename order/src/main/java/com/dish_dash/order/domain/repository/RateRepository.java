@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RateRepository extends JpaRepository<Rate, String> {
+    Rate findByDeliveryPersonID(String deliveryPersonID);
 
-  //  Rate findByDeliveryPersonID(String deliveryPersonID);
+    //  Rate findByDeliveryPersonID(String deliveryPersonID);
 }

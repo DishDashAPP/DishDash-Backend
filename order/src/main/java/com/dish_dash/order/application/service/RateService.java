@@ -13,22 +13,18 @@ public class RateService {
 
   private final RateRepository rateRepository;
 
-  public boolean setOrderRate(Long customerId, Long orderId, int point) {
-    //    Rate rate = Rate.builder().customerId(customerId).orderId(orderId).point(point).build();
-    //    rateRepository.save(rate);
-    return true;
+  public boolean setOrderRate(long customerId, long orderId, int point) {
+        Rate rate = Rate.builder().customerId(customerId).orderId(orderId).point(point).build();
+        return rateRepository.save(rate).getId() > 0;
   }
 
-  public boolean setDeliveryRate(Long customerId, Long orderId, int point) {
-    //    Rate rate = Rate.builder().customerId(customerId).orderId(orderId).point(point).build();
-    //    rateRepository.save(rate);
-    return true;
+  public boolean setDeliveryRate(long customerId, long orderId, int point) {
+        Rate rate = Rate.builder().customerId(customerId).orderId(orderId).point(point).build();
+        return rateRepository.save(rate).getId() > 0;
   }
 
   public RateDto getDeliveryRate(String deliveryPersonID) {
     // TODO rate, no delivery person
-
-    // return rateRepository.findByDeliveryPersonID(deliveryPersonID);
-    return OrderMapper.INSTANCE.rateToRateDto(Rate.builder().build());
+    return OrderMapper.INSTANCE.rateToRateDto(rateRepository.findByDeliveryPersonID(deliveryPersonID));
   }
 }

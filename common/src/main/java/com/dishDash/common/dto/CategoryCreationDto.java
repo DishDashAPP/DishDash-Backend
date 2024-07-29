@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RateDto {
-  private long id;
+public class CategoryCreationDto {
+  private String name;
 }

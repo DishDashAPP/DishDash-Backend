@@ -11,12 +11,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FoodDto {
+public class FoodViewDto {
+  private long id;
   private String name;
   private String description;
   private int stock;
   private Price price;
 
   @JsonProperty("category_id")
-  private long CategoryId;
+  private long categoryId;
 }

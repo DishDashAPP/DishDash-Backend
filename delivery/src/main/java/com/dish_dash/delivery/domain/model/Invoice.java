@@ -20,13 +20,13 @@ public class Invoice {
   private String invoiceID;
 
   @Column(name = "customer_id")
-  private Long customerId;
+  private long customerId;
 
   @Column(name = "order_id")
-  private Long orderId;
+  private long orderId;
 
   @Column(name = "delivery_person_id")
-  private Long deliveryPersonId;
+  private long deliveryPersonId;
 
   @Column(name = "create_time")
   @CreationTimestamp

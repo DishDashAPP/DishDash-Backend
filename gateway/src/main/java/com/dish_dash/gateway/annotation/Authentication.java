@@ -1,10 +1,14 @@
 package com.dish_dash.gateway.annotation;
 
-import javax.persistence.Inheritance;
 import java.lang.annotation.*;
+import javax.persistence.Inheritance;
 
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Inheritance
 @Documented
-public @interface Authentication {}
+public @interface Authentication {
+  String token() default "";
+
+  String userId() default "";
+}

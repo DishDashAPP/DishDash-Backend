@@ -13,23 +13,31 @@ public class RestaurantOwnerService {
 
   private final RestaurantOwnerRepository restaurantOwnerRepository;
 
-  public Boolean modifyProfile(Long id, RestaurantOwnerDto restaurantOwnerDto) {
+  public Boolean modifyProfile(long id, RestaurantOwnerDto restaurantOwnerDto) {
     return restaurantOwnerRepository
         .findById(id)
         .map(
             restaurantOwner -> {
-              UserMapper.INSTANCE.updateRestaurantOwnerFromDto(restaurantOwnerDto, restaurantOwner);
-              restaurantOwnerRepository.save(restaurantOwner);
+              restaurantOwnerRepository.modify(
+                  restaurantOwnerDto.getFirstName(),
+                  restaurantOwnerDto.getLastName(),
+                  restaurantOwnerDto.getAddress(),
+                  restaurantOwnerDto.getPhoneNumber(),
+                  id);
               return true;
             })
         .orElse(false);
   }
 
   public void createRestaurantOwner(RestaurantOwnerDto restaurantOwnerDto) {
-    restaurantOwnerRepository.save(UserMapper.INSTANCE.dtoToRestaurantOwner(restaurantOwnerDto));
+    restaurantOwnerRepository.save(
+        RestaurantOwner.builder().id(restaurantOwnerDto.getId()).build());
   }
 
-  public RestaurantOwner getUserProfile(Long restaurantOwnerId) {
-    return restaurantOwnerRepository.findById(restaurantOwnerId).orElse(null);
+  public RestaurantOwnerDto getUserProfile(long restaurantOwnerId) {
+    return restaurantOwnerRepository
+        .findById(restaurantOwnerId)
+        .map(UserMapper.INSTANCE::restaurantOwnerToDto)
+        .orElse(null);
   }
 }

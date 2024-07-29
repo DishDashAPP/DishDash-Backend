@@ -20,7 +20,7 @@ public class DeliveryPersonOrderController implements DeliveryPersonOrderApi {
   }
 
   @Override
-  public OrderDto getDeliveryPersonCurrentOrder(String deliveryPersonID) {
+  public OrderDto getDeliveryPersonCurrentOrder(Long deliveryPersonID) {
     return deliveryPersonOrderService.getDeliveryPersonCurrentOrder(deliveryPersonID);
   }
 }
