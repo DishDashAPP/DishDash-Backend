@@ -28,7 +28,7 @@ public class FoodController {
 
   @PostMapping
   @Authentication(userId = "#userId")
-  public FoodDto createFood(@RequestBody FoodDto foodDto, long userId) {
+  public FoodDto createFood(@RequestBody FoodDto foodDto, Long userId) {
     return foodApi.createFood(userId, foodDto);
   }
 

@@ -25,7 +25,7 @@ public class FoodController implements FoodApi {
   }
 
   @Override
-  public FoodDto createFood(long userId, FoodDto foodDto) {
+  public FoodDto createFood(Long userId, FoodDto foodDto) {
     return foodService.saveFood(foodDto, userId);
   }
 

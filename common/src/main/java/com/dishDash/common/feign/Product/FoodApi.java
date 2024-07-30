@@ -1,9 +1,8 @@
 package com.dishDash.common.feign.Product;
 
 import com.dishDash.common.dto.FoodDto;
-import java.util.List;
-
 import com.dishDash.common.dto.FoodViewDto;
+import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +16,7 @@ public interface FoodApi {
   FoodViewDto getFoodById(@PathVariable long id);
 
   @PostMapping()
-  FoodDto createFood( @RequestParam long userId, @RequestBody FoodDto foodDto);
+  FoodDto createFood( @RequestParam Long userId, @RequestBody FoodDto foodDto);
 
   @DeleteMapping("/{id}")
   void deleteFood(@PathVariable long id);

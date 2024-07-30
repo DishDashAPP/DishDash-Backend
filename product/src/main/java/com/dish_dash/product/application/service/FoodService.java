@@ -5,10 +5,9 @@ import com.dishDash.common.dto.FoodViewDto;
 import com.dish_dash.product.domain.mapper.ProductMapper;
 import com.dish_dash.product.domain.model.Food;
 import com.dish_dash.product.infrastructure.repository.FoodRepository;
+import com.dish_dash.product.infrastructure.repository.MenuRepository;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import com.dish_dash.product.infrastructure.repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +28,7 @@ public class FoodService {
     return foodRepository.findById(id).map(ProductMapper.INSTANCE::foodToViewDto).orElse(null);
   }
 
-  public FoodDto saveFood(FoodDto foodDto, long userId) {
+  public FoodDto saveFood(FoodDto foodDto, Long userId) {
     Food food = ProductMapper.INSTANCE.dtoToFood(foodDto);
     food.setCategory(categoryService.getReferenceCategory(foodDto.getCategoryId()));
 
