@@ -6,18 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/delivery")
+@RequestMapping("v1/delivery")
 @RequiredArgsConstructor
 public class DeliveryController {
-  private final DeliveryApi deleteApi;
-
-  @PostMapping("/assignOrder")
-  boolean assignOrder(@RequestParam Long orderId, @RequestParam Long deliveryPersonId) {
-    return deleteApi.assignOrder(orderId, deliveryPersonId);
-  }
+  private final DeliveryApi deliveryApi;
 
   @GetMapping("/getInvoice")
-  InvoiceDto getInvoice(@RequestParam Long orderId) {
-    return deleteApi.getInvoice(orderId);
+  public InvoiceDto getInvoice(@RequestParam Long orderId) {
+    return deliveryApi.getInvoice(orderId);
   }
 }

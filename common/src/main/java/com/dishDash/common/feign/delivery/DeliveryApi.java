@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "delivery-service")
+@FeignClient(name = "delivery-service", contextId = "delivery-service", path = "/delivery")
 public interface DeliveryApi {
   @PostMapping("/assignOrder")
   boolean assignOrder(@RequestParam long orderId, @RequestParam long deliveryPersonId);

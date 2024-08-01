@@ -5,7 +5,7 @@ import com.dishDash.common.enums.OrderStatus;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "order-service",contextId = "order-service")
+@FeignClient(name = "order-service", contextId = "order-service", path = "/order")
 public interface OrderApi {
   @GetMapping()
   OrderDto viewOrder(@RequestParam long orderID);

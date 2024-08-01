@@ -17,7 +17,7 @@ import org.hibernate.annotations.CreationTimestamp;
 public class Invoice {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private String invoiceID;
+  private long invoiceID;
 
   @Column(name = "customer_id")
   private long customerId;
