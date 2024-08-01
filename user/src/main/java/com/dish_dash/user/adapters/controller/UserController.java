@@ -12,6 +12,8 @@ import com.dish_dash.user.service.RestaurantOwnerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class UserController implements UserApi {
@@ -63,6 +65,11 @@ public class UserController implements UserApi {
   }
 
   @Override
+  public List<RestaurantOwnerDto> getAllRestaurant() {
+    return restaurantOwnerService.getAllRestaurant();
+  }
+
+  @Override
   public void createRestaurantOwner(RestaurantOwnerDto restaurantOwnerDto) {
     restaurantOwnerService.createRestaurantOwner(restaurantOwnerDto);
   }
@@ -83,8 +90,8 @@ public class UserController implements UserApi {
     return deliveryPersonService.getLocation(deliveryPersonId);
   }
 
-    @Override
-    public Long setActiveOrder(@RequestParam long orderId) {
-        return deliveryPersonService.setActiveOrder(orderId);
-    }
+  @Override
+  public Long setActiveOrder(@RequestParam long orderId) {
+    return deliveryPersonService.setActiveOrder(orderId);
+  }
 }

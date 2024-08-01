@@ -8,20 +8,21 @@ import com.dishDash.common.response.LoginResponse;
 import com.dish_dash.authentication.application.service.AuthenticationService;
 import com.dish_dash.authentication.domain.model.AuthenticationInfo;
 import com.dish_dash.authentication.infrastructure.repository.AuthenticationRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import redis.embedded.RedisServer;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static reactor.core.publisher.Mono.when;
 
 @SpringBootTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AuthenticationServiceIntegrationTest {
 
   @Autowired private AuthenticationService authenticationService;
@@ -29,6 +30,18 @@ public class AuthenticationServiceIntegrationTest {
   @Autowired private RedisTemplate<String, Long> redisTemplate;
   @Autowired private PasswordEncoder passwordEncoder;
   @MockBean private UserApi userApi;
+  private RedisServer redisServer;
+
+  @BeforeAll
+  void startRedis() {
+    redisServer = new RedisServer(6379);
+    redisServer.start();
+  }
+
+  @AfterAll
+  void stopRedis() {
+    redisServer.stop();
+  }
 
   @BeforeEach
   void setUp() {

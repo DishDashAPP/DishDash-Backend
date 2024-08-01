@@ -6,6 +6,8 @@ import com.dish_dash.gateway.annotation.Authentication;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/v1/restaurantOwner")
 @RequiredArgsConstructor
@@ -22,5 +24,10 @@ public class RestaurantOwnerController {
   @Authentication(userId = "#userId")
   public RestaurantOwnerDto getUserProfile(Long userId) {
     return userApi.getRestaurantOwnerProfile(userId);
+  }
+
+  @GetMapping
+  List<RestaurantOwnerDto> getAllRestaurants() {
+    return userApi.getAllRestaurant();
   }
 }

@@ -10,6 +10,8 @@ import com.dishDash.common.enums.DeliveryPersonStatus;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @FeignClient(name = "user-service")
 public interface UserApi {
   @PutMapping(CUSTOMER + "/{id}")
@@ -40,6 +42,9 @@ public interface UserApi {
 
   @PostMapping(RESTAURANT_OWNER)
   void createRestaurantOwner(@RequestBody RestaurantOwnerDto restaurantOwnerDto);
+
+  @GetMapping(RESTAURANT_OWNER)
+  List<RestaurantOwnerDto> getAllRestaurant();
 
   @GetMapping(DELIVERY_PERSON + "/status/{id}")
   DeliveryPersonStatus getDeliveryPersonStatus(@PathVariable long id);

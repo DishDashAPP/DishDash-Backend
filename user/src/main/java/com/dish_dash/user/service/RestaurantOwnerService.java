@@ -7,6 +7,9 @@ import com.dish_dash.user.domain.model.RestaurantOwner;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class RestaurantOwnerService {
@@ -39,5 +42,11 @@ public class RestaurantOwnerService {
         .findById(restaurantOwnerId)
         .map(UserMapper.INSTANCE::restaurantOwnerToDto)
         .orElse(null);
+  }
+
+  public List<RestaurantOwnerDto> getAllRestaurant() {
+    return restaurantOwnerRepository.findAll().stream()
+        .map(UserMapper.INSTANCE::restaurantOwnerToDto)
+        .toList();
   }
 }
