@@ -16,22 +16,24 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import java.security.Key;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Key;
+import java.util.Date;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AuthenticationService {
+
   private final AuthenticationRepository authRepository;
   private final BCryptPasswordEncoder passwordEncoder;
   private final RedisTemplate<String, Long> redisTemplate;
@@ -39,48 +41,58 @@ public class AuthenticationService {
 
   private static final String SECRET_KEY = "ag3Md4EPHdtxFzYdnQVNt1mGPJwlSVLY45cGRyMwmN4";
 
+  private static final long TOKEN_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
+
   public LoginResponse login(String username, String password) {
+    validateLoginInput(username, password);
+
     AuthenticationInfo authInfo = authRepository.findByUsername(username);
-    if (authInfo != null && passwordEncoder.matches(password, authInfo.getPassword())) {
-      return LoginResponse.builder()
-          .token(generateToken(authInfo.getUserId()))
-          .role(authInfo.getRole())
-          .build();
+    if (authInfo == null || !passwordEncoder.matches(password, authInfo.getPassword())) {
+      log.warn("Invalid login attempt for username: {}", username);
+      throw new CustomException(ErrorCode.INVALID_CREDENTIALS, "Invalid username or password");
     }
-    return null;
+
+    String token = generateToken(authInfo.getUserId());
+    return LoginResponse.builder().token(token).role(authInfo.getRole()).build();
   }
 
   public AuthDto validateToken(String tokenValue) {
     Optional<Claims> claims = extractAllClaims(tokenValue);
-    if (claims.isEmpty()) return AuthDto.builder().isValid(false).build();
-    claims.get().getSubject();
-    String userId = claims.get().getSubject();
-    if (Boolean.TRUE.equals(redisTemplate.hasKey(tokenValue))
-        && Objects.nonNull(userId)
-        && new Date().before(claims.get().getExpiration())) {
-      Optional<AuthenticationInfo> authenticationInfoOptional =
-          authRepository.findById(Long.valueOf(userId));
-      if (authenticationInfoOptional.isPresent())
-        return AuthDto.builder()
-            .isValid(true)
-            .userId(Long.parseLong(userId))
-            .role(authenticationInfoOptional.get().getRole())
-            .build();
+
+    if (claims.isEmpty()) {
+      return AuthDto.builder().isValid(false).build();
     }
-    return AuthDto.builder().isValid(false).build();
+
+    String userId = claims.get().getSubject();
+    if (!isTokenValid(tokenValue, userId, claims.get().getExpiration())) {
+      return AuthDto.builder().isValid(false).build();
+    }
+
+    return authRepository
+        .findById(Long.valueOf(userId))
+        .map(
+            authInfo ->
+                AuthDto.builder()
+                    .isValid(true)
+                    .userId(authInfo.getUserId())
+                    .role(authInfo.getRole())
+                    .build())
+        .orElseGet(() -> AuthDto.builder().isValid(false).build());
   }
 
   public void invalidateToken(String token) {
     if (Boolean.TRUE.equals(redisTemplate.hasKey(token))) {
       redisTemplate.delete(token);
+      log.info("Token invalidated: {}", token);
     }
   }
 
   private String generateToken(long userId) {
     long nowMillis = System.currentTimeMillis();
-    long expMillis = nowMillis + 24 * 60 * 60 * 1000;
+    long expMillis = nowMillis + TOKEN_EXPIRATION_TIME;
+
     String token = generateTokenValue(userId, expMillis, nowMillis);
-    redisTemplate.opsForValue().set(token, userId, expMillis, TimeUnit.MILLISECONDS);
+    redisTemplate.opsForValue().set(token, userId, TOKEN_EXPIRATION_TIME, TimeUnit.MILLISECONDS);
     return token;
   }
 
@@ -108,16 +120,26 @@ public class AuthenticationService {
               .parseClaimsJws(token)
               .getBody());
     } catch (Exception e) {
+      log.error("Failed to parse token: {}", e.getMessage());
       return Optional.empty();
     }
   }
 
+  private boolean isTokenValid(String token, String userId, Date expiration) {
+    return Boolean.TRUE.equals(redisTemplate.hasKey(token))
+        && Objects.nonNull(userId)
+        && new Date().before(expiration);
+  }
+
   public void register(String username, String password, Role role) {
+    validateRegistrationInput(username, password, role);
+
     AuthenticationInfo existingUser = authRepository.findByUsername(username);
     if (Objects.nonNull(existingUser)) {
       log.info("User already exists: {}", existingUser);
       throw new CustomException(ErrorCode.USER_ALREADY_EXISTS, "User already exists");
     }
+
     String encodedPassword = passwordEncoder.encode(password);
 
     AuthenticationInfo authenticationInfo =
@@ -128,6 +150,10 @@ public class AuthenticationService {
                 .role(role)
                 .build());
 
+    assignUserRole(authenticationInfo, role);
+  }
+
+  private void assignUserRole(AuthenticationInfo authenticationInfo, Role role) {
     switch (role) {
       case CUSTOMER ->
           userApi.createCustomer(CustomerDto.builder().id(authenticationInfo.getUserId()).build());
@@ -137,6 +163,27 @@ public class AuthenticationService {
       case RESTAURANT_OWNER ->
           userApi.createRestaurantOwner(
               RestaurantOwnerDto.builder().id(authenticationInfo.getUserId()).build());
+    }
+  }
+
+  private void validateLoginInput(String username, String password) {
+    if (username == null || username.isEmpty()) {
+      throw new CustomException(ErrorCode.INVALID_CREDENTIALS, "Username cannot be empty");
+    }
+    if (password == null || password.isEmpty()) {
+      throw new CustomException(ErrorCode.INVALID_CREDENTIALS, "Password cannot be empty");
+    }
+  }
+
+  private void validateRegistrationInput(String username, String password, Role role) {
+    if (username == null || username.isEmpty()) {
+      throw new CustomException(ErrorCode.INVALID_CREDENTIALS, "Username cannot be empty");
+    }
+    if (password == null || password.isEmpty()) {
+      throw new CustomException(ErrorCode.INVALID_CREDENTIALS, "Password cannot be empty");
+    }
+    if (role == null) {
+      throw new CustomException(ErrorCode.INVALID_CREDENTIALS, "Role cannot be null");
     }
   }
 }
