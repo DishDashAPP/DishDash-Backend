@@ -35,7 +35,7 @@ public class FoodController {
 
   @PutMapping("/{id}")
   @Authentication(userId = "#userId")
-  public FoodDto modifyFood(@RequestParam Long userId, @PathVariable long id, @RequestBody FoodDto foodDto) {
+  public FoodDto modifyFood(Long userId, @PathVariable long id, @RequestBody FoodDto foodDto) {
     // Ensure that the modifyFood method is correctly mapping parameters
     return foodApi.modifyFood(id, userId, foodDto);
   }
