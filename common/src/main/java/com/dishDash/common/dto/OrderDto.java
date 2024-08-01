@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Data
@@ -15,9 +16,12 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderDto {
   private long id;
-    private long customerId;
-    private long restaurantOwnerId;
-    private List<OrderItemDto> orderItems;
-    private OrderStatus status;
-    private Price totalPrice;
+  private long customerId;
+  private long restaurantOwnerId;
+  private List<OrderItemDto> orderItems;
+  private OrderStatus status;
+  private Price totalPrice;
+  private Timestamp createTime;
+  private DeliveryPersonDto deliveryPersonDto;
+  private CustomerDto customerDto;
 }

@@ -12,25 +12,36 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/food")
 public class FoodController implements FoodApi {
+
   private final FoodService foodService;
 
   @Override
+  @GetMapping
   public List<FoodViewDto> getAllFoods() {
     return foodService.getAllFoods();
   }
 
   @Override
-  public FoodViewDto getFoodById(long id) {
+  @GetMapping("/{id}")
+  public FoodViewDto getFoodById(@PathVariable long id) {
     return foodService.getFoodById(id);
   }
 
   @Override
-  public FoodDto createFood(Long userId, FoodDto foodDto) {
+  @PostMapping
+  public FoodDto createFood(@RequestParam Long userId, @RequestBody FoodDto foodDto) {
     return foodService.saveFood(foodDto, userId);
   }
 
   @Override
-  public void deleteFood(long id) {
+  @PutMapping("/{id}")
+  public FoodDto modifyFood(@RequestParam Long userId, @PathVariable long id, @RequestBody FoodDto foodDto) {
+    return foodService.modifyFood(id, foodDto, userId);
+  }
+
+  @Override
+  @DeleteMapping("/{id}")
+  public void deleteFood(@PathVariable long id) {
     foodService.deleteFood(id);
   }
 }

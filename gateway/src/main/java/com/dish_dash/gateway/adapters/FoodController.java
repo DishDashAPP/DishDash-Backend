@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/v1/food")
 @RequiredArgsConstructor
 public class FoodController {
+
   private final FoodApi foodApi;
 
   @GetMapping
@@ -28,8 +29,15 @@ public class FoodController {
 
   @PostMapping
   @Authentication(userId = "#userId")
-  public FoodDto createFood(@RequestBody FoodDto foodDto, Long userId) {
+  public FoodDto createFood(@RequestParam Long userId, @RequestBody FoodDto foodDto) {
     return foodApi.createFood(userId, foodDto);
+  }
+
+  @PutMapping("/{id}")
+  @Authentication(userId = "#userId")
+  public FoodDto modifyFood(@PathVariable long id, @RequestParam Long userId, @RequestBody FoodDto foodDto) {
+    // Ensure that the modifyFood method is correctly mapping parameters
+    return foodApi.modifyFood(id, userId, foodDto);
   }
 
   @DeleteMapping("/{id}")
