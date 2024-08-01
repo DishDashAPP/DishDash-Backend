@@ -28,6 +28,7 @@ public class RestaurantOwnerServiceIntegrationTest {
             .firstName("FIRSTNAME")
             .lastName("LASTNAME")
             .address("ADDRESS")
+            .restaurantName("RESTAURANT_NAME")
             .phoneNumber("PHONE_NUMBER")
             .build();
   }
@@ -40,6 +41,7 @@ public class RestaurantOwnerServiceIntegrationTest {
             .firstName("OLD_FIRSTNAME")
             .lastName("OLD_LASTNAME")
             .address("OLD_ADDRESS")
+            .restaurantName("OLD_RESTAURANT_NAME")
             .phoneNumber("OLD_PHONE_NUMBER")
             .build();
     restaurantOwnerRepository.save(initialOwner);
@@ -59,6 +61,10 @@ public class RestaurantOwnerServiceIntegrationTest {
         "PHONE_NUMBER",
         modifiedOwner.getPhoneNumber(),
         "Phone number should be updated to PHONE_NUMBER");
+    assertEquals(
+        "RESTAURANT_NAME",
+        modifiedOwner.getRestaurantName(),
+        "RESTAURANT_NAME should be updated to RESTAURANT_NAME");
   }
 
   @Test
@@ -86,6 +92,7 @@ public class RestaurantOwnerServiceIntegrationTest {
             .firstName("FIRSTNAME")
             .lastName("LASTNAME")
             .address("ADDRESS")
+            .restaurantName("RESTAURANT_NAME")
             .phoneNumber("PHONE_NUMBER")
             .build();
     restaurantOwnerRepository.save(owner);
@@ -97,6 +104,8 @@ public class RestaurantOwnerServiceIntegrationTest {
     assertEquals("FIRSTNAME", result.getFirstName(), "First name should be FIRSTNAME");
     assertEquals("LASTNAME", result.getLastName(), "Last name should be LASTNAME");
     assertEquals("ADDRESS", result.getAddress(), "Address should be ADDRESS");
+    assertEquals(
+        "RESTAURANT_NAME", result.getRestaurantName(), "restaurantName should be RESTAURANT_NAME");
     assertEquals("PHONE_NUMBER", result.getPhoneNumber(), "Phone number should be PHONE_NUMBER");
   }
 

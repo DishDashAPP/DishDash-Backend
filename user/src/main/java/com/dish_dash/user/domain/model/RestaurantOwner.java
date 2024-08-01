@@ -20,6 +20,7 @@ public class RestaurantOwner implements User {
   private String firstName;
   private String lastName;
   private String phoneNumber;
+  private String restaurantName;
   private String address;
 
   @ElementCollection

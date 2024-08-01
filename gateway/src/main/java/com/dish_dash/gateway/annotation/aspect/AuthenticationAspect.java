@@ -47,6 +47,7 @@ public class AuthenticationAspect {
           entry("/v1/food", List.of(Role.RESTAURANT_OWNER)),
           entry("/v1/category", List.of(Role.RESTAURANT_OWNER)),
           entry("/v1/restaurantOwner", List.of(Role.RESTAURANT_OWNER)),
+          entry("/v1/restaurantOwner/all", List.of(Role.CUSTOMER)),
           entry("/v1/order/restaurantOwner", List.of(Role.RESTAURANT_OWNER)),
           entry("/v1/deliveryPerson", List.of(Role.DELIVERY_PERSON)),
           entry("/v1/order/deliveryPerson", List.of(Role.DELIVERY_PERSON)),

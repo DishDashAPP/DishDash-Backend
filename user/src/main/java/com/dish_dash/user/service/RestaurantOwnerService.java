@@ -25,6 +25,7 @@ public class RestaurantOwnerService {
                   restaurantOwnerDto.getFirstName(),
                   restaurantOwnerDto.getLastName(),
                   restaurantOwnerDto.getAddress(),
+                  restaurantOwnerDto.getRestaurantName(),
                   restaurantOwnerDto.getPhoneNumber(),
                   id);
               return true;
