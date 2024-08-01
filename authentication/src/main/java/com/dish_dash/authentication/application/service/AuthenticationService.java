@@ -8,6 +8,7 @@ import com.dishDash.common.enums.ErrorCode;
 import com.dishDash.common.enums.Role;
 import com.dishDash.common.exception.CustomException;
 import com.dishDash.common.feign.user.UserApi;
+import com.dishDash.common.response.LoginResponse;
 import com.dish_dash.authentication.domain.model.AuthenticationInfo;
 import com.dish_dash.authentication.infrastructure.repository.AuthenticationRepository;
 import io.jsonwebtoken.Claims;
@@ -38,10 +39,13 @@ public class AuthenticationService {
 
   private static final String SECRET_KEY = "ag3Md4EPHdtxFzYdnQVNt1mGPJwlSVLY45cGRyMwmN4";
 
-  public String login(String username, String password) {
+  public LoginResponse login(String username, String password) {
     AuthenticationInfo authInfo = authRepository.findByUsername(username);
     if (authInfo != null && passwordEncoder.matches(password, authInfo.getPassword())) {
-      return generateToken(authInfo.getUserId());
+      return LoginResponse.builder()
+          .token(generateToken(authInfo.getUserId()))
+          .role(authInfo.getRole())
+          .build();
     }
     return null;
   }

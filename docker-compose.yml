@@ -23,136 +23,136 @@ services:
       - app_network
     volumes:
       - redis-data:/data
-
-  discovery:
-    image: mirzaeimahdi409/dish_dash_discovery
-    build:
-      context: ./discovery
-      dockerfile: Dockerfile
-    ports:
-      - "18761:18761"
-    networks:
-      - app_network
-    restart: always
-
-  authentication:
-    image: mirzaeimahdi409/dish_dash_authentication
-    build:
-      context: ./authentication
-      dockerfile: Dockerfile
-    ports:
-      - "8081:8081"
-    networks:
-      - app_network
-    deploy:
-      replicas: 1
-    depends_on:
-      - discovery
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
-      - SPRING_REDIS_HOST=redis
-    restart: always
-
-  order:
-    image: mirzaeimahdi409/dish_dash_order
-    build:
-      context: ./order
-      dockerfile: Dockerfile
-    networks:
-      - app_network
-    deploy:
-      replicas: 1
-    depends_on:
-      - discovery
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
-    restart: always
-
-  gateway:
-    image: mirzaeimahdi409/dish_dash_gateway
-    build:
-      context: ./gateway
-      dockerfile: Dockerfile
-    ports:
-      - "8083:8083"
-    networks:
-      - app_network
-    deploy:
-      replicas: 1
-    depends_on:
-      - discovery
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
-    restart: always
-
-  user:
-    image: mirzaeimahdi409/dish_dash_user
-    build:
-      context: ./user
-      dockerfile: Dockerfile
-    networks:
-      - app_network
-    deploy:
-      replicas: 1
-    depends_on:
-      - discovery
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
-    restart: always
-
-  delivery:
-    image: mirzaeimahdi409/dish_dash_delivery
-    build:
-      context: ./delivery
-      dockerfile: Dockerfile
-    networks:
-      - app_network
-    deploy:
-      replicas: 1
-    ports:
-      - "8082:8082"
-    depends_on:
-      - discovery
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
-    restart: always
-
-  product:
-    image: mirzaeimahdi409/dish_dash_product
-    build:
-      context: ./product
-      dockerfile: Dockerfile
-    networks:
-      - app_network
-    deploy:
-      replicas: 1
-    depends_on:
-      - discovery
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
-    restart: always
-
-  payment:
-    image: mirzaeimahdi409/dish_dash_payment
-    build:
-      context: ./payment
-      dockerfile: Dockerfile
-    networks:
-      - app_network
-    deploy:
-      replicas: 1
-    depends_on:
-      - discovery
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
-    restart: always
+#
+#  discovery:
+#    image: mirzaeimahdi409/dish_dash_discovery
+#    build:
+#      context: ./discovery
+#      dockerfile: Dockerfile
+#    ports:
+#      - "18761:18761"
+#    networks:
+#      - app_network
+#    restart: always
+#
+#  authentication:
+#    image: mirzaeimahdi409/dish_dash_authentication
+#    build:
+#      context: ./authentication
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8081:8081"
+#    networks:
+#      - app_network
+#    deploy:
+#      replicas: 1
+#    depends_on:
+#      - discovery
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
+#      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
+#      - SPRING_REDIS_HOST=redis
+#    restart: always
+#
+#  order:
+#    image: mirzaeimahdi409/dish_dash_order
+#    build:
+#      context: ./order
+#      dockerfile: Dockerfile
+#    networks:
+#      - app_network
+#    deploy:
+#      replicas: 1
+#    depends_on:
+#      - discovery
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
+#      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
+#    restart: always
+#
+#  gateway:
+#    image: mirzaeimahdi409/dish_dash_gateway
+#    build:
+#      context: ./gateway
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8083:8083"
+#    networks:
+#      - app_network
+#    deploy:
+#      replicas: 1
+#    depends_on:
+#      - discovery
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
+#      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
+#    restart: always
+#
+#  user:
+#    image: mirzaeimahdi409/dish_dash_user
+#    build:
+#      context: ./user
+#      dockerfile: Dockerfile
+#    networks:
+#      - app_network
+#    deploy:
+#      replicas: 1
+#    depends_on:
+#      - discovery
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
+#      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
+#    restart: always
+#
+#  delivery:
+#    image: mirzaeimahdi409/dish_dash_delivery
+#    build:
+#      context: ./delivery
+#      dockerfile: Dockerfile
+#    networks:
+#      - app_network
+#    deploy:
+#      replicas: 1
+#    ports:
+#      - "8082:8082"
+#    depends_on:
+#      - discovery
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
+#      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
+#    restart: always
+#
+#  product:
+#    image: mirzaeimahdi409/dish_dash_product
+#    build:
+#      context: ./product
+#      dockerfile: Dockerfile
+#    networks:
+#      - app_network
+#    deploy:
+#      replicas: 1
+#    depends_on:
+#      - discovery
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
+#      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
+#    restart: always
+#
+#  payment:
+#    image: mirzaeimahdi409/dish_dash_payment
+#    build:
+#      context: ./payment
+#      dockerfile: Dockerfile
+#    networks:
+#      - app_network
+#    deploy:
+#      replicas: 1
+#    depends_on:
+#      - discovery
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dishdash
+#      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:18761/eureka
+#    restart: always
 
 networks:
   app_network:

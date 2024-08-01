@@ -2,6 +2,7 @@ package com.dishDash.common.feign.authentication;
 
 import com.dishDash.common.dto.AuthDto;
 import com.dishDash.common.enums.Role;
+import com.dishDash.common.response.LoginResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface AuthenticationApi {
 
   @PostMapping("auth/login")
-  String login(@RequestParam String username, @RequestParam String password);
+  LoginResponse login(@RequestParam String username, @RequestParam String password);
 
   @GetMapping("auth/validate")
   AuthDto validate(@RequestParam String token);

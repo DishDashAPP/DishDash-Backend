@@ -1,6 +1,7 @@
 package com.dish_dash.gateway.adapters;
 
 import com.dishDash.common.feign.authentication.AuthenticationApi;
+import com.dishDash.common.response.LoginResponse;
 import com.dish_dash.gateway.annotation.Authentication;
 import com.dish_dash.gateway.request.LoginRequest;
 import com.dish_dash.gateway.request.RegisterRequest;
@@ -14,7 +15,7 @@ public class AuthenticationController {
   private final AuthenticationApi authenticationApi;
 
   @PostMapping("/login")
-  public String login(@RequestBody LoginRequest loginRequest) {
+  public LoginResponse login(@RequestBody LoginRequest loginRequest) {
     return authenticationApi.login(loginRequest.getUsername(), loginRequest.getPassword());
   }
 

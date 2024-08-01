@@ -3,6 +3,7 @@ package com.dish_dash.authentication.adapters.controller;
 import com.dishDash.common.dto.AuthDto;
 import com.dishDash.common.enums.Role;
 import com.dishDash.common.feign.authentication.AuthenticationApi;
+import com.dishDash.common.response.LoginResponse;
 import com.dish_dash.authentication.application.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ public class AuthenticationController implements AuthenticationApi {
   private final AuthenticationService authService;
 
   @Override
-  public String login(String username, String password) {
+  public LoginResponse login(String username, String password) {
     return authService.login(username, password);
   }
 
