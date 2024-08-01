@@ -26,7 +26,7 @@ public class RestaurantOwnerController {
     return userApi.getRestaurantOwnerProfile(userId);
   }
 
-  @GetMapping
+  @GetMapping("/all")
   List<RestaurantOwnerDto> getAllRestaurants() {
     return userApi.getAllRestaurant();
   }
