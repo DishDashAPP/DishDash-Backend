@@ -14,33 +14,45 @@ public class CustomerService {
   private final CustomerRepository customerRepository;
 
   public Boolean modifyProfile(long id, CustomerDto customerDto) {
+    // Check if the customer exists
     return customerRepository
-        .findById(id)
-        .map(
-            customer -> {
-              customerRepository.modify(
-                  customerDto.getFirstName(),
-                  customerDto.getLastName(),
-                  customerDto.getAddress(),
-                  customerDto.getPhoneNumber(),
-                  customer.getId());
+            .findById(id)
+            .map(
+                    customer -> {
+                      // Modify existing customer details
+                      customerRepository.modify(
+                              customerDto.getFirstName(),
+                              customerDto.getLastName(),
+                              customerDto.getAddress(),
+                              customerDto.getPhoneNumber(),
+                              customer.getId());
+                      return true;
+                    })
+            .orElseGet(() -> {
+              // Insert new customer if not found
+              Customer newCustomer = UserMapper.INSTANCE.dtoToCustomer(customerDto);
+              newCustomer.setId(id);
+              customerRepository.save(newCustomer);
               return true;
-            })
-        .orElse(false);
+            });
   }
 
   public void createCustomer(CustomerDto customerDto) {
-    customerRepository.save(Customer.builder().id(customerDto.getId()).build());
+    // Create a new customer from CustomerDto
+    Customer newCustomer = UserMapper.INSTANCE.dtoToCustomer(customerDto);
+    customerRepository.save(newCustomer);
   }
 
   public String getCustomerAddress(long customerID) {
+    // Get customer address if exists
     return customerRepository.findById(customerID).map(Customer::getAddress).orElse(null);
   }
 
   public CustomerDto getUserProfile(long customerId) {
+    // Get customer profile
     return customerRepository
-        .findById(customerId)
-        .map(UserMapper.INSTANCE::customerToDto)
-        .orElse(null);
+            .findById(customerId)
+            .map(UserMapper.INSTANCE::customerToDto)
+            .orElse(null);
   }
 }

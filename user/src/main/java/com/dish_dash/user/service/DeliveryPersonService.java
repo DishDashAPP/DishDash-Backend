@@ -15,83 +15,97 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DeliveryPersonService {
 
-  private final LocationRepository locationRepository;
-  private final DeliveryPersonRepository deliveryPersonRepository;
+    private final LocationRepository locationRepository;
+    private final DeliveryPersonRepository deliveryPersonRepository;
 
-  public Boolean modifyProfile(long id, DeliveryPersonDto deliveryPersonDto) {
-    return deliveryPersonRepository
-        .findById(id)
-        .map(
-            deliveryPerson -> {
-              deliveryPersonRepository.modify(
-                  deliveryPersonDto.getFirstName(),
-                  deliveryPersonDto.getLastName(),
-                  deliveryPersonDto.getPhoneNumber(),
-                  id);
-              return true;
-            })
-        .orElse(false);
-  }
+    public Boolean modifyProfile(long id, DeliveryPersonDto deliveryPersonDto) {
+        // Check if the delivery person exists, if not, create a new one
+        return deliveryPersonRepository
+                .findById(id)
+                .map(
+                        deliveryPerson -> {
+                            // Modify existing delivery person details
+                            deliveryPersonRepository.modify(
+                                    deliveryPersonDto.getFirstName(),
+                                    deliveryPersonDto.getLastName(),
+                                    deliveryPersonDto.getPhoneNumber(),
+                                    id);
+                            return true;
+                        })
+                .orElseGet(() -> {
+                    // Insert new delivery person if not found
+                    DeliveryPerson newDeliveryPerson = UserMapper.INSTANCE.dtoToDeliveryPerson(deliveryPersonDto);
+                    newDeliveryPerson.setId(id); // Ensure the ID from the argument is set
+                    deliveryPersonRepository.save(newDeliveryPerson);
+                    return true;
+                });
+    }
 
-  public void createDeliveryPerson(DeliveryPersonDto deliveryPersonDto) {
-    deliveryPersonRepository.save(DeliveryPerson.builder().id(deliveryPersonDto.getId()).build());
-  }
+    public void createDeliveryPerson(DeliveryPersonDto deliveryPersonDto) {
+        // Create a new delivery person from DeliveryPersonDto
+        DeliveryPerson newDeliveryPerson = UserMapper.INSTANCE.dtoToDeliveryPerson(deliveryPersonDto);
+        deliveryPersonRepository.save(newDeliveryPerson);
+    }
 
-  public DeliveryPersonDto getUserProfile(long deliveryPersonId) {
-    return deliveryPersonRepository
-        .findById(deliveryPersonId)
-        .map(UserMapper.INSTANCE::deliveryPersonToDto)
-        .orElse(null);
-  }
+    public DeliveryPersonDto getUserProfile(long deliveryPersonId) {
+        // Get delivery person profile
+        return deliveryPersonRepository
+                .findById(deliveryPersonId)
+                .map(UserMapper.INSTANCE::deliveryPersonToDto)
+                .orElse(null);
+    }
 
-  public DeliveryPersonStatus getDeliveryPersonStatus(long deliveryPersonId) {
-    return deliveryPersonRepository
-        .findById(deliveryPersonId)
-        .map(DeliveryPerson::getStatus)
-        .orElse(null);
-  }
+    public DeliveryPersonStatus getDeliveryPersonStatus(long deliveryPersonId) {
+        // Get delivery person status
+        return deliveryPersonRepository
+                .findById(deliveryPersonId)
+                .map(DeliveryPerson::getStatus)
+                .orElse(null);
+    }
 
-  public boolean setLocation(LocationDto locationDto, long deliveryPersonId) {
-    return deliveryPersonRepository
-        .findById(deliveryPersonId)
-        .map(
-            deliveryPerson -> {
-              Location location =
-                  locationRepository
-                      .findByDeliveryID(deliveryPersonId)
-                      .orElse(
-                          Location.builder()
-                              .deliveryID(deliveryPersonId)
-                              .latitude(locationDto.getLatitude())
-                              .longitude(locationDto.getLongitude())
-                              .build());
-              deliveryPerson.setLocation(location);
-              deliveryPersonRepository.save(deliveryPerson);
-              return true;
-            })
-        .orElse(false);
-  }
+    public boolean setLocation(LocationDto locationDto, long deliveryPersonId) {
+        return deliveryPersonRepository
+                .findById(deliveryPersonId)
+                .map(
+                        deliveryPerson -> {
+                            // Find existing location or create a new one
+                            Location location =
+                                    locationRepository
+                                            .findByDeliveryID(deliveryPersonId)
+                                            .orElseGet(() -> Location.builder()
+                                                    .deliveryID(deliveryPersonId)
+                                                    .latitude(locationDto.getLatitude())
+                                                    .longitude(locationDto.getLongitude())
+                                                    .build());
+                            location.setLatitude(locationDto.getLatitude());
+                            location.setLongitude(locationDto.getLongitude());
+                            locationRepository.save(location);
+                            deliveryPerson.setLocation(location);
+                            deliveryPersonRepository.save(deliveryPerson);
+                            return true;
+                        })
+                .orElse(false);
+    }
 
-  public LocationDto getLocation(long deliveryPersonId) {
-    return locationRepository
-        .findByDeliveryID(deliveryPersonId)
-        .map(UserMapper.INSTANCE::locationToDto)
-        .orElse(null);
-  }
+    public LocationDto getLocation(long deliveryPersonId) {
+        // Get location details of the delivery person
+        return locationRepository
+                .findByDeliveryID(deliveryPersonId)
+                .map(UserMapper.INSTANCE::locationToDto)
+                .orElse(null);
+    }
 
-  public long setActiveOrder(long orderId) {
-    // it shoud find the delivery person who is not busy and set the order to him and return false
-    // if not found
-
-    return deliveryPersonRepository
-        .findFirstByStatus(DeliveryPersonStatus.ACTIVE)
-        .map(
-            deliveryPerson -> {
-              deliveryPerson.setCurrentOrderId(orderId);
-              deliveryPerson.setStatus(DeliveryPersonStatus.BUSY);
-              deliveryPersonRepository.save(deliveryPerson);
-              return deliveryPerson.getId();
-            })
-        .orElse(0L);
-  }
+    public long setActiveOrder(long orderId) {
+        // Find the first available delivery person who is not busy and assign the order
+        return deliveryPersonRepository
+                .findFirstByStatus(DeliveryPersonStatus.ACTIVE)
+                .map(
+                        deliveryPerson -> {
+                            deliveryPerson.setCurrentOrderId(orderId);
+                            deliveryPerson.setStatus(DeliveryPersonStatus.BUSY);
+                            deliveryPersonRepository.save(deliveryPerson);
+                            return deliveryPerson.getId();
+                        })
+                .orElse(0L);
+    }
 }
