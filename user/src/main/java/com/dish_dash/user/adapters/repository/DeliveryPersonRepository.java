@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Repository
 public interface DeliveryPersonRepository
@@ -28,4 +29,6 @@ public interface DeliveryPersonRepository
       @Param("id") long id);
 
   Collection<DeliveryPerson> findByStatus(DeliveryPersonStatus deliveryPersonStatus);
+
+  Optional<DeliveryPerson> findFirstByStatus(DeliveryPersonStatus deliveryPersonStatus);
 }

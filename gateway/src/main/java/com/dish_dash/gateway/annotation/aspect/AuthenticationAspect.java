@@ -37,7 +37,9 @@ public class AuthenticationAspect {
       Map.ofEntries(
           entry("/v1/rate", List.of(Role.USER, Role.CUSTOMER)),
           entry("/v1/rate/order", List.of(Role.USER, Role.CUSTOMER)),
-          entry("/v1/auth/validate", List.of(Role.USER, Role.CUSTOMER)),
+          entry(
+              "/v1/auth",
+              List.of(Role.USER, Role.CUSTOMER, Role.RESTAURANT_OWNER, Role.DELIVERY_PERSON)),
           entry("/user", List.of(Role.USER, Role.CUSTOMER)),
           entry("/v1/customer", List.of(Role.USER, Role.CUSTOMER)),
           entry("/v1/order/customer", List.of(Role.USER, Role.CUSTOMER)),

@@ -83,15 +83,15 @@ public class DeliveryPersonService {
     // it shoud find the delivery person who is not busy and set the order to him and return false
     // if not found
 
-      return deliveryPersonRepository.findByStatus(DeliveryPersonStatus.ACTIVE).stream()
-          .findFirst()
-          .map(
-              deliveryPerson -> {
-                deliveryPerson.setCurrentOrderId(orderId);
-                deliveryPerson.setStatus(DeliveryPersonStatus.BUSY);
-                deliveryPersonRepository.save(deliveryPerson);
-                return deliveryPerson.getId();
-              })
-          .orElse(null);
+    return deliveryPersonRepository
+        .findFirstByStatus(DeliveryPersonStatus.ACTIVE)
+        .map(
+            deliveryPerson -> {
+              deliveryPerson.setCurrentOrderId(orderId);
+              deliveryPerson.setStatus(DeliveryPersonStatus.BUSY);
+              deliveryPersonRepository.save(deliveryPerson);
+              return deliveryPerson.getId();
+            })
+        .orElse(0L);
   }
 }

@@ -28,18 +28,18 @@ public class RestaurantOrderService {
       if (orderOptional.get().getRestaurantOwnerId() != restaurantOwnerId)
         throw new CustomException(ErrorCode.FORBIDDEN, "Restaurant owner id mismatch");
       orderOptional.get().setStatus(status);
+
+      // we should set a delivery person to the order or throw an exception
+      long setDeliveryPerson = userApi.setActiveOrder(orderId);
+      if (setDeliveryPerson != 0) {
+        orderOptional.get().setStatus(status);
+        orderOptional.get().setDeliveryPersonId(setDeliveryPerson);
+        orderRepository.updateDeliveryPerson(setDeliveryPerson, orderId);
+        orderRepository.updateStatus(status, orderId);
+        return true;
+      } else throw new CustomException(ErrorCode.BAD_REQUEST, "No delivery person available");
     }
-    // we should set a delivery person to the order or throw an exception
-    var setDeliveryPerson = userApi.setActiveOrder(orderId);
-    if (setDeliveryPerson != null) {
-      orderOptional.get().setStatus(status);
-      orderOptional.get().setDeliveryPersonId(setDeliveryPerson);
-      orderRepository.updateDeliveryPerson(setDeliveryPerson, orderId);
-      orderRepository.updateStatus(status, orderId);
-      return true;
-    } else {
-      throw new CustomException(ErrorCode.BAD_REQUEST, "No delivery person available");
-    }
+    throw new CustomException(ErrorCode.BAD_REQUEST, "No order available");
   }
 
   public List<OrderDto> getRestaurantOwnerOrderHistory(long restaurantOwnerID) {
