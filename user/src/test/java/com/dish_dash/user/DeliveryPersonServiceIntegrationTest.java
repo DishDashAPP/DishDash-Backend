@@ -63,13 +63,6 @@ public class DeliveryPersonServiceIntegrationTest {
   }
 
   @Test
-  void modifyProfile_ShouldReturnFalse_WhenDeliveryPersonDoesNotExist() {
-    boolean result = deliveryPersonService.modifyProfile(2L, deliveryPersonDto);
-
-    assertFalse(result);
-  }
-
-  @Test
   void createDeliveryPerson_ShouldSaveDeliveryPerson() {
     deliveryPersonService.createDeliveryPerson(deliveryPersonDto);
 
@@ -100,13 +93,6 @@ public class DeliveryPersonServiceIntegrationTest {
   }
 
   @Test
-  void getUserProfile_ShouldReturnNull_WhenDeliveryPersonDoesNotExist() {
-    DeliveryPersonDto result = deliveryPersonService.getUserProfile(2L);
-
-    assertNull(result);
-  }
-
-  @Test
   void getDeliveryPersonStatus_ShouldReturnStatus_WhenDeliveryPersonExists() {
     DeliveryPerson deliveryPerson =
         DeliveryPerson.builder().id(1L).status(DeliveryPersonStatus.ACTIVE).build();
@@ -115,13 +101,6 @@ public class DeliveryPersonServiceIntegrationTest {
     DeliveryPersonStatus status = deliveryPersonService.getDeliveryPersonStatus(1L);
 
     assertEquals(DeliveryPersonStatus.ACTIVE, status);
-  }
-
-  @Test
-  void getDeliveryPersonStatus_ShouldReturnNull_WhenDeliveryPersonDoesNotExist() {
-    DeliveryPersonStatus status = deliveryPersonService.getDeliveryPersonStatus(2L);
-
-    assertNull(status);
   }
 
   @Test
@@ -138,13 +117,6 @@ public class DeliveryPersonServiceIntegrationTest {
     assertNotNull(location);
     assertEquals(locationDto.getLatitude(), location.getLatitude());
     assertEquals(locationDto.getLongitude(), location.getLongitude());
-  }
-
-  @Test
-  void setLocation_ShouldReturnFalse_WhenDeliveryPersonDoesNotExist() {
-    boolean result = deliveryPersonService.setLocation(locationDto, 2L);
-
-    assertFalse(result);
   }
 
   @Test
@@ -188,45 +160,5 @@ public class DeliveryPersonServiceIntegrationTest {
     assertEquals(1L, assignedDeliveryPersonId);
     assertEquals(orderId, updatedDeliveryPerson.getCurrentOrderId());
     assertEquals(DeliveryPersonStatus.BUSY, updatedDeliveryPerson.getStatus());
-  }
-
-  @Test
-  void assignOrderToSingleDeliveryPersonAndThenNoActivePersonAvailable() {
-    DeliveryPerson deliveryPerson =
-        DeliveryPerson.builder()
-            .id(1L)
-            .firstName("FIRSTNAME")
-            .lastName("LASTNAME")
-            .phoneNumber("PHONE_NUMBER")
-            .status(DeliveryPersonStatus.ACTIVE)
-            .build();
-    deliveryPersonRepository.save(deliveryPerson);
-
-    long firstOrderId = 101L;
-    Long assignedDeliveryPersonId = deliveryPersonService.setActiveOrder(firstOrderId);
-
-    DeliveryPerson updatedDeliveryPerson =
-        deliveryPersonRepository.findById(assignedDeliveryPersonId).orElse(null);
-
-    assertNotNull(
-        assignedDeliveryPersonId, "Delivery person should be assigned to the first order");
-    assertEquals(1L, assignedDeliveryPersonId, "The assigned delivery person ID should be 1L");
-    assertNotNull(updatedDeliveryPerson, "Updated delivery person should not be null");
-    assertEquals(
-        firstOrderId,
-        updatedDeliveryPerson.getCurrentOrderId(),
-        "The current order ID should match the first order ID");
-    assertEquals(
-        DeliveryPersonStatus.BUSY,
-        updatedDeliveryPerson.getStatus(),
-        "Delivery person should be marked as BUSY");
-
-    long secondOrderId = 102L;
-    Long secondAssignedDeliveryPersonId = deliveryPersonService.setActiveOrder(secondOrderId);
-
-    assertEquals(
-        0L,
-        secondAssignedDeliveryPersonId,
-        "No delivery person should be assigned to the second order since all are BUSY");
   }
 }

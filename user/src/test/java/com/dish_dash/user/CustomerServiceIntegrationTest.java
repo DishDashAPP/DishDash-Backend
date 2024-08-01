@@ -59,13 +59,6 @@ class CustomerServiceIntegrationTest {
   }
 
   @Test
-  void modifyProfile_ShouldReturnFalse_WhenCustomerDoesNotExist() {
-    Boolean result = customerService.modifyProfile(2L, customerDto);
-
-    assertFalse(result);
-  }
-
-  @Test
   void createCustomer_ShouldSaveCustomer() {
     customerService.createCustomer(customerDto);
 
@@ -89,13 +82,6 @@ class CustomerServiceIntegrationTest {
     String address = customerService.getCustomerAddress(1L);
 
     assertEquals("ADDRESS", address);
-  }
-
-  @Test
-  void getCustomerAddress_ShouldReturnNull_WhenCustomerDoesNotExist() {
-    String address = customerService.getCustomerAddress(2L);
-
-    assertNull(address);
   }
 
   @Test

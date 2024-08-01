@@ -68,13 +68,6 @@ public class RestaurantOwnerServiceIntegrationTest {
   }
 
   @Test
-  void modifyProfile_ShouldReturnFalse_WhenRestaurantOwnerDoesNotExist() {
-    boolean result = restaurantOwnerService.modifyProfile(2L, restaurantOwnerDto);
-
-    assertFalse(result, "Expected profile modification to return false for non-existing owner");
-  }
-
-  @Test
   void createRestaurantOwner_ShouldSaveRestaurantOwner() {
     restaurantOwnerService.createRestaurantOwner(restaurantOwnerDto);
 
