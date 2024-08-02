@@ -17,12 +17,10 @@ public class CustomerService {
   private final AuthenticationApi authenticationApi;
 
   public Boolean modifyProfile(long id, CustomerDto customerDto) {
-    // Check if the customer exists
     return customerRepository
         .findById(id)
         .map(
             customer -> {
-              // Modify existing customer details
               customerRepository.modify(
                   customerDto.getFirstName(),
                   customerDto.getLastName(),
@@ -33,7 +31,6 @@ public class CustomerService {
             })
         .orElseGet(
             () -> {
-              // Insert new customer if not found
               Customer newCustomer = UserMapper.INSTANCE.dtoToCustomer(customerDto);
               newCustomer.setId(id);
               customerRepository.save(newCustomer);
@@ -42,13 +39,11 @@ public class CustomerService {
   }
 
   public void createCustomer(CustomerDto customerDto) {
-    // Create a new customer from CustomerDto
     Customer newCustomer = UserMapper.INSTANCE.dtoToCustomer(customerDto);
     customerRepository.save(newCustomer);
   }
 
   public String getCustomerAddress(long customerID) {
-    // Get customer address if exists
     return customerRepository.findById(customerID).map(Customer::getAddress).orElse(null);
   }
 

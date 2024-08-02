@@ -20,34 +20,16 @@ public class FoodService {
   private final CategoryService categoryService;
   private final MenuRepository menuRepository;
 
-  /**
-   * Retrieves all food items and maps them to FoodViewDto.
-   *
-   * @return List of FoodViewDto representing all food items.
-   */
   public List<FoodViewDto> getAllFoods() {
     return foodRepository.findAll().stream()
             .map(ProductMapper.INSTANCE::foodToViewDto)
             .collect(Collectors.toList());
   }
 
-  /**
-   * Retrieves a specific food item by its ID.
-   *
-   * @param id the unique identifier of the food item.
-   * @return FoodViewDto representing the food item, or null if not found.
-   */
   public FoodViewDto getFoodById(long id) {
     return foodRepository.findById(id).map(ProductMapper.INSTANCE::foodToViewDto).orElse(null);
   }
 
-  /**
-   * Saves a new food item to the database.
-   *
-   * @param foodDto the details of the food item to save.
-   * @param userId the ID of the user associated with the food item.
-   * @return FoodDto representing the saved food item.
-   */
   @Transactional
   public FoodDto saveFood(FoodDto foodDto, Long userId) {
     Food food = ProductMapper.INSTANCE.dtoToFood(foodDto);
@@ -63,11 +45,6 @@ public class FoodService {
     return ProductMapper.INSTANCE.foodToDto(foodRepository.save(food));
   }
 
-  /**
-   * Deletes a food item by its ID.
-   *
-   * @param id the unique identifier of the food item to delete.
-   */
   public void deleteFood(long id) {
     if (foodRepository.existsById(id)) {
       foodRepository.deleteById(id);
@@ -76,13 +53,6 @@ public class FoodService {
     }
   }
 
-  /**
-   * Modifies an existing food item.
-   *
-   * @param foodDto the new details of the food item to update.
-   * @param userId the ID of the user associated with the food item.
-   * @return FoodDto representing the updated food item.
-   */
   @Transactional
   public FoodDto modifyFood(long id, FoodDto foodDto, Long userId) {
     Food existingFood = foodRepository.findById(id)

@@ -22,12 +22,10 @@ public class DeliveryPersonService {
   private final AuthenticationApi authenticationApi;
 
   public Boolean modifyProfile(long id, DeliveryPersonDto deliveryPersonDto) {
-    // Check if the delivery person exists, if not, create a new one
     return deliveryPersonRepository
         .findById(id)
         .map(
             deliveryPerson -> {
-              // Modify existing delivery person details
               deliveryPersonRepository.modify(
                   deliveryPersonDto.getFirstName(),
                   deliveryPersonDto.getLastName(),
@@ -37,17 +35,15 @@ public class DeliveryPersonService {
             })
         .orElseGet(
             () -> {
-              // Insert new delivery person if not found
               DeliveryPerson newDeliveryPerson =
                   UserMapper.INSTANCE.dtoToDeliveryPerson(deliveryPersonDto);
-              newDeliveryPerson.setId(id); // Ensure the ID from the argument is set
+              newDeliveryPerson.setId(id);
               deliveryPersonRepository.save(newDeliveryPerson);
               return true;
             });
   }
 
   public void createDeliveryPerson(DeliveryPersonDto deliveryPersonDto) {
-    // Create a new delivery person from DeliveryPersonDto
     DeliveryPerson newDeliveryPerson = UserMapper.INSTANCE.dtoToDeliveryPerson(deliveryPersonDto);
     deliveryPersonRepository.save(newDeliveryPerson);
   }
@@ -66,7 +62,6 @@ public class DeliveryPersonService {
   }
 
   public DeliveryPersonStatus getDeliveryPersonStatus(long deliveryPersonId) {
-    // Get delivery person status
     return deliveryPersonRepository
         .findById(deliveryPersonId)
         .map(DeliveryPerson::getStatus)
@@ -78,7 +73,6 @@ public class DeliveryPersonService {
         .findById(deliveryPersonId)
         .map(
             deliveryPerson -> {
-              // Find existing location or create a new one
               Location location =
                   locationRepository
                       .findByDeliveryID(deliveryPersonId)
@@ -100,7 +94,6 @@ public class DeliveryPersonService {
   }
 
   public LocationDto getLocation(long deliveryPersonId) {
-    // Get location details of the delivery person
     return locationRepository
         .findByDeliveryID(deliveryPersonId)
         .map(UserMapper.INSTANCE::locationToDto)
@@ -108,7 +101,6 @@ public class DeliveryPersonService {
   }
 
   public long setActiveOrder(long orderId) {
-    // Find the first available delivery person who is not busy and assign the order
     return deliveryPersonRepository
         .findFirstByStatus(DeliveryPersonStatus.ACTIVE)
         .map(

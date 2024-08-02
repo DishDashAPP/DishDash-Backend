@@ -39,17 +39,14 @@ public class CustomerOrderService {
           ErrorCode.BAD_REQUEST, "There is an active order for the customer");
     AtomicReference<Double> totalPrice = new AtomicReference<>(0.0);
 
-    // Calculate the total price for the order items
     List<OrderItem> orderItems =
         orderItemsDto.stream()
             .map(
                 dto -> {
                   OrderItem orderItem = OrderMapper.INSTANCE.orderItemCreatenDtoToOrderItem(dto);
 
-                  // Fetch the food details using FoodApi
                   FoodViewDto food = foodApi.getFoodById(dto.getFoodId());
 
-                  // Calculate the total price for the order item
                   double itemTotalPrice = food.getPrice().getAmount() * dto.getQuantity();
                   orderItem.setPrice(
                       Price.builder()
@@ -62,7 +59,6 @@ public class CustomerOrderService {
                 })
             .collect(Collectors.toList());
 
-    // Create the order with the calculated total price
     Order order =
         Order.builder()
             .customerId(customerId)
@@ -75,17 +71,13 @@ public class CustomerOrderService {
                     .build())
             .build();
 
-    // Save the order to get the generated ID
     order = orderRepository.save(order);
     final Order savedOrder = order;
 
-    // Associate OrderItems with the saved Order
     orderItems.forEach(orderItem -> orderItem.setOrder(savedOrder));
 
-    // Save order items
     orderItemRepository.saveAll(orderItems);
 
-    // Update order with order items
     order.setOrderItems(orderItems);
     orderRepository.save(order);
 
@@ -109,10 +101,8 @@ public class CustomerOrderService {
                     OrderItem orderItem = OrderMapper.INSTANCE.orderItemCreateDtoToOrderItem(dto);
                     orderItem.setOrder(order);
 
-                    // Fetch the food details using FoodApi
                     FoodViewDto food = foodApi.getFoodById(dto.getFoodId());
 
-                    // Calculate the total price for the order item
                     double itemTotalPrice = food.getPrice().getAmount() * dto.getQuantity();
                     orderItem.setPrice(
                         Price.builder()

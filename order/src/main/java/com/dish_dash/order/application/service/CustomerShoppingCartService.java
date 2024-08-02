@@ -46,10 +46,8 @@ public class CustomerShoppingCartService {
                   ShoppingCartItem orderItem =
                       ShoppingCartMapper.INSTANCE.shoppingCartItemCreationDtoToShoppingCartItem(dto);
 
-                  // Fetch the food details using FoodApi
                   FoodViewDto food = foodApi.getFoodById(dto.getFoodId());
 
-                  // Calculate the total price for the order item
                   double itemTotalPrice = food.getPrice().getAmount() * dto.getQuantity();
                   orderItem.setPrice(
                       Price.builder()
@@ -62,7 +60,6 @@ public class CustomerShoppingCartService {
                 })
             .collect(Collectors.toList());
 
-    // Create the order with the calculated total price
     var shoppingCart =
         ShoppingCart.builder()
             .customerId(customerId)
@@ -74,17 +71,13 @@ public class CustomerShoppingCartService {
                     .build())
             .build();
 
-    // Save the order to get the generated ID
     shoppingCart = shoppingCartRepository.save(shoppingCart);
     final var savedShoppingCart = shoppingCart;
 
-    // Associate OrderItems with the saved Order
     orderItems.forEach(orderItem -> orderItem.setShoppingCart(savedShoppingCart));
 
-    // Save order items
     orderItemRepository.saveAll(orderItems);
 
-    // Update order with order items
     shoppingCart.setShoppingCartItems(orderItems);
     shoppingCartRepository.save(shoppingCart);
 
@@ -109,10 +102,8 @@ public class CustomerShoppingCartService {
                         ShoppingCartMapper.INSTANCE.shoppingCartItemCreationDtoToShoppingCartItem(dto);
                     orderItem.setShoppingCart(shoppingCart);
 
-                    // Fetch the food details using FoodApi
                     FoodViewDto food = foodApi.getFoodById(dto.getFoodId());
 
-                    // Calculate the total price for the order item
                     double itemTotalPrice = food.getPrice().getAmount() * dto.getQuantity();
                     orderItem.setPrice(
                         Price.builder()
