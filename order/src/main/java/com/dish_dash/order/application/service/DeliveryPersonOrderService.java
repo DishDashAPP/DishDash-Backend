@@ -37,6 +37,7 @@ public class DeliveryPersonOrderService {
       orderDto.setCustomerDto(userApi.getCustomerProfile(orderDto.getCustomerId()));
       orderDto.setRestaurantOwnerDto(
           userApi.getRestaurantOwnerProfile(orderDto.getRestaurantOwnerId()));
+      return orderDto;
     }
     throw new CustomException(ErrorCode.BAD_REQUEST, "order not found");
   }
