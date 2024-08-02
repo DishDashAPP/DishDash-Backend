@@ -56,7 +56,7 @@ public class RestaurantOrderService {
   public List<OrderDto> getRestaurantOwnerActiveOrders(long restaurantOwnerID) {
     return orderRepository
         .findAllByRestaurantOwnerIdAndStatusIn(
-            restaurantOwnerID, List.of(OrderStatus.PREPARING, OrderStatus.DELIVERING))
+            restaurantOwnerID, List.of(OrderStatus.PREPARING))
         .stream()
         .map(this::mapOrderToOrderDto)
         .collect(Collectors.toList());
