@@ -8,6 +8,7 @@ import com.dish_dash.product.domain.model.Menu;
 import com.dish_dash.product.infrastructure.repository.FoodRepository;
 import com.dish_dash.product.infrastructure.repository.MenuRepository;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,20 @@ public class MenuService {
   }
 
   public MenuDto getMenuById(long id) {
-    return menuRepository.findByRestaurantId(id).map(ProductMapper.INSTANCE::menuToDto).orElse(null);
+    Optional<Menu> menuOptional = menuRepository.findById(id);
+    if (menuOptional.isPresent()) {
+      MenuDto menuDto = ProductMapper.INSTANCE.menuToDto(menuOptional.get());
+      menuDto.setFoods(
+          menuOptional.get().getFoodList().stream()
+              .map(ProductMapper.INSTANCE::foodToDto)
+              .toList());
+      menuDto.setCategories(
+          menuOptional.get().getCategories().stream()
+              .map(ProductMapper.INSTANCE::categoryToDto)
+              .collect(Collectors.toList()));
+      return menuDto;
+    }
+    return null;
   }
 
   public MenuDto saveMenu(MenuDto menu) {

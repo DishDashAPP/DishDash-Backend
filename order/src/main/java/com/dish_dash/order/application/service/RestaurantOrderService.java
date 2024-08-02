@@ -1,7 +1,5 @@
 package com.dish_dash.order.application.service;
 
-import com.dishDash.common.dto.CustomerDto;
-import com.dishDash.common.dto.DeliveryPersonDto;
 import com.dishDash.common.dto.OrderDto;
 import com.dishDash.common.enums.ErrorCode;
 import com.dishDash.common.enums.OrderStatus;
@@ -24,12 +22,11 @@ public class RestaurantOrderService {
   private final UserApi userApi;
 
   public boolean updateOrderStatusByRestaurantOwner(
-          Long restaurantOwnerId, long orderId, OrderStatus status) {
+      Long restaurantOwnerId, long orderId, OrderStatus status) {
     Optional<Order> orderOptional = orderRepository.findById(orderId);
     if (orderOptional.isPresent()) {
       if (orderOptional.get().getRestaurantOwnerId() != restaurantOwnerId)
         throw new CustomException(ErrorCode.FORBIDDEN, "Restaurant owner id mismatch");
-      orderOptional.get().setStatus(status);
 
       // we should set a delivery person to the order or throw an exception
       long setDeliveryPerson = userApi.setActiveOrder(orderId);
@@ -46,34 +43,34 @@ public class RestaurantOrderService {
 
   public List<OrderDto> getRestaurantOwnerOrderHistory(long restaurantOwnerID) {
     return orderRepository
-            .findAllByRestaurantOwnerIdAndStatusIn(
-                    restaurantOwnerID,
-                    List.of(
-                            OrderStatus.DELIVERED,
-                            OrderStatus.NOT_PAID,
-                            OrderStatus.DELIVERING,
-                            OrderStatus.PREPARING))
-            .stream()
-            .map(order -> {
+        .findAllByRestaurantOwnerIdAndStatusIn(
+            restaurantOwnerID,
+            List.of(OrderStatus.DELIVERED, OrderStatus.NOT_PAID, OrderStatus.DELIVERING))
+        .stream()
+        .map(
+            order -> {
               OrderDto orderDto = OrderMapper.INSTANCE.orderToDto(order);
-              orderDto.setDeliveryPersonDto(userApi.getDeliveryPersonProfile(order.getDeliveryPersonId()));
+              orderDto.setDeliveryPersonDto(
+                  userApi.getDeliveryPersonProfile(order.getDeliveryPersonId()));
               orderDto.setCustomerDto(userApi.getCustomerProfile(order.getCustomerId()));
               return orderDto;
             })
-            .collect(Collectors.toList());
+        .collect(Collectors.toList());
   }
 
   public List<OrderDto> getRestaurantOwnerActiveOrders(long restaurantOwnerID) {
     return orderRepository
-            .findAllByRestaurantOwnerIdAndStatusIn(
-                    restaurantOwnerID, List.of(OrderStatus.PREPARING, OrderStatus.DELIVERING))
-            .stream()
-            .map(order -> {
+        .findAllByRestaurantOwnerIdAndStatusIn(
+            restaurantOwnerID, List.of(OrderStatus.PREPARING, OrderStatus.DELIVERING))
+        .stream()
+        .map(
+            order -> {
               OrderDto orderDto = OrderMapper.INSTANCE.orderToDto(order);
-              orderDto.setDeliveryPersonDto(userApi.getDeliveryPersonProfile(order.getDeliveryPersonId()));
+              orderDto.setDeliveryPersonDto(
+                  userApi.getDeliveryPersonProfile(order.getDeliveryPersonId()));
               orderDto.setCustomerDto(userApi.getCustomerProfile(order.getCustomerId()));
               return orderDto;
             })
-            .collect(Collectors.toList());
+        .collect(Collectors.toList());
   }
 }
