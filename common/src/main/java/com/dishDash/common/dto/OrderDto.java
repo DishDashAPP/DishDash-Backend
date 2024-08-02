@@ -3,13 +3,12 @@ package com.dishDash.common.dto;
 import com.dishDash.common.Price;
 import com.dishDash.common.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.sql.Timestamp;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Timestamp;
-import java.util.List;
 
 @Data
 @Builder
@@ -23,6 +22,9 @@ public class OrderDto {
 
   @JsonProperty("restaurant_owner_id")
   private long restaurantOwnerId;
+
+  @JsonProperty("restaurant_owner")
+  private RestaurantOwnerDto restaurantOwnerDto;
 
   @JsonProperty("order_items")
   private List<OrderItemDto> orderItems;

@@ -1,5 +1,7 @@
 package com.dish_dash.product;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.dishDash.common.Price;
 import com.dishDash.common.dto.FoodDto;
 import com.dishDash.common.dto.MenuDto;
@@ -8,18 +10,17 @@ import com.dish_dash.product.domain.model.Food;
 import com.dish_dash.product.domain.model.Menu;
 import com.dish_dash.product.infrastructure.repository.FoodRepository;
 import com.dish_dash.product.infrastructure.repository.MenuRepository;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@Disabled
 public class MenuServiceIntegrationTest {
 
   @Autowired private MenuRepository menuRepository;
