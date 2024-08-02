@@ -27,9 +27,9 @@ public class CategoryController {
   }
 
   @PostMapping
-  @Authentication
-  public CategoryCreationDto createCategory(@RequestBody CategoryCreationDto category) {
-    return categoryApi.createCategory(category);
+  @Authentication(userId = "#userId")
+  CategoryCreationDto createCategory(Long userId, @RequestBody CategoryCreationDto category) {
+    return categoryApi.createCategory(userId, category);
   }
 
   @DeleteMapping("/{id}")

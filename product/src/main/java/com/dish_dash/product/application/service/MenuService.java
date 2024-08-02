@@ -2,6 +2,8 @@ package com.dish_dash.product.application.service;
 
 import com.dishDash.common.dto.FoodDto;
 import com.dishDash.common.dto.MenuDto;
+import com.dishDash.common.enums.ErrorCode;
+import com.dishDash.common.exception.CustomException;
 import com.dish_dash.product.domain.mapper.ProductMapper;
 import com.dish_dash.product.domain.model.Food;
 import com.dish_dash.product.domain.model.Menu;
@@ -42,7 +44,7 @@ public class MenuService {
               .collect(Collectors.toList()));
       return menuDto;
     }
-    return null;
+    throw new CustomException(ErrorCode.NO_CONTENT, "Menu not found");
   }
 
   public MenuDto saveMenu(MenuDto menu) {

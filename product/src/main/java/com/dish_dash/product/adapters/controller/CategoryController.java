@@ -25,8 +25,8 @@ public class CategoryController implements CategoryApi {
   }
 
   @Override
-  public CategoryCreationDto createCategory(CategoryCreationDto category) {
-    return categoryService.saveCategory(category);
+  public CategoryCreationDto createCategory(long userId, CategoryCreationDto category) {
+    return categoryService.saveCategory(category, userId);
   }
 
   @Override
