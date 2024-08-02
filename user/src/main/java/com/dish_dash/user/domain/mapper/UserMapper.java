@@ -9,7 +9,6 @@ import com.dish_dash.user.domain.model.DeliveryPerson;
 import com.dish_dash.user.domain.model.Location;
 import com.dish_dash.user.domain.model.RestaurantOwner;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
@@ -29,6 +28,4 @@ public interface UserMapper {
   RestaurantOwner dtoToRestaurantOwner(RestaurantOwnerDto restaurantOwnerDto);
 
   LocationDto locationToDto(Location location);
-
-  void updateCustomerFromDto(CustomerDto customerDto, @MappingTarget Customer customer);
 }

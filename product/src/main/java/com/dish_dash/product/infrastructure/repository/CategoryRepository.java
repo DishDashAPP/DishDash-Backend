@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-  List<Category> findAllByMenu_RestaurantId(Long restaurantId);
+  List<Category> findAllByMenu_RestaurantId(long restaurantId);
 }

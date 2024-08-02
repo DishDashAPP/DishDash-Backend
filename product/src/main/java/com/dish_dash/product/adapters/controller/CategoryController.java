@@ -15,7 +15,7 @@ public class CategoryController implements CategoryApi {
   private final CategoryService categoryService;
 
   @Override
-  public List<CategoryViewDto> getAllCategories(Long userId) {
+  public List<CategoryViewDto> getAllCategories(long userId) {
     return categoryService.getAllCategories(userId);
   }
 
