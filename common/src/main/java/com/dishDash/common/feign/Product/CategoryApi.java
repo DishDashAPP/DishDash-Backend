@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public interface CategoryApi {
 
   @GetMapping()
-  List<CategoryViewDto> getAllCategories();
+  List<CategoryViewDto> getAllCategories(Long userId);
 
   @GetMapping("/{id}")
   CategoryViewDto getCategoryById(@PathVariable long id);

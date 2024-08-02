@@ -15,9 +15,9 @@ public class CategoryController {
   private final CategoryApi categoryApi;
 
   @GetMapping
-  @Authentication
-  public List<CategoryViewDto> getAllCategories() {
-    return categoryApi.getAllCategories();
+  @Authentication(userId = "#userId")
+  public List<CategoryViewDto> getAllCategories(Long userId) {
+    return categoryApi.getAllCategories(userId);
   }
 
   @GetMapping("/{id}")

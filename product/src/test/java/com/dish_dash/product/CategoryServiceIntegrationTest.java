@@ -6,7 +6,9 @@ import com.dishDash.common.dto.CategoryCreationDto;
 import com.dishDash.common.dto.CategoryViewDto;
 import com.dish_dash.product.application.service.CategoryService;
 import com.dish_dash.product.domain.model.Category;
+import com.dish_dash.product.domain.model.Menu;
 import com.dish_dash.product.infrastructure.repository.CategoryRepository;
+import com.dish_dash.product.infrastructure.repository.MenuRepository;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -23,8 +25,10 @@ public class CategoryServiceIntegrationTest {
   @Autowired private CategoryRepository categoryRepository;
 
   @Autowired private CategoryService categoryService;
+  @Autowired private MenuRepository menuRepository;
 
   private CategoryCreationDto categoryCreationDto;
+  private Menu menu;
 
   @BeforeEach
   void setUp() {
@@ -32,13 +36,14 @@ public class CategoryServiceIntegrationTest {
 
     categoryRepository.flush();
     categoryCreationDto = CategoryCreationDto.builder().name("CATEGORY_NAME").build();
+    menu = menuRepository.save(Menu.builder().restaurantId(1).build());
   }
 
   @Test
   void getAllCategories_ShouldReturnAllCategories() {
     Category category = categoryRepository.save(Category.builder().name("CATEGORY_NAME").build());
 
-    List<CategoryViewDto> categories = categoryService.getAllCategories();
+    List<CategoryViewDto> categories = categoryService.getAllCategories(menu.getRestaurantId());
 
     assertNotNull(categories, "Categories should not be null");
     assertEquals(1, categories.size(), "There should be exactly one category");
