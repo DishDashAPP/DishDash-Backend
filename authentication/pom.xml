@@ -8,7 +8,6 @@
         <groupId>com.dishDash</groupId>
         <artifactId>DishDash</artifactId>
         <version>${revision}</version>
-        <relativePath>../pom.xml</relativePath> <!-- Adjust the relative path if necessary -->
     </parent>
 
     <artifactId>authentication</artifactId>
@@ -38,12 +37,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
-            <version>2.7.18</version>
+            <version>3.0.4</version>
         </dependency>
         <dependency>
-            <groupId>it.ozimov</groupId>
+            <groupId>com.github.kstyrc</groupId>
             <artifactId>embedded-redis</artifactId>
-            <version>0.7.3</version>
+            <version>0.6</version>
             <scope>test</scope>
         </dependency>
         <dependency>

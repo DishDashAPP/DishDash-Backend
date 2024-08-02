@@ -1,5 +1,8 @@
 package com.dish_dash.authentication;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+
 import com.dishDash.common.dto.AuthDto;
 import com.dishDash.common.enums.Role;
 import com.dishDash.common.exception.CustomException;
@@ -17,12 +20,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import redis.embedded.RedisServer;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static reactor.core.publisher.Mono.when;
+import java.io.IOException;
 
-@SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AuthenticationServiceIntegrationTest {
 
   @Autowired private AuthenticationService authenticationService;
@@ -30,15 +30,17 @@ public class AuthenticationServiceIntegrationTest {
   @Autowired private RedisTemplate<String, Long> redisTemplate;
   @Autowired private PasswordEncoder passwordEncoder;
   @MockBean private UserApi userApi;
-  private RedisServer redisServer;
+  private static RedisServer redisServer;
 
-  @BeforeAll
-  void startRedis() {
-    redisServer = new RedisServer(6379);
-    redisServer.start();
+  @BeforeEach
+  void startRedis() throws IOException {
+    if (redisServer == null || !redisServer.isActive()) {
+      redisServer = new RedisServer(6370);
+      redisServer.start();
+    }
   }
 
-  @AfterAll
+  @AfterEach
   void stopRedis() {
     redisServer.stop();
   }
