@@ -20,6 +20,6 @@ public class Price {
   @JsonCreator
   public Price(@JsonProperty("amount") double amount, @JsonProperty("unit") CurrencyUnit unit) {
     this.amount = amount;
-    this.unit = (unit == null) ? CurrencyUnit.TOMAN : unit; // default value
+    this.unit = (unit == null) ? CurrencyUnit.TOMAN : unit;
   }
 }

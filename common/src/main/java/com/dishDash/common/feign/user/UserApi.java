@@ -55,7 +55,6 @@ public interface UserApi {
   @GetMapping("/location")
   LocationDto getLocation(@RequestParam long deliveryPersonId);
 
-  // an api to set the current order id to a ACTIVE delivery person and set his status to BUSY
   @PostMapping(DELIVERY_PERSON + "/setActiveOrder")
   Long setActiveOrder(@RequestParam long orderId);
 }

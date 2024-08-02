@@ -17,6 +17,5 @@ public class ShoppingCartItemCreateDto {
   @JsonProperty("food_id")
   private long foodId;
 
-//  private Price price;   this should be calculated by the system not comming from the client
   private Integer quantity;
 }
