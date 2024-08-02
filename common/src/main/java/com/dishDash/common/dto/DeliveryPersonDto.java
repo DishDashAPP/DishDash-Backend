@@ -11,7 +11,7 @@ public class DeliveryPersonDto {
   private long id;
 
   @JsonProperty("first_name")
-  @NonNull private String firstName;
+  private String firstName;
 
   @JsonProperty("last_name")
   private String lastName;
