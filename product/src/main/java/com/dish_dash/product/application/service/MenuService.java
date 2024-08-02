@@ -40,7 +40,7 @@ public class MenuService {
               .toList());
       menuDto.setCategories(
           menuOptional.get().getCategories().stream()
-              .map(ProductMapper.INSTANCE::categoryToDto)
+              .map(ProductMapper.INSTANCE::categoryToViewDto)
               .collect(Collectors.toList()));
       return menuDto;
     }
