@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FoodDto {
+  private long id;
   private String name;
   private String description;
   private int stock;
