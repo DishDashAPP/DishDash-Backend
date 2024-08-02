@@ -19,5 +19,5 @@ public interface RateApi {
   RateDto getDeliveryRate(@PathVariable String deliveryPersonID);
 
   @GetMapping("/info")
-  RestaurantCommentsDto getRestaurantComments(long restaurantId);
+  RestaurantCommentsDto getRestaurantComments(@RequestParam long restaurantId);
 }
