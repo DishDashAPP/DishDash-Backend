@@ -26,4 +26,7 @@ public class RestaurantOwnerDto {
   private String restaurantName;
 
   private String address;
+
+  @JsonProperty("restaurant_comments")
+  private RestaurantCommentsDto restaurantComments;
 }

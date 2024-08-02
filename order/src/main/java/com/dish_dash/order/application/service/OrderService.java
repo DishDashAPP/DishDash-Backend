@@ -5,6 +5,7 @@ import com.dishDash.common.enums.OrderStatus;
 import com.dish_dash.order.domain.mapper.OrderMapper;
 import com.dish_dash.order.domain.model.Order;
 import com.dish_dash.order.domain.repository.OrderRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,10 @@ public class OrderService {
       return order.getStatus();
     }
     return null;
+  }
+
+  public List<Order> getAllOrderByRestaurantOwnerId(long restaurantId) {
+    return orderRepository.findAllByRestaurantOwnerId(restaurantId);
   }
 
   public boolean prepareOrder(OrderDto orderDto) {

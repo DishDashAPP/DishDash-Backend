@@ -29,7 +29,7 @@ public class FoodController {
 
   @PostMapping
   @Authentication(userId = "#userId")
-  public FoodDto createFood(@RequestParam Long userId, @RequestBody FoodDto foodDto) {
+  public FoodDto createFood(Long userId, @RequestBody FoodDto foodDto) {
     return foodApi.createFood(userId, foodDto);
   }
 

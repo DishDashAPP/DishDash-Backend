@@ -1,6 +1,7 @@
 package com.dishDash.common.feign.order;
 
 import com.dishDash.common.dto.RateDto;
+import com.dishDash.common.dto.RestaurantCommentsDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,4 +17,7 @@ public interface RateApi {
 
   @GetMapping("/delivery/{deliveryPersonID}")
   RateDto getDeliveryRate(@PathVariable String deliveryPersonID);
+
+  @GetMapping("/info")
+  RestaurantCommentsDto getRestaurantComments(long restaurantId);
 }

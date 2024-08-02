@@ -1,6 +1,7 @@
 package com.dish_dash.order.adapters.controller;
 
 import com.dishDash.common.dto.RateDto;
+import com.dishDash.common.dto.RestaurantCommentsDto;
 import com.dishDash.common.feign.order.RateApi;
 import com.dish_dash.order.application.service.RateService;
 import lombok.RequiredArgsConstructor;
@@ -25,5 +26,10 @@ public class RateController implements RateApi {
   @Override
   public RateDto getDeliveryRate(String deliveryPersonID) {
     return rateService.getDeliveryRate(deliveryPersonID);
+  }
+
+  @Override
+  public RestaurantCommentsDto getRestaurantComments(long restaurantId) {
+    return rateService.getRestaurantComments(restaurantId);
   }
 }

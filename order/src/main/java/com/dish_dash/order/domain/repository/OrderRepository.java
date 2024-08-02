@@ -1,7 +1,7 @@
 package com.dish_dash.order.domain.repository;
 
-import com.dish_dash.order.domain.model.Order;
 import com.dishDash.common.enums.OrderStatus;
+import com.dish_dash.order.domain.model.Order;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -16,6 +16,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
   List<Order> findAllByRestaurantOwnerIdAndStatusIn(
       long restaurantOwnerId, List<OrderStatus> status);
+
+  List<Order> findAllByRestaurantOwnerId(long restaurantOwnerId);
 
   Order findByDeliveryPersonId(long deliveryPersonId);
 
