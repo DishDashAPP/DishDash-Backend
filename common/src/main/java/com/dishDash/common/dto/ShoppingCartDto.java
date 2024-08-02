@@ -1,7 +1,7 @@
 package com.dishDash.common.dto;
 
 import com.dishDash.common.Price;
-import com.dishDash.common.enums.OrderStatus;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,8 +14,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ShoppingCartDto {
   private long id;
-    private long customerId;
-    private long restaurantOwnerId;
-    private List<OrderItemDto> orderItems;
-    private Price totalPrice;
+
+  @JsonProperty("customer_id")
+  private long customerId;
+
+  @JsonProperty("restaurant_owner_id")
+  private long restaurantOwnerId;
+
+  @JsonProperty("order_items")
+  private List<OrderItemDto> orderItems;
+
+  @JsonProperty("total_price")
+  private Price totalPrice;
 }
