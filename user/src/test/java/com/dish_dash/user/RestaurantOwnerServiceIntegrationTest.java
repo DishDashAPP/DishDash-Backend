@@ -5,6 +5,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 
 import com.dishDash.common.dto.RestaurantOwnerDto;
+import com.dishDash.common.enums.ErrorCode;
+import com.dishDash.common.exception.CustomException;
 import com.dishDash.common.feign.authentication.AuthenticationApi;
 import com.dishDash.common.feign.order.RateApi;
 import com.dish_dash.user.adapters.repository.RestaurantOwnerRepository;
@@ -21,14 +23,19 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 public class RestaurantOwnerServiceIntegrationTest {
 
   @Autowired private RestaurantOwnerRepository restaurantOwnerRepository;
+
   @Autowired private RestaurantOwnerService restaurantOwnerService;
+
   @MockBean private AuthenticationApi authenticationApi;
+
   @MockBean private RateApi rateApi;
 
   private RestaurantOwnerDto restaurantOwnerDto;
 
   @BeforeEach
   void setUp() {
+    restaurantOwnerRepository.deleteAll();
+
     restaurantOwnerDto =
         RestaurantOwnerDto.builder()
             .id(1L)
@@ -76,6 +83,25 @@ public class RestaurantOwnerServiceIntegrationTest {
   }
 
   @Test
+  void modifyProfile_ShouldReturnTrue_WhenRestaurantOwnerDoesNotExist() {
+    boolean result = restaurantOwnerService.modifyProfile(2L, restaurantOwnerDto);
+
+    RestaurantOwner newOwner = restaurantOwnerRepository.findById(2L).orElse(null);
+
+    assertTrue(result, "Expected profile creation to return true");
+    assertNotNull(newOwner, "New owner should not be null");
+    assertEquals("FIRSTNAME", newOwner.getFirstName(), "First name should be set to FIRSTNAME");
+    assertEquals("LASTNAME", newOwner.getLastName(), "Last name should be set to LASTNAME");
+    assertEquals("ADDRESS", newOwner.getAddress(), "Address should be set to ADDRESS");
+    assertEquals(
+        "PHONE_NUMBER", newOwner.getPhoneNumber(), "Phone number should be set to PHONE_NUMBER");
+    assertEquals(
+        "RESTAURANT_NAME",
+        newOwner.getRestaurantName(),
+        "RESTAURANT_NAME should be set to RESTAURANT_NAME");
+  }
+
+  @Test
   void createRestaurantOwner_ShouldSaveRestaurantOwner() {
     restaurantOwnerService.createRestaurantOwner(restaurantOwnerDto);
 
@@ -83,6 +109,15 @@ public class RestaurantOwnerServiceIntegrationTest {
 
     assertNotNull(savedOwner, "Saved owner should not be null");
     assertEquals(1L, savedOwner.getId(), "Owner ID should be 1");
+    assertEquals("FIRSTNAME", savedOwner.getFirstName(), "First name should be FIRSTNAME");
+    assertEquals("LASTNAME", savedOwner.getLastName(), "Last name should be LASTNAME");
+    assertEquals("ADDRESS", savedOwner.getAddress(), "Address should be ADDRESS");
+    assertEquals(
+        "PHONE_NUMBER", savedOwner.getPhoneNumber(), "Phone number should be PHONE_NUMBER");
+    assertEquals(
+        "RESTAURANT_NAME",
+        savedOwner.getRestaurantName(),
+        "RESTAURANT_NAME should be RESTAURANT_NAME");
   }
 
   @Test
@@ -100,6 +135,7 @@ public class RestaurantOwnerServiceIntegrationTest {
 
     Mockito.when(authenticationApi.getUsername(any())).thenReturn("USERNAME");
     Mockito.when(rateApi.getRestaurantComments(anyLong())).thenReturn(null);
+
     RestaurantOwnerDto result = restaurantOwnerService.getUserProfile(1L);
 
     assertNotNull(result, "Profile should not be null");
@@ -110,13 +146,22 @@ public class RestaurantOwnerServiceIntegrationTest {
     assertEquals(
         "RESTAURANT_NAME", result.getRestaurantName(), "restaurantName should be RESTAURANT_NAME");
     assertEquals("PHONE_NUMBER", result.getPhoneNumber(), "Phone number should be PHONE_NUMBER");
+    assertEquals("USERNAME", result.getUsername(), "Username should be USERNAME");
   }
 
   @Test
-  void getUserProfile_ShouldReturnNull_WhenOwnerDoesNotExist() {
+  void getUserProfile_ShouldThrowCustomException_WhenOwnerDoesNotExist() {
     Mockito.when(authenticationApi.getUsername(any())).thenReturn("USERNAME");
-    RestaurantOwnerDto result = restaurantOwnerService.getUserProfile(2L);
 
-    assertNull(result, "Profile should be null for non-existing owner");
+    CustomException exception =
+        assertThrows(
+            CustomException.class,
+            () -> {
+              restaurantOwnerService.getUserProfile(2L);
+            });
+
+    assertEquals(ErrorCode.NOT_FOUND, exception.getErrorCode(), "Expected ErrorCode.NOT_FOUND");
+    assertEquals(
+        "Restaurant owner not found", exception.getMessage(), "Exception message should match");
   }
 }
