@@ -2,26 +2,20 @@ package com.dish_dash.order.application.service;
 
 import com.dishDash.common.Price;
 import com.dishDash.common.dto.FoodViewDto;
-import com.dishDash.common.dto.OrderItemCreateDto;
 import com.dishDash.common.dto.ShoppingCartDto;
 import com.dishDash.common.dto.ShoppingCartItemCreateDto;
 import com.dishDash.common.enums.ErrorCode;
 import com.dishDash.common.exception.CustomException;
 import com.dishDash.common.feign.Product.FoodApi;
-import com.dish_dash.order.domain.mapper.OrderMapper;
 import com.dish_dash.order.domain.mapper.ShoppingCartMapper;
-import com.dish_dash.order.domain.model.OrderItem;
 import com.dish_dash.order.domain.model.ShoppingCart;
 import com.dish_dash.order.domain.model.ShoppingCartItem;
-import com.dish_dash.order.domain.repository.OrderItemRepository;
-
+import com.dish_dash.order.domain.repository.ShoppingCartItemRepository;
+import com.dish_dash.order.domain.repository.ShoppingCartRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
-
-import com.dish_dash.order.domain.repository.ShoppingCartItemRepository;
-import com.dish_dash.order.domain.repository.ShoppingCartRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,9 +26,9 @@ public class CustomerShoppingCartService {
 
   private final ShoppingCartRepository shoppingCartRepository;
   private final FoodApi foodApi;
-    private final ShoppingCartItemRepository shoppingCartItemRepository;
+  private final ShoppingCartItemRepository shoppingCartItemRepository;
 
-    @Transactional
+  @Transactional
   public ShoppingCartDto createShoppingCart(
       long customerId, long restaurantOwnerId, List<ShoppingCartItemCreateDto> orderItemsDto) {
     AtomicReference<Double> totalPrice = new AtomicReference<>(0.0);
@@ -44,7 +38,8 @@ public class CustomerShoppingCartService {
             .map(
                 dto -> {
                   ShoppingCartItem orderItem =
-                      ShoppingCartMapper.INSTANCE.shoppingCartItemCreationDtoToShoppingCartItem(dto);
+                      ShoppingCartMapper.INSTANCE.shoppingCartItemCreationDtoToShoppingCartItem(
+                          dto);
 
                   FoodViewDto food = foodApi.getFoodById(dto.getFoodId());
 
@@ -98,7 +93,8 @@ public class CustomerShoppingCartService {
               .map(
                   dto -> {
                     ShoppingCartItem orderItem =
-                        ShoppingCartMapper.INSTANCE.shoppingCartItemCreationDtoToShoppingCartItem(dto);
+                        ShoppingCartMapper.INSTANCE.shoppingCartItemCreationDtoToShoppingCartItem(
+                            dto);
                     orderItem.setShoppingCart(shoppingCart);
 
                     FoodViewDto food = foodApi.getFoodById(dto.getFoodId());
