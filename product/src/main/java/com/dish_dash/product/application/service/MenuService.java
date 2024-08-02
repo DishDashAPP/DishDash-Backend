@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,12 +20,14 @@ public class MenuService {
   private final MenuRepository menuRepository;
   private final FoodRepository foodRepository;
 
+  @Transactional(readOnly = true)
   public List<MenuDto> getAllMenus() {
     return menuRepository.findAll().stream()
         .map(ProductMapper.INSTANCE::menuToDto)
         .collect(Collectors.toList());
   }
 
+  @Transactional(readOnly = true)
   public MenuDto getMenuById(long id) {
     Optional<Menu> menuOptional = menuRepository.findById(id);
     if (menuOptional.isPresent()) {

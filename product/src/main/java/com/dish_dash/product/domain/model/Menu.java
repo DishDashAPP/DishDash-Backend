@@ -21,7 +21,9 @@ public class Menu {
   @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)
   private List<Food> foodList;
 
-  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @ManyToMany(
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+      fetch = FetchType.EAGER)
   @JoinTable(
       name = "menu_category",
       joinColumns = @JoinColumn(name = "menu_id"),
