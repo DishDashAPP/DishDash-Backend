@@ -2,6 +2,7 @@ package com.dish_dash.gateway.adapters;
 
 import com.dishDash.common.dto.OrderDto;
 import com.dishDash.common.dto.OrderItemCreateDto;
+import com.dishDash.common.dto.TransactionDto;
 import com.dishDash.common.feign.order.CustomerOrderAPi;
 import com.dish_dash.gateway.annotation.Authentication;
 import java.util.List;
@@ -16,18 +17,10 @@ public class CustomerOrderController {
 
   @PostMapping
   @Authentication(userId = "#userId")
-  public OrderDto createOrder(
+  public TransactionDto createOrder(
       Long userId,
-      @RequestParam Long restaurantOwnerId,
-      @RequestBody List<OrderItemCreateDto> orderItemsDto) {
-    return customerOrderAPi.createOrder(userId, restaurantOwnerId, orderItemsDto);
-  }
-
-  @PostMapping("/modifyOrder")
-  @Authentication(userId = "#userId")
-  OrderDto modifyOrder(
-      Long userId, @RequestParam Long orderId, @RequestBody List<OrderItemCreateDto> orderItems) {
-    return customerOrderAPi.modifyOrder(userId, orderId, orderItems);
+      @RequestParam Long restaurantOwnerId) {
+    return customerOrderAPi.createOrder(userId, restaurantOwnerId);
   }
 
   @PostMapping("/orderRate")

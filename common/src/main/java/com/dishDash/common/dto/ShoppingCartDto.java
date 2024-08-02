@@ -21,8 +21,8 @@ public class ShoppingCartDto {
   @JsonProperty("restaurant_owner_id")
   private long restaurantOwnerId;
 
-  @JsonProperty("order_items")
-  private List<OrderItemDto> orderItems;
+  @JsonProperty("shopping_cart_items")
+  private List<ShoppingCartItemDto> shoppingCartItems;
 
   @JsonProperty("total_price")
   private Price totalPrice;

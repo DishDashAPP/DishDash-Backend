@@ -2,9 +2,6 @@ package com.dish_dash.order.domain.mapper;
 
 import com.dishDash.common.dto.*;
 import com.dish_dash.order.domain.model.*;
-
-import java.util.List;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -12,15 +9,9 @@ import org.mapstruct.factory.Mappers;
 public interface ShoppingCartMapper {
   ShoppingCartMapper INSTANCE = Mappers.getMapper(ShoppingCartMapper.class);
 
-  ShoppingCartDto shoppingCartToDto(ShoppingCart order);
+  ShoppingCartDto shoppingCartToDto(ShoppingCart shoppingCart);
 
-  ShoppingCart shoppingCartDtoToShoppingCart(ShoppingCartDto orderDto);
-
-  default double calculateTotalPrice(List<ShoppingCartItem> shoppingCartItems) {
-    return shoppingCartItems.stream()
-            .mapToDouble(shoppingCartItem -> shoppingCartItem.getPrice().getAmount())
-            .sum();
-  }
+  ShoppingCart shoppingCartDtoToShoppingCart(ShoppingCartDto shoppingCartDto);
 
   ShoppingCartItem shoppingCartItemCreationDtoToShoppingCartItem(ShoppingCartItemCreateDto dto);
 }

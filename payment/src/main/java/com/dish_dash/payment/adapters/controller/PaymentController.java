@@ -21,9 +21,9 @@ public class PaymentController implements PaymentApi {
   }
 
   @Override
-  public TransactionDto createOrderTransaction(long orderId, double amount) {
+  public TransactionDto createOrderTransaction(Long shoppingCartId, double amount) {
     Price price = Price.builder().amount(amount).unit(CurrencyUnit.TOMAN).build();
     return TransactionMapper.INSTANCE.transactionToDto(
-        paymentService.createOrderTransaction(orderId, price));
+        paymentService.createOrderTransaction(shoppingCartId, price));
   }
 }

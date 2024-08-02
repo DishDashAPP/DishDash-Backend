@@ -3,22 +3,24 @@ package com.dish_dash.order.application.service;
 import com.dishDash.common.Price;
 import com.dishDash.common.dto.FoodViewDto;
 import com.dishDash.common.dto.OrderDto;
-import com.dishDash.common.dto.OrderItemCreateDto;
+import com.dishDash.common.dto.TransactionDto;
 import com.dishDash.common.enums.ErrorCode;
 import com.dishDash.common.enums.OrderStatus;
 import com.dishDash.common.exception.CustomException;
 import com.dishDash.common.exception.MoreThanOneOrderException;
 import com.dishDash.common.feign.Product.FoodApi;
+import com.dishDash.common.feign.payment.PaymentApi;
 import com.dish_dash.order.domain.mapper.OrderMapper;
-import com.dish_dash.order.domain.model.Order;
-import com.dish_dash.order.domain.model.OrderItem;
-import com.dish_dash.order.domain.model.Rate;
+import com.dish_dash.order.domain.model.*;
 import com.dish_dash.order.domain.repository.OrderItemRepository;
 import com.dish_dash.order.domain.repository.OrderRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+
+import com.dish_dash.order.domain.repository.ShoppingCartItemRepository;
+import com.dish_dash.order.domain.repository.ShoppingCartRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,33 +29,48 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CustomerOrderService {
 
+  private final ShoppingCartRepository shoppingCartRepository;
+  private final ShoppingCartItemRepository shoppingCartItemRepository;
   private final OrderRepository orderRepository;
   private final OrderItemRepository orderItemRepository;
   private final FoodApi foodApi;
+  private final PaymentApi paymentApi;
 
   @Transactional
-  public OrderDto createOrder(
-      long customerId, long restaurantOwnerId, List<OrderItemCreateDto> orderItemsDto) {
+  public TransactionDto createOrder(long customerId, long restaurantOwnerId) {
     if (orderRepository.findByCustomerIdAndStatusNot(customerId, OrderStatus.DELIVERED).isPresent())
       throw new MoreThanOneOrderException(
           ErrorCode.BAD_REQUEST, "There is an active order for the customer");
+
+    ShoppingCart shoppingCart =
+        shoppingCartRepository
+            .findByCustomerIdAndRestaurantOwnerId(customerId, restaurantOwnerId)
+            .stream()
+            .findFirst()
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND, "Shopping cart not found"));
+
+    List<ShoppingCartItem> shoppingCartItems =
+        shoppingCartItemRepository.findByShoppingCartId(shoppingCart.getId());
+
     AtomicReference<Double> totalPrice = new AtomicReference<>(0.0);
-
     List<OrderItem> orderItems =
-        orderItemsDto.stream()
+        shoppingCartItems.stream()
             .map(
-                dto -> {
-                  OrderItem orderItem = OrderMapper.INSTANCE.orderItemCreatenDtoToOrderItem(dto);
+                cartItem -> {
+                  OrderItem orderItem = new OrderItem();
 
-                  FoodViewDto food = foodApi.getFoodById(dto.getFoodId());
+                  FoodViewDto food = foodApi.getFoodById(cartItem.getFoodId());
 
-                  double itemTotalPrice = food.getPrice().getAmount() * dto.getQuantity();
+                  double itemTotalPrice = food.getPrice().getAmount() * cartItem.getQuantity();
                   orderItem.setPrice(
                       Price.builder()
                           .amount(itemTotalPrice)
                           .unit(food.getPrice().getUnit())
                           .build());
                   totalPrice.updateAndGet(v -> v + itemTotalPrice);
+
+                  orderItem.setFoodId(cartItem.getFoodId());
+                  orderItem.setQuantity(cartItem.getQuantity());
 
                   return orderItem;
                 })
@@ -73,57 +90,19 @@ public class CustomerOrderService {
 
     order = orderRepository.save(order);
     final Order savedOrder = order;
-
     orderItems.forEach(orderItem -> orderItem.setOrder(savedOrder));
-
     orderItemRepository.saveAll(orderItems);
 
     order.setOrderItems(orderItems);
     orderRepository.save(order);
 
-    return OrderMapper.INSTANCE.orderToDto(order);
-  }
+    TransactionDto transactionDto =
+        paymentApi.createOrderTransaction(shoppingCart.getId(), totalPrice.get());
 
-  @Transactional
-  public OrderDto modifyOrder(
-      long customerId, long orderId, List<OrderItemCreateDto> orderItemsDto) {
-    Optional<Order> orderOptional = orderRepository.findById(orderId);
-    if (orderOptional.isPresent()) {
-      Order order = orderOptional.get();
-      if (customerId != order.getCustomerId())
-        throw new CustomException(ErrorCode.BAD_REQUEST, "Customer id mismatch");
+    shoppingCartItemRepository.deleteAll(shoppingCartItems);
+    shoppingCartRepository.delete(shoppingCart);
 
-      AtomicReference<Double> totalPrice = new AtomicReference<>(0.0);
-      List<OrderItem> orderItems =
-          orderItemsDto.stream()
-              .map(
-                  dto -> {
-                    OrderItem orderItem = OrderMapper.INSTANCE.orderItemCreateDtoToOrderItem(dto);
-                    orderItem.setOrder(order);
-
-                    FoodViewDto food = foodApi.getFoodById(dto.getFoodId());
-
-                    double itemTotalPrice = food.getPrice().getAmount() * dto.getQuantity();
-                    orderItem.setPrice(
-                        Price.builder()
-                            .amount(itemTotalPrice)
-                            .unit(food.getPrice().getUnit())
-                            .build());
-                    totalPrice.updateAndGet(v -> v + itemTotalPrice);
-
-                    return orderItem;
-                  })
-              .collect(Collectors.toList());
-
-      order.setOrderItems(orderItems);
-      order.setTotalPrice(
-          Price.builder()
-              .amount(totalPrice.get())
-              .unit(orderItems.get(0).getPrice().getUnit())
-              .build());
-      return OrderMapper.INSTANCE.orderToDto(orderRepository.save(order));
-    }
-    return null;
+    return transactionDto;
   }
 
   public boolean setOrderRate(long customerId, long orderID, int point) {

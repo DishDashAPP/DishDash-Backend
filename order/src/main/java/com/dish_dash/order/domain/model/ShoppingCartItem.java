@@ -1,8 +1,9 @@
 package com.dish_dash.order.domain.model;
 
 import com.dishDash.common.Price;
-import javax.persistence.*;
 import lombok.*;
+
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -14,13 +15,13 @@ import lombok.*;
 @Entity
 @Table(name = "shopping_cart_item")
 public class ShoppingCartItem {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "shopping_cart_id", nullable = false)
-  @ToString.Exclude
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "shopping_cart_id")
   private ShoppingCart shoppingCart;
 
   @Column(name = "food_id")

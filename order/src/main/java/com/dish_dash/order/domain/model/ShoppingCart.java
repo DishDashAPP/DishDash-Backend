@@ -22,7 +22,7 @@ public class ShoppingCart {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "shoppingCart")
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "shoppingCart", orphanRemoval = true)
   private List<ShoppingCartItem> shoppingCartItems;
 
   @Column(name = "restaurant_owner_id")

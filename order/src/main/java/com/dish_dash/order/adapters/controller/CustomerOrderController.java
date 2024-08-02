@@ -2,6 +2,7 @@ package com.dish_dash.order.adapters.controller;
 
 import com.dishDash.common.dto.OrderDto;
 import com.dishDash.common.dto.OrderItemCreateDto;
+import com.dishDash.common.dto.TransactionDto;
 import com.dishDash.common.feign.order.CustomerOrderAPi;
 import com.dish_dash.order.application.service.CustomerOrderService;
 import java.util.List;
@@ -16,14 +17,9 @@ public class CustomerOrderController implements CustomerOrderAPi {
   private final CustomerOrderService customerOrderService;
 
   @Override
-  public OrderDto createOrder(
-          Long customerId, Long restaurantOwnerId, List<OrderItemCreateDto> orderItemsDto) {
-    return customerOrderService.createOrder(customerId, restaurantOwnerId, orderItemsDto);
-  }
-
-  @Override
-  public OrderDto modifyOrder(Long customerId, Long orderId, List<OrderItemCreateDto> orderItems) {
-    return customerOrderService.modifyOrder(customerId, orderId, orderItems);
+  public TransactionDto createOrder(
+          Long customerId, Long restaurantOwnerId) {
+    return customerOrderService.createOrder(customerId, restaurantOwnerId);
   }
 
   @Override

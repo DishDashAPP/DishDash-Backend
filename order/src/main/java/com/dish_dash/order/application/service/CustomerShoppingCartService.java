@@ -31,10 +31,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomerShoppingCartService {
 
   private final ShoppingCartRepository shoppingCartRepository;
-  private final ShoppingCartItemRepository orderItemRepository;
   private final FoodApi foodApi;
+    private final ShoppingCartItemRepository shoppingCartItemRepository;
 
-  @Transactional
+    @Transactional
   public ShoppingCartDto createShoppingCart(
       long customerId, long restaurantOwnerId, List<ShoppingCartItemCreateDto> orderItemsDto) {
     AtomicReference<Double> totalPrice = new AtomicReference<>(0.0);
@@ -55,7 +55,6 @@ public class CustomerShoppingCartService {
                           .unit(food.getPrice().getUnit())
                           .build());
                   totalPrice.updateAndGet(v -> v + itemTotalPrice);
-
                   return orderItem;
                 })
             .collect(Collectors.toList());
@@ -76,7 +75,7 @@ public class CustomerShoppingCartService {
 
     orderItems.forEach(orderItem -> orderItem.setShoppingCart(savedShoppingCart));
 
-    orderItemRepository.saveAll(orderItems);
+    shoppingCartItemRepository.saveAll(orderItems);
 
     shoppingCart.setShoppingCartItems(orderItems);
     shoppingCartRepository.save(shoppingCart);

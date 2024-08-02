@@ -11,5 +11,7 @@ import java.util.Collection;
 
 @Repository
 public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long> {
+    Collection<ShoppingCart> findByCustomerIdAndRestaurantOwnerId(long customerID, long restaurantOwnerId);
+
     Collection<ShoppingCart> findByCustomerId(long customerID);
 }
