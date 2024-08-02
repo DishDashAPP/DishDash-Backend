@@ -20,10 +20,10 @@ public class FoodService {
   private final CategoryService categoryService;
   private final MenuRepository menuRepository;
 
-  public List<FoodViewDto> getAllFoods() {
-    return foodRepository.findAll().stream()
-            .map(ProductMapper.INSTANCE::foodToViewDto)
-            .collect(Collectors.toList());
+  public List<FoodViewDto> getAllFoods(long userId) {
+    return foodRepository.findByMenu_RestaurantId(userId).stream()
+        .map(ProductMapper.INSTANCE::foodToViewDto)
+        .collect(Collectors.toList());
   }
 
   public FoodViewDto getFoodById(long id) {
@@ -55,8 +55,11 @@ public class FoodService {
 
   @Transactional
   public FoodDto modifyFood(long id, FoodDto foodDto, Long userId) {
-    Food existingFood = foodRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Food item not found with the specified ID."));
+    Food existingFood =
+        foodRepository
+            .findById(id)
+            .orElseThrow(
+                () -> new IllegalArgumentException("Food item not found with the specified ID."));
 
     existingFood.setName(foodDto.getName());
     existingFood.setDescription(foodDto.getDescription());

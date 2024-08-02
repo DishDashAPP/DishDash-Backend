@@ -49,8 +49,7 @@ public class FoodServiceIntegrationTest {
     category = Category.builder().name("CATEGORY_NAME").build();
     category = categoryRepository.saveAndFlush(category);
 
-    menu = Menu.builder().restaurantId(1L).build();
-    menu = menuRepository.saveAndFlush(menu);
+    menu = menuRepository.saveAndFlush(Menu.builder().restaurantId(1L).build());
 
     foodDto =
         FoodDto.builder()
@@ -73,7 +72,7 @@ public class FoodServiceIntegrationTest {
             .build();
     foodRepository.saveAndFlush(food);
 
-    List<FoodViewDto> foods = foodService.getAllFoods();
+    List<FoodViewDto> foods = foodService.getAllFoods(menu.getRestaurantId());
 
     assertNotNull(foods, "Foods should not be null");
     assertEquals(1, foods.size(), "There should be exactly one food item");

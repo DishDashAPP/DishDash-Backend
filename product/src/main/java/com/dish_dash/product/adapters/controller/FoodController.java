@@ -16,31 +16,27 @@ public class FoodController implements FoodApi {
   private final FoodService foodService;
 
   @Override
-  @GetMapping
-  public List<FoodViewDto> getAllFoods() {
-    return foodService.getAllFoods();
+  public List<FoodViewDto> getAllFoods(long userId) {
+    return foodService.getAllFoods(userId);
   }
 
   @Override
-  @GetMapping("/{id}")
   public FoodViewDto getFoodById(@PathVariable long id) {
     return foodService.getFoodById(id);
   }
 
   @Override
-  @PostMapping
   public FoodDto createFood(@RequestParam Long userId, @RequestBody FoodDto foodDto) {
     return foodService.saveFood(foodDto, userId);
   }
 
   @Override
-  @PutMapping("/{id}")
-  public FoodDto modifyFood(@RequestParam Long userId, @PathVariable long id, @RequestBody FoodDto foodDto) {
+  public FoodDto modifyFood(
+      @RequestParam Long userId, @PathVariable long id, @RequestBody FoodDto foodDto) {
     return foodService.modifyFood(id, foodDto, userId);
   }
 
   @Override
-  @DeleteMapping("/{id}")
   public void deleteFood(@PathVariable long id) {
     foodService.deleteFood(id);
   }

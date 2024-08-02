@@ -16,9 +16,9 @@ public class FoodController {
   private final FoodApi foodApi;
 
   @GetMapping
-  @Authentication
-  public List<FoodViewDto> getAllFoods() {
-    return foodApi.getAllFoods();
+  @Authentication(userId = "#userId")
+  public List<FoodViewDto> getAllFoods(Long userId) {
+    return foodApi.getAllFoods(userId);
   }
 
   @GetMapping("/{id}")

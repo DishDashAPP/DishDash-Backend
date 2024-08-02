@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 public interface FoodApi {
 
   @GetMapping
-  List<FoodViewDto> getAllFoods();
+  List<FoodViewDto> getAllFoods(@RequestParam long userId);
 
   @GetMapping("/{id}")
   FoodViewDto getFoodById(@PathVariable long id);
@@ -19,7 +19,8 @@ public interface FoodApi {
   FoodDto createFood(@RequestParam Long userId, @RequestBody FoodDto foodDto);
 
   @PutMapping("/{id}")
-  FoodDto modifyFood(@RequestParam Long userId, @PathVariable long id, @RequestBody FoodDto foodDto);
+  FoodDto modifyFood(
+      @RequestParam Long userId, @PathVariable long id, @RequestBody FoodDto foodDto);
 
   @DeleteMapping("/{id}")
   void deleteFood(@PathVariable long id);
