@@ -16,6 +16,6 @@ public class MenuDto {
   private long restaurantId;
 
   private List<FoodDto> foods;
-  private List<CategoryCreationDto> categories;
+  private List<CategoryViewDto> categories;
   private long id;
 }
