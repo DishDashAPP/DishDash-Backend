@@ -36,7 +36,12 @@ public class MenuService {
       MenuDto menuDto = ProductMapper.INSTANCE.menuToDto(menuOptional.get());
       menuDto.setFoods(
           menuOptional.get().getFoodList().stream()
-              .map(ProductMapper.INSTANCE::foodToDto)
+              .map(
+                  food -> {
+                    var dto = ProductMapper.INSTANCE.foodToDto(food);
+                    dto.setCategoryId(food.getCategory().getId());
+                    return dto;
+                  })
               .toList());
       menuDto.setCategories(
           menuOptional.get().getCategories().stream()
