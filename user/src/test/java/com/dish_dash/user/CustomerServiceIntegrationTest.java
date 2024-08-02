@@ -1,43 +1,47 @@
 package com.dish_dash.user;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+
 import com.dishDash.common.dto.CustomerDto;
+import com.dishDash.common.feign.authentication.AuthenticationApi;
 import com.dish_dash.user.adapters.repository.CustomerRepository;
 import com.dish_dash.user.domain.model.Customer;
 import com.dish_dash.user.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest
 class CustomerServiceIntegrationTest {
 
-  @Autowired
-  private CustomerRepository customerRepository;
+  @Autowired private CustomerRepository customerRepository;
 
-  @Autowired
-  private CustomerService customerService;
+  @Autowired private CustomerService customerService;
+  @MockBean private AuthenticationApi authenticationApi;
 
   private CustomerDto customerDto;
 
   @BeforeEach
   void setUp() {
-    customerDto = CustomerDto.builder()
+    customerDto =
+        CustomerDto.builder()
             .id(1L)
             .firstName("FIRSTNAME")
             .lastName("LASTNAME")
             .address("ADDRESS")
+            .username("USERNAME")
             .phoneNumber("PHONE_NUMBER")
             .build();
   }
 
   @Test
   void modifyProfile_ShouldReturnTrue_WhenCustomerExists() {
-    Customer initialCustomer = Customer.builder()
+    Customer initialCustomer =
+        Customer.builder()
             .id(1L)
             .firstName("FIRSTNAME")
             .lastName("LASTNAME")
@@ -70,7 +74,8 @@ class CustomerServiceIntegrationTest {
 
   @Test
   void getCustomerAddress_ShouldReturnAddress_WhenCustomerExists() {
-    Customer customer = Customer.builder()
+    Customer customer =
+        Customer.builder()
             .id(1L)
             .firstName("FIRSTNAME")
             .lastName("LASTNAME")
@@ -86,7 +91,8 @@ class CustomerServiceIntegrationTest {
 
   @Test
   void getUserProfile_ShouldReturnCustomerDto_WhenCustomerExists() {
-    Customer customer = Customer.builder()
+    Customer customer =
+        Customer.builder()
             .id(1L)
             .firstName("FIRSTNAME")
             .lastName("LASTNAME")
@@ -94,6 +100,7 @@ class CustomerServiceIntegrationTest {
             .phoneNumber("PHONE_NUMBER")
             .build();
     customerRepository.save(customer);
+    Mockito.when(authenticationApi.getUsername(any())).thenReturn("USERNAME");
 
     CustomerDto result = customerService.getUserProfile(1L);
 
@@ -107,6 +114,7 @@ class CustomerServiceIntegrationTest {
 
   @Test
   void getUserProfile_ShouldReturnNull_WhenCustomerDoesNotExist() {
+    Mockito.when(authenticationApi.getUsername(any())).thenReturn("USERNAME");
     CustomerDto result = customerService.getUserProfile(2L);
 
     assertNull(result);

@@ -21,4 +21,7 @@ public class DeliveryPersonDto {
 
   @JsonProperty("phone_number")
   private String phoneNumber;
+
+  @JsonProperty("username")
+  private String username;
 }

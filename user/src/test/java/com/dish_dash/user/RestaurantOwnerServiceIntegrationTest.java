@@ -1,22 +1,29 @@
 package com.dish_dash.user;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+
 import com.dishDash.common.dto.RestaurantOwnerDto;
+import com.dishDash.common.feign.authentication.AuthenticationApi;
+import com.dishDash.common.feign.order.RateApi;
 import com.dish_dash.user.adapters.repository.RestaurantOwnerRepository;
 import com.dish_dash.user.domain.model.RestaurantOwner;
 import com.dish_dash.user.service.RestaurantOwnerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest
 public class RestaurantOwnerServiceIntegrationTest {
 
   @Autowired private RestaurantOwnerRepository restaurantOwnerRepository;
-
   @Autowired private RestaurantOwnerService restaurantOwnerService;
+  @MockBean private AuthenticationApi authenticationApi;
+  @MockBean private RateApi rateApi;
 
   private RestaurantOwnerDto restaurantOwnerDto;
 
@@ -29,6 +36,7 @@ public class RestaurantOwnerServiceIntegrationTest {
             .lastName("LASTNAME")
             .address("ADDRESS")
             .restaurantName("RESTAURANT_NAME")
+            .username("USERNAME")
             .phoneNumber("PHONE_NUMBER")
             .build();
   }
@@ -90,6 +98,8 @@ public class RestaurantOwnerServiceIntegrationTest {
             .build();
     restaurantOwnerRepository.save(owner);
 
+    Mockito.when(authenticationApi.getUsername(any())).thenReturn("USERNAME");
+    Mockito.when(rateApi.getRestaurantComments(anyLong())).thenReturn(null);
     RestaurantOwnerDto result = restaurantOwnerService.getUserProfile(1L);
 
     assertNotNull(result, "Profile should not be null");
@@ -104,6 +114,7 @@ public class RestaurantOwnerServiceIntegrationTest {
 
   @Test
   void getUserProfile_ShouldReturnNull_WhenOwnerDoesNotExist() {
+    Mockito.when(authenticationApi.getUsername(any())).thenReturn("USERNAME");
     RestaurantOwnerDto result = restaurantOwnerService.getUserProfile(2L);
 
     assertNull(result, "Profile should be null for non-existing owner");

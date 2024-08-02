@@ -22,5 +22,8 @@ public class CustomerDto {
   @JsonProperty("phone_number")
   private String phoneNumber;
 
+  @JsonProperty("username")
+  private String username;
+
   private String address;
 }

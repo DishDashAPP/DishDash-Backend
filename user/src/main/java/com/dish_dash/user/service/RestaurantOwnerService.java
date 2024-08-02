@@ -1,12 +1,14 @@
 package com.dish_dash.user.service;
 
 import com.dishDash.common.dto.RestaurantOwnerDto;
+import com.dishDash.common.feign.authentication.AuthenticationApi;
 import com.dishDash.common.feign.order.RateApi;
 import com.dish_dash.user.adapters.repository.RestaurantOwnerRepository;
 import com.dish_dash.user.domain.mapper.UserMapper;
 import com.dish_dash.user.domain.model.RestaurantOwner;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ public class RestaurantOwnerService {
 
   private final RestaurantOwnerRepository restaurantOwnerRepository;
   private final RateApi rateApi;
+  private final AuthenticationApi authenticationApi;
 
   public Boolean modifyProfile(long id, RestaurantOwnerDto restaurantOwnerDto) {
     return restaurantOwnerRepository
@@ -48,10 +51,17 @@ public class RestaurantOwnerService {
   }
 
   public RestaurantOwnerDto getUserProfile(long restaurantOwnerId) {
-    return restaurantOwnerRepository
-        .findById(restaurantOwnerId)
-        .map(UserMapper.INSTANCE::restaurantOwnerToDto)
-        .orElse(null);
+    String username = authenticationApi.getUsername(restaurantOwnerId);
+    Optional<RestaurantOwner> restaurantOwnerOptional =
+        restaurantOwnerRepository.findById(restaurantOwnerId);
+    if (restaurantOwnerOptional.isPresent()) {
+      RestaurantOwnerDto restaurantOwnerDto =
+          UserMapper.INSTANCE.restaurantOwnerToDto(restaurantOwnerOptional.get());
+      restaurantOwnerDto.setUsername(username);
+      restaurantOwnerDto.setRestaurantComments(rateApi.getRestaurantComments(restaurantOwnerId));
+      return restaurantOwnerDto;
+    }
+    return null;
   }
 
   public List<RestaurantOwnerDto> getAllRestaurant() {

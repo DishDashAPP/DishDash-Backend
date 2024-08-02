@@ -17,6 +17,9 @@ public interface AuthenticationApi {
   @GetMapping("auth/validate")
   AuthDto validate(@RequestParam String token);
 
+  @GetMapping("auth/info")
+  String getUsername(@RequestParam Long userId);
+
   @PostMapping("auth/logout")
   void logout(@RequestParam String token);
 

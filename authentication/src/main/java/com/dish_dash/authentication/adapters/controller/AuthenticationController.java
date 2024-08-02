@@ -25,6 +25,11 @@ public class AuthenticationController implements AuthenticationApi {
   }
 
   @Override
+  public String getUsername(Long userId) {
+    return authService.getUsername(userId);
+  }
+
+  @Override
   public void logout(String token) {
     authService.invalidateToken(token);
   }

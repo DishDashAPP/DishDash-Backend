@@ -1,6 +1,7 @@
 package com.dish_dash.gateway.adapters;
 
 import com.dishDash.common.dto.CustomerDto;
+import com.dishDash.common.dto.RestaurantOwnerDto;
 import com.dishDash.common.feign.user.UserApi;
 import com.dish_dash.gateway.annotation.Authentication;
 import lombok.RequiredArgsConstructor;
@@ -22,5 +23,11 @@ public class CustomerController {
   @Authentication(userId = "#userId")
   public CustomerDto getUserProfile(Long userId) {
     return userApi.getCustomerProfile(userId);
+  }
+
+  @GetMapping("/restaurant")
+  @Authentication
+  public RestaurantOwnerDto getRestaurantProfile(@RequestParam Long restaurantId) {
+    return userApi.getRestaurantOwnerProfile(restaurantId);
   }
 }

@@ -1,8 +1,12 @@
 package com.dish_dash.user;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+
 import com.dishDash.common.dto.DeliveryPersonDto;
 import com.dishDash.common.dto.LocationDto;
 import com.dishDash.common.enums.DeliveryPersonStatus;
+import com.dishDash.common.feign.authentication.AuthenticationApi;
 import com.dish_dash.user.adapters.repository.DeliveryPersonRepository;
 import com.dish_dash.user.adapters.repository.LocationRepository;
 import com.dish_dash.user.domain.model.DeliveryPerson;
@@ -10,18 +14,17 @@ import com.dish_dash.user.domain.model.Location;
 import com.dish_dash.user.service.DeliveryPersonService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest
 public class DeliveryPersonServiceIntegrationTest {
   @Autowired private DeliveryPersonRepository deliveryPersonRepository;
-
   @Autowired private LocationRepository locationRepository;
-
   @Autowired private DeliveryPersonService deliveryPersonService;
+  @MockBean private AuthenticationApi authenticationApi;
 
   private DeliveryPersonDto deliveryPersonDto;
   private LocationDto locationDto;
@@ -33,6 +36,7 @@ public class DeliveryPersonServiceIntegrationTest {
             .id(1L)
             .firstName("FIRSTNAME")
             .lastName("LASTNAME")
+            .username("USERNAME")
             .phoneNumber("PHONE_NUMBER")
             .build();
 
@@ -83,6 +87,7 @@ public class DeliveryPersonServiceIntegrationTest {
             .build();
     deliveryPersonRepository.save(deliveryPerson);
 
+    Mockito.when(authenticationApi.getUsername(any())).thenReturn("USERNAME");
     DeliveryPersonDto result = deliveryPersonService.getUserProfile(1L);
 
     assertNotNull(result);
