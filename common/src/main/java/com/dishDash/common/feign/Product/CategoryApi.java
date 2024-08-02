@@ -18,7 +18,7 @@ public interface CategoryApi {
   CategoryViewDto getCategoryById(@PathVariable long id);
 
   @PostMapping()
-  CategoryCreationDto createCategory(@RequestBody CategoryCreationDto categoryDto);
+  CategoryCreationDto createCategory(@RequestParam long userId, @RequestBody CategoryCreationDto categoryDto);
 
   @DeleteMapping("/{id}")
   void deleteCategory(@PathVariable long id);

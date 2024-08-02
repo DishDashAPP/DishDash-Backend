@@ -66,7 +66,7 @@ public class CategoryServiceIntegrationTest {
 
   @Test
   void saveCategory_ShouldSaveAndReturnCategoryCreationDto() {
-    CategoryCreationDto savedCategoryDto = categoryService.saveCategory(categoryCreationDto);
+    CategoryCreationDto savedCategoryDto = categoryService.saveCategory(categoryCreationDto, userId);
 
     assertNotNull(savedCategoryDto, "Saved category should not be null");
     assertEquals(
