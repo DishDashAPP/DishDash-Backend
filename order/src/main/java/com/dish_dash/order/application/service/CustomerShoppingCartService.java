@@ -27,30 +27,7 @@ public class CustomerShoppingCartService {
   private final FoodApi foodApi;
 
   @Transactional
-  public ShoppingCartDto createShoppingCart(
-      long customerId, long restaurantOwnerId, List<ShoppingCartItemCreateDto> orderItemsDto) {
-    //    List<ShoppingCartItem> orderItems =
-    //        orderItemsDto.stream()
-    //            .map(
-    //                dto -> {
-    //                  ShoppingCartItem orderItem =
-    //
-    // ShoppingCartMapper.INSTANCE.shoppingCartItemCreationDtoToShoppingCartItem(
-    //                          dto);
-    //
-    //                  FoodViewDto food = foodApi.getFoodById(dto.getFoodId());
-    //
-    //                  double itemTotalPrice = food.getPrice().getAmount() * dto.getQuantity();
-    //                  orderItem.setPrice(
-    //                      Price.builder()
-    //                          .amount(itemTotalPrice)
-    //                          .unit(food.getPrice().getUnit())
-    //                          .build());
-    //                  totalPrice.updateAndGet(v -> v + itemTotalPrice);
-    //                  return orderItem;
-    //                })
-    //            .collect(Collectors.toList());
-
+  public ShoppingCartDto createShoppingCart(long customerId, long restaurantOwnerId) {
     ShoppingCart shoppingCart =
         shoppingCartRepository.save(
             ShoppingCart.builder()

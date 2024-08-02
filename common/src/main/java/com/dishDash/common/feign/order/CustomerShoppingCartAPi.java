@@ -1,9 +1,8 @@
 package com.dishDash.common.feign.order;
 
-import java.util.List;
-
 import com.dishDash.common.dto.ShoppingCartDto;
 import com.dishDash.common.dto.ShoppingCartItemCreateDto;
+import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,8 +11,7 @@ public interface CustomerShoppingCartAPi {
   @PostMapping("/createShoppingCart")
   ShoppingCartDto createShoppingCart(
       @RequestParam Long customerId,
-      @RequestParam Long restaurantOwnerId,
-      @RequestBody List<ShoppingCartItemCreateDto> shoppingCartItemsCreateDto);
+      @RequestParam Long restaurantOwnerId);
 
   @PostMapping("/modifyShoppingCart")
   ShoppingCartDto modifyOrder(

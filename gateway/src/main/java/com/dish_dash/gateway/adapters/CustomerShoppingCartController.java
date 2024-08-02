@@ -16,17 +16,16 @@ public class CustomerShoppingCartController {
 
   @PostMapping
   @Authentication(userId = "#userId")
-  public ShoppingCartDto createShoppingCart(
-      Long userId,
-      @RequestParam Long restaurantOwnerId,
-      @RequestBody List<ShoppingCartItemCreateDto> orderItemsDto) {
-    return customerShoppingCartAPi.createShoppingCart(userId, restaurantOwnerId, orderItemsDto);
+  public ShoppingCartDto createShoppingCart(Long userId, @RequestParam Long restaurantOwnerId) {
+    return customerShoppingCartAPi.createShoppingCart(userId, restaurantOwnerId);
   }
 
   @PostMapping("/modifyShoppingCart")
   @Authentication(userId = "#userId")
   ShoppingCartDto modifyShoppingCart(
-      Long userId, @RequestParam Long orderId, @RequestBody List<ShoppingCartItemCreateDto> orderItems) {
+      Long userId,
+      @RequestParam Long orderId,
+      @RequestBody List<ShoppingCartItemCreateDto> orderItems) {
     return customerShoppingCartAPi.modifyOrder(userId, orderId, orderItems);
   }
 
