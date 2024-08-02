@@ -29,7 +29,7 @@ public class MenuService {
 
   @Transactional(readOnly = true)
   public MenuDto getMenuById(long id) {
-    Optional<Menu> menuOptional = menuRepository.findById(id);
+    Optional<Menu> menuOptional = menuRepository.findByRestaurantId(id);
     if (menuOptional.isPresent()) {
       MenuDto menuDto = ProductMapper.INSTANCE.menuToDto(menuOptional.get());
       menuDto.setFoods(

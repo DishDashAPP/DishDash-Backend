@@ -68,10 +68,12 @@ public class RestaurantOwnerService {
     List<RestaurantOwnerDto> response = new ArrayList<>();
     List<RestaurantOwner> restaurantOwners = restaurantOwnerRepository.findAll();
     for (RestaurantOwner restaurantOwner : restaurantOwners) {
+      String username = authenticationApi.getUsername(restaurantOwner.getId());
       RestaurantOwnerDto restaurantOwnerDto =
           UserMapper.INSTANCE.restaurantOwnerToDto(restaurantOwner);
       restaurantOwnerDto.setRestaurantComments(
           rateApi.getRestaurantComments(restaurantOwner.getId()));
+      restaurantOwnerDto.setUsername(username);
       response.add(restaurantOwnerDto);
     }
     return response;
