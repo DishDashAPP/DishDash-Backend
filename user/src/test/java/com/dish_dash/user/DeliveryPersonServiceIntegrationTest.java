@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import com.dishDash.common.dto.DeliveryPersonDto;
 import com.dishDash.common.dto.LocationDto;
 import com.dishDash.common.enums.DeliveryPersonStatus;
+import com.dishDash.common.exception.CustomException;
 import com.dishDash.common.feign.authentication.AuthenticationApi;
 import com.dish_dash.user.adapters.repository.DeliveryPersonRepository;
 import com.dish_dash.user.adapters.repository.LocationRepository;
@@ -21,9 +22,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest
 public class DeliveryPersonServiceIntegrationTest {
+
   @Autowired private DeliveryPersonRepository deliveryPersonRepository;
+
   @Autowired private LocationRepository locationRepository;
+
   @Autowired private DeliveryPersonService deliveryPersonService;
+
   @MockBean private AuthenticationApi authenticationApi;
 
   private DeliveryPersonDto deliveryPersonDto;
@@ -31,6 +36,9 @@ public class DeliveryPersonServiceIntegrationTest {
 
   @BeforeEach
   void setUp() {
+    deliveryPersonRepository.deleteAll();
+    locationRepository.deleteAll();
+
     deliveryPersonDto =
         DeliveryPersonDto.builder()
             .id(1L)
@@ -67,6 +75,19 @@ public class DeliveryPersonServiceIntegrationTest {
   }
 
   @Test
+  void modifyProfile_ShouldReturnFalse_WhenDeliveryPersonDoesNotExist() {
+    boolean result = deliveryPersonService.modifyProfile(2L, deliveryPersonDto);
+
+    DeliveryPerson newDeliveryPerson = deliveryPersonRepository.findById(2L).orElse(null);
+
+    assertTrue(result);
+    assertNotNull(newDeliveryPerson);
+    assertEquals("FIRSTNAME", newDeliveryPerson.getFirstName());
+    assertEquals("LASTNAME", newDeliveryPerson.getLastName());
+    assertEquals("PHONE_NUMBER", newDeliveryPerson.getPhoneNumber());
+  }
+
+  @Test
   void createDeliveryPerson_ShouldSaveDeliveryPerson() {
     deliveryPersonService.createDeliveryPerson(deliveryPersonDto);
 
@@ -74,6 +95,9 @@ public class DeliveryPersonServiceIntegrationTest {
 
     assertNotNull(savedDeliveryPerson);
     assertEquals(deliveryPersonDto.getId(), savedDeliveryPerson.getId());
+    assertEquals(deliveryPersonDto.getFirstName(), savedDeliveryPerson.getFirstName());
+    assertEquals(deliveryPersonDto.getLastName(), savedDeliveryPerson.getLastName());
+    assertEquals(deliveryPersonDto.getPhoneNumber(), savedDeliveryPerson.getPhoneNumber());
   }
 
   @Test
@@ -95,6 +119,17 @@ public class DeliveryPersonServiceIntegrationTest {
     assertEquals(deliveryPerson.getFirstName(), result.getFirstName());
     assertEquals(deliveryPerson.getLastName(), result.getLastName());
     assertEquals(deliveryPerson.getPhoneNumber(), result.getPhoneNumber());
+    assertEquals("USERNAME", result.getUsername());
+  }
+
+  @Test
+  void getUserProfile_ShouldThrowCustomException_WhenDeliveryPersonDoesNotExist() {
+    Mockito.when(authenticationApi.getUsername(any())).thenReturn("USERNAME");
+
+    Exception exception =
+        assertThrows(CustomException.class, () -> deliveryPersonService.getUserProfile(2L));
+
+    assertEquals("Delivery person not found", exception.getMessage());
   }
 
   @Test
@@ -106,6 +141,15 @@ public class DeliveryPersonServiceIntegrationTest {
     DeliveryPersonStatus status = deliveryPersonService.getDeliveryPersonStatus(1L);
 
     assertEquals(DeliveryPersonStatus.ACTIVE, status);
+  }
+
+  @Test
+  void getDeliveryPersonStatus_ShouldThrowCustomException_WhenDeliveryPersonDoesNotExist() {
+    Exception exception =
+        assertThrows(
+            CustomException.class, () -> deliveryPersonService.getDeliveryPersonStatus(2L));
+
+    assertEquals("Delivery person not found", exception.getMessage());
   }
 
   @Test
@@ -122,6 +166,15 @@ public class DeliveryPersonServiceIntegrationTest {
     assertNotNull(location);
     assertEquals(locationDto.getLatitude(), location.getLatitude());
     assertEquals(locationDto.getLongitude(), location.getLongitude());
+  }
+
+  @Test
+  void setLocation_ShouldThrowCustomException_WhenDeliveryPersonDoesNotExist() {
+    Exception exception =
+        assertThrows(
+            CustomException.class, () -> deliveryPersonService.setLocation(locationDto, 2L));
+
+    assertEquals("Delivery person not found", exception.getMessage());
   }
 
   @Test
@@ -142,10 +195,11 @@ public class DeliveryPersonServiceIntegrationTest {
   }
 
   @Test
-  void getLocation_ShouldReturnNull_WhenDeliveryPersonDoesNotExist() {
-    LocationDto result = deliveryPersonService.getLocation(2L);
+  void getLocation_ShouldThrowCustomException_WhenLocationDoesNotExist() {
+    Exception exception =
+        assertThrows(CustomException.class, () -> deliveryPersonService.getLocation(2L));
 
-    assertNull(result);
+    assertEquals("Location not found", exception.getMessage());
   }
 
   @Test
@@ -165,5 +219,15 @@ public class DeliveryPersonServiceIntegrationTest {
     assertEquals(1L, assignedDeliveryPersonId);
     assertEquals(orderId, updatedDeliveryPerson.getCurrentOrderId());
     assertEquals(DeliveryPersonStatus.BUSY, updatedDeliveryPerson.getStatus());
+  }
+
+  @Test
+  void setActiveOrder_ShouldThrowCustomException_WhenNoActiveDeliveryPersonIsAvailable() {
+    long orderId = 100L;
+
+    Exception exception =
+        assertThrows(CustomException.class, () -> deliveryPersonService.setActiveOrder(orderId));
+
+    assertEquals("No active delivery person available", exception.getMessage());
   }
 }
