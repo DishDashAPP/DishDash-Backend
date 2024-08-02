@@ -17,7 +17,7 @@ public class ExceptionHandlerAdvice {
         "Custom Exception. responding with error code: {}, exception_message: {}",
         ex.getErrorCode().getErrorCodeValue(),
         ex.getMessage());
-    return new ResponseEntity<>(
+      return new ResponseEntity<>(
         ex.getMessage(), HttpStatus.resolve(ex.getErrorCode().getErrorCodeValue()));
   }
 }

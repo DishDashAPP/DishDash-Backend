@@ -18,6 +18,8 @@ public class OrderItemDto {
   @JsonProperty("food_id")
   private long foodId;
 
+  private String name;
+
   private Price price;
   private Integer quantity;
 }
