@@ -10,7 +10,6 @@ import com.dish_dash.product.domain.model.Menu;
 import com.dish_dash.product.infrastructure.repository.CategoryRepository;
 import com.dish_dash.product.infrastructure.repository.MenuRepository;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,7 @@ public class CategoryService {
   public List<CategoryViewDto> getAllCategories(long userId) {
     log.info("Retrieving all categories for restaurant ID: {}", userId);
     return categoryRepository.findAllByMenu_RestaurantId(userId).stream()
-        .map(ProductMapper.INSTANCE::categoryToViewDto).collect(Collectors.toList());
+        .map(ProductMapper.INSTANCE::categoryToViewDto).toList();
   }
 
   public CategoryViewDto getCategoryById(long id) {
