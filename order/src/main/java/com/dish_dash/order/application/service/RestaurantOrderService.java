@@ -25,7 +25,7 @@ public class RestaurantOrderService {
   private final FoodApi foodApi;
 
   public boolean updateOrderStatusByRestaurantOwner(
-      Long restaurantOwnerId, long orderId, OrderStatus status) {
+      Long restaurantOwnerId, Long orderId, OrderStatus status) {
     Optional<Order> orderOptional = orderRepository.findById(orderId);
     if (orderOptional.isPresent()) {
       if (orderOptional.get().getRestaurantOwnerId() != restaurantOwnerId)

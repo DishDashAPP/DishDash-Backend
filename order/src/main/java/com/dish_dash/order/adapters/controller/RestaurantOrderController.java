@@ -16,7 +16,7 @@ public class RestaurantOrderController implements RestaurantOwnerOrderApi {
 
   @Override
   public boolean updateOrderStatusByRestaurantOwner(
-      Long restaurantOwnerId, long orderID, OrderStatus orderStatus) {
+      Long restaurantOwnerId, Long orderID, OrderStatus orderStatus) {
     return restaurantOrderService.updateOrderStatusByRestaurantOwner(
         restaurantOwnerId, orderID, orderStatus);
   }

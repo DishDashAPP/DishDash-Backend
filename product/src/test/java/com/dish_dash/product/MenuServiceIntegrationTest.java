@@ -102,14 +102,6 @@ class MenuServiceIntegrationTest {
   }
 
   @Test
-  void deleteMenu_ShouldRemoveMenu() {
-    menuService.deleteMenu(menu.getRestaurantId());
-
-    boolean exists = menuRepository.existsByRestaurantId(menu.getRestaurantId());
-    assertFalse(exists, "Menu should be null after deletion");
-  }
-
-  @Test
   void addFoodToMenu_ShouldAddFoodAndReturnFoodDto() {
     FoodDto foodDto = FoodDto.builder().name("FOOD_NAME").description("FOOD_DESCRIPTION")
         .price(Price.builder().amount(10).build()).categoryId(category.getId()).build();

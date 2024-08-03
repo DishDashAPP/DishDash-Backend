@@ -3,6 +3,7 @@ package com.dish_dash.order.application.service;
 import com.dishDash.common.Price;
 import com.dishDash.common.dto.FoodViewDto;
 import com.dishDash.common.dto.OrderDto;
+import com.dishDash.common.dto.ShoppingCartDto;
 import com.dishDash.common.dto.TransactionDto;
 import com.dishDash.common.enums.ErrorCode;
 import com.dishDash.common.enums.OrderStatus;
@@ -10,7 +11,9 @@ import com.dishDash.common.exception.CustomException;
 import com.dishDash.common.exception.MoreThanOneOrderException;
 import com.dishDash.common.feign.Product.FoodApi;
 import com.dishDash.common.feign.payment.PaymentApi;
+import com.dishDash.common.feign.user.UserApi;
 import com.dish_dash.order.domain.mapper.OrderMapper;
+import com.dish_dash.order.domain.mapper.ShoppingCartMapper;
 import com.dish_dash.order.domain.model.*;
 import com.dish_dash.order.domain.repository.OrderItemRepository;
 import com.dish_dash.order.domain.repository.OrderRepository;
@@ -34,6 +37,7 @@ public class CustomerOrderService {
   private final OrderItemRepository orderItemRepository;
   private final FoodApi foodApi;
   private final PaymentApi paymentApi;
+  private final UserApi userApi;
 
   @Transactional
   public TransactionDto createOrder(long customerId, long restaurantOwnerId) {
@@ -145,11 +149,27 @@ public class CustomerOrderService {
   public OrderDto getCustomerCurrentOrder(long customerId) {
     return orderRepository
         .findByCustomerIdAndStatusNot(customerId, OrderStatus.DELIVERED)
-        .filter(
-            order ->
-                order.getStatus() == OrderStatus.PREPARING
-                    || order.getStatus() == OrderStatus.DELIVERING)
-        .map(OrderMapper.INSTANCE::orderToDto)
+        .map(
+            order -> {
+              OrderDto orderDto =
+                  OrderMapper.INSTANCE.orderToDto(order);
+
+                orderDto.setOrderItems(
+                        orderDto.getOrderItems().stream()
+                      .peek(
+                          item -> {
+                            FoodViewDto foodDto = foodApi.getFoodById(item.getFoodId());
+                            item.setName(foodDto.getName());
+                            item.setDescription(foodDto.getDescription());
+                          })
+                      .collect(Collectors.toList()));
+                if (order.getDeliveryPersonId() != 0)
+                {
+                    orderDto.setDeliveryPersonDto(userApi.getDeliveryPersonProfile(order.getDeliveryPersonId()));
+                }
+
+              return orderDto;
+            })
         .orElse(null);
   }
 }

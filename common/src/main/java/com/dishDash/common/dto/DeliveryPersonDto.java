@@ -21,4 +21,10 @@ public class DeliveryPersonDto {
 
   @JsonProperty("username")
   private String username;
+
+  @JsonProperty("location")
+  private LocationDto location;
+
+  @JsonProperty("rate")
+  private RateDto rate;
 }
