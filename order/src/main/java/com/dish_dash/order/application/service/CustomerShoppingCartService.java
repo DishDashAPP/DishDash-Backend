@@ -17,6 +17,8 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CustomerShoppingCartService {
 
+  private static final Logger log = LoggerFactory.getLogger(CustomerShoppingCartService.class);
   private final ShoppingCartRepository shoppingCartRepository;
   private final FoodApi foodApi;
 
@@ -82,15 +85,19 @@ public class CustomerShoppingCartService {
           Price.builder().amount(totalPrice.get()).unit(CurrencyUnit.TOMAN).build());
       ShoppingCartDto shoppingCartDto =
           ShoppingCartMapper.INSTANCE.shoppingCartToDto(shoppingCartRepository.save(shoppingCart));
+      log.info("Shopping cart updated. {}", shoppingCartDto);
       shoppingCartDto.setShoppingCartItems(
           shoppingCartDto.getShoppingCartItems().stream()
               .peek(
                   item -> {
                     FoodViewDto foodDto = foodApi.getFoodById(item.getFoodId());
+                    log.info(
+                        "Shopping cart item updated. item: {}, food: {}", item, foodDto.getName());
                     item.setName(foodDto.getName());
                     item.setDescription(foodDto.getDescription());
                   })
               .collect(Collectors.toList()));
+      log.info("Shopping cart Add name. {}", shoppingCartDto);
       return shoppingCartDto;
     }
     return null;
