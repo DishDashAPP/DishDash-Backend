@@ -8,6 +8,7 @@ import com.dishDash.common.enums.CurrencyUnit;
 import com.dishDash.common.enums.ErrorCode;
 import com.dishDash.common.exception.CustomException;
 import com.dishDash.common.feign.Product.FoodApi;
+import com.dishDash.common.feign.user.UserApi;
 import com.dish_dash.order.domain.mapper.ShoppingCartMapper;
 import com.dish_dash.order.domain.model.ShoppingCart;
 import com.dish_dash.order.domain.model.ShoppingCartItem;
@@ -17,18 +18,18 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CustomerShoppingCartService {
-
-  private static final Logger log = LoggerFactory.getLogger(CustomerShoppingCartService.class);
   private final ShoppingCartRepository shoppingCartRepository;
   private final FoodApi foodApi;
+  private final UserApi userApi;
+  private final RateService rateService;
 
   public ShoppingCartDto createShoppingCart(long customerId, long restaurantOwnerId) {
     Optional<ShoppingCart> shoppingCartOptional =
@@ -45,7 +46,12 @@ public class CustomerShoppingCartService {
                 .totalPrice(Price.builder().build())
                 .build());
 
-    return ShoppingCartMapper.INSTANCE.shoppingCartToDto(shoppingCart);
+    ShoppingCartDto shoppingCartDto = ShoppingCartMapper.INSTANCE.shoppingCartToDto(shoppingCart);
+    shoppingCartDto.setRestaurantOwner(
+        userApi.getRestaurantOwnerProfile(shoppingCartDto.getRestaurantOwnerId()));
+    shoppingCartDto.setRestaurantComments(
+        rateService.getRestaurantComments(shoppingCartDto.getRestaurantOwnerId()));
+    return shoppingCartDto;
   }
 
   @Transactional
@@ -96,6 +102,10 @@ public class CustomerShoppingCartService {
                 item.setDescription(foodDto.getDescription());
               }));
       log.info("Shopping cart Add name. {}", shoppingCartDto);
+      shoppingCartDto.setRestaurantOwner(
+          userApi.getRestaurantOwnerProfile(shoppingCartDto.getRestaurantOwnerId()));
+      shoppingCartDto.setRestaurantComments(
+          rateService.getRestaurantComments(shoppingCartDto.getRestaurantOwnerId()));
       return shoppingCartDto;
     }
     return null;
@@ -117,7 +127,10 @@ public class CustomerShoppingCartService {
                             item.setDescription(foodDto.getDescription());
                           })
                       .collect(Collectors.toList()));
-
+              shoppingCartDto.setRestaurantOwner(
+                  userApi.getRestaurantOwnerProfile(shoppingCartDto.getRestaurantOwnerId()));
+              shoppingCartDto.setRestaurantComments(
+                  rateService.getRestaurantComments(shoppingCartDto.getRestaurantOwnerId()));
               return shoppingCartDto;
             })
         .collect(Collectors.toList());
