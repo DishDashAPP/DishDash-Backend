@@ -1,7 +1,9 @@
 package com.dish_dash.gateway.adapters;
 
 import com.dishDash.common.dto.CustomerDto;
+import com.dishDash.common.dto.FoodViewDto;
 import com.dishDash.common.dto.RestaurantOwnerDto;
+import com.dishDash.common.feign.Product.FoodApi;
 import com.dishDash.common.feign.user.UserApi;
 import com.dish_dash.gateway.annotation.Authentication;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CustomerController {
   private final UserApi userApi;
+  private final FoodApi foodApi;
 
   @PutMapping
   @Authentication(userId = "#userId")
@@ -29,5 +32,11 @@ public class CustomerController {
   @Authentication
   public RestaurantOwnerDto getRestaurantProfile(@RequestParam Long restaurantId) {
     return userApi.getRestaurantOwnerProfile(restaurantId);
+  }
+
+  @GetMapping("/food/{id}")
+  @Authentication
+  public FoodViewDto getFoodById(@PathVariable long id) {
+    return foodApi.getFoodById(id);
   }
 }
