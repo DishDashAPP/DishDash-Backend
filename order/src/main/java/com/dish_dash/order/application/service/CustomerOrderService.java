@@ -99,6 +99,7 @@ public class CustomerOrderService {
 
     TransactionDto transactionDto =
         paymentApi.createOrderTransaction(shoppingCart.getId(), totalPrice.get());
+    transactionDto.setOrderId(order.getId());
 
     shoppingCartItemRepository.deleteAll(shoppingCartItems);
     shoppingCartRepository.delete(shoppingCart);
