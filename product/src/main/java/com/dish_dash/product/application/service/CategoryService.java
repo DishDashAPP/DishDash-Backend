@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 @Service
 @RequiredArgsConstructor
@@ -26,33 +27,25 @@ public class CategoryService {
   public List<CategoryViewDto> getAllCategories(long userId) {
     log.info("Retrieving all categories for restaurant ID: {}", userId);
     return categoryRepository.findAllByMenu_RestaurantId(userId).stream()
-        .map(ProductMapper.INSTANCE::categoryToViewDto)
-        .collect(Collectors.toList());
+        .map(ProductMapper.INSTANCE::categoryToViewDto).collect(Collectors.toList());
   }
 
   public CategoryViewDto getCategoryById(long id) {
     log.info("Retrieving category by ID: {}", id);
-    return categoryRepository
-        .findById(id)
-        .map(ProductMapper.INSTANCE::categoryToViewDto)
-        .orElseThrow(
-            () -> {
-              log.error("getCategoryById. Category ID: {} not found", id);
-              return new CustomException(ErrorCode.NOT_FOUND, "Category not found");
-            });
+    return categoryRepository.findById(id).map(ProductMapper.INSTANCE::categoryToViewDto)
+        .orElseThrow(() -> {
+          log.error("Category with ID: {} not found", id);
+          return new CustomException(ErrorCode.NOT_FOUND, "Category not found for ID: " + id);
+        });
   }
 
   public CategoryCreationDto saveCategory(CategoryCreationDto categoryCreationDto, long userId) {
     log.info("Saving category for restaurant ID: {}", userId);
-    Menu menu = menuRepository.findByRestaurantId(userId).orElseGet(() -> {
-      log.warn("No existing menu found for user ID: {}. Creating new menu.", userId);
-      Menu newMenu = new Menu();
-      newMenu.setRestaurantId(userId);
-      menuRepository.save(newMenu);
-      log.info("New menu created with ID: {}", newMenu.getId());
 
-      return newMenu;
-    });
+    Assert.notNull(categoryCreationDto, "Category creation DTO must not be null");
+    Assert.hasText(categoryCreationDto.getName(), "Category name must not be empty");
+
+    Menu menu = menuRepository.findByRestaurantId(userId).orElseGet(() -> createNewMenu(userId));
 
     Category category = ProductMapper.INSTANCE.dtoToCategory(categoryCreationDto);
     category.setMenu(menu);
@@ -64,20 +57,31 @@ public class CategoryService {
 
   public void deleteCategory(long id) {
     log.info("Deleting category with ID: {}", id);
+
     if (!categoryRepository.existsById(id)) {
       log.error("Attempt to delete non-existing category with ID: {}", id);
-      throw new CustomException(ErrorCode.NOT_FOUND, "Category not found");
+      throw new CustomException(ErrorCode.NOT_FOUND, "Category not found for ID: " + id);
     }
+
     categoryRepository.deleteById(id);
     log.info("Category with ID: {} deleted successfully", id);
   }
 
   public Category getReferenceCategory(long id) {
     log.info("Getting reference to category by ID: {}", id);
-    if (!categoryRepository.existsById(id)) {
+
+    return categoryRepository.findById(id).orElseThrow(() -> {
       log.error("Reference category ID: {} not found", id);
-      throw new CustomException(ErrorCode.NOT_FOUND, "Category not found");
-    }
-    return categoryRepository.getReferenceById(id);
+      return new CustomException(ErrorCode.NOT_FOUND, "Category not found for ID: " + id);
+    });
+  }
+
+  private Menu createNewMenu(long userId) {
+    log.warn("No existing menu found for user ID: {}. Creating new menu.", userId);
+    Menu newMenu = new Menu();
+    newMenu.setRestaurantId(userId);
+    menuRepository.save(newMenu);
+    log.info("New menu created with ID: {}", newMenu.getId());
+    return newMenu;
   }
 }
