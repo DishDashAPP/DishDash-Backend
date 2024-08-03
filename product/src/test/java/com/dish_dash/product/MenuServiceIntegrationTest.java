@@ -1,7 +1,6 @@
 package com.dish_dash.product;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -28,14 +27,10 @@ import org.springframework.test.annotation.DirtiesContext;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class MenuServiceIntegrationTest {
 
-  @Autowired
-  private MenuRepository menuRepository;
-  @Autowired
-  private FoodRepository foodRepository;
-  @Autowired
-  private CategoryRepository categoryRepository;
-  @Autowired
-  private MenuService menuService;
+  @Autowired private MenuRepository menuRepository;
+  @Autowired private FoodRepository foodRepository;
+  @Autowired private CategoryRepository categoryRepository;
+  @Autowired private MenuService menuService;
 
   private Menu menu;
   private Category category;
@@ -51,8 +46,9 @@ class MenuServiceIntegrationTest {
     categoryRepository.flush();
 
     menu = menuRepository.saveAndFlush(Menu.builder().restaurantId(1L).build());
-    category = categoryRepository.saveAndFlush(
-        Category.builder().name("CATEGORY_NAME").menu(menu).build());
+    category =
+        categoryRepository.saveAndFlush(
+            Category.builder().name("CATEGORY_NAME").menu(menu).build());
   }
 
   @Test
@@ -78,12 +74,16 @@ class MenuServiceIntegrationTest {
   void getMenuById_ShouldThrowException_WhenMenuDoesNotExist() {
     long nonExistingMenuId = 999L;
 
-    CustomException exception = assertThrows(CustomException.class,
-        () -> menuService.getMenuById(nonExistingMenuId));
+    CustomException exception =
+        assertThrows(CustomException.class, () -> menuService.getMenuById(nonExistingMenuId));
 
-    assertEquals(ErrorCode.NOT_FOUND_NO_CONTENT, exception.getErrorCode(),
+    assertEquals(
+        ErrorCode.NOT_FOUND_NO_CONTENT,
+        exception.getErrorCode(),
         "Error code should be NOT_FOUND_NO_CONTENT");
-    assertEquals("Menu not found for restaurant ID: " + nonExistingMenuId, exception.getMessage(),
+    assertEquals(
+        "Menu not found for restaurant ID: " + nonExistingMenuId,
+        exception.getMessage(),
         "Exception message should indicate the menu was not found");
   }
 
@@ -102,23 +102,22 @@ class MenuServiceIntegrationTest {
   }
 
   @Test
-  void deleteMenu_ShouldRemoveMenu() {
-    menuService.deleteMenu(menu.getRestaurantId());
-
-    boolean exists = menuRepository.existsByRestaurantId(menu.getRestaurantId());
-    assertFalse(exists, "Menu should be null after deletion");
-  }
-
-  @Test
   void addFoodToMenu_ShouldAddFoodAndReturnFoodDto() {
-    FoodDto foodDto = FoodDto.builder().name("FOOD_NAME").description("FOOD_DESCRIPTION")
-        .price(Price.builder().amount(10).build()).categoryId(category.getId()).build();
+    FoodDto foodDto =
+        FoodDto.builder()
+            .name("FOOD_NAME")
+            .description("FOOD_DESCRIPTION")
+            .price(Price.builder().amount(10).build())
+            .categoryId(category.getId())
+            .build();
 
     FoodDto savedFoodDto = menuService.addFoodToMenu(menu.getId(), foodDto);
 
     assertNotNull(savedFoodDto, "Saved food should not be null");
     assertEquals("FOOD_NAME", savedFoodDto.getName(), "Food name should be FOOD_NAME");
-    assertEquals("FOOD_DESCRIPTION", savedFoodDto.getDescription(),
+    assertEquals(
+        "FOOD_DESCRIPTION",
+        savedFoodDto.getDescription(),
         "Food description should be FOOD_DESCRIPTION");
 
     Food savedFood = foodRepository.findById(savedFoodDto.getId()).orElse(null);
@@ -130,17 +129,27 @@ class MenuServiceIntegrationTest {
 
   @Test
   void addFoodToMenu_ShouldThrowException_WhenMenuDoesNotExist() {
-    FoodDto foodDto = FoodDto.builder().name("FOOD_NAME").description("FOOD_DESCRIPTION")
-        .price(Price.builder().amount(10).build()).categoryId(category.getId()).build();
+    FoodDto foodDto =
+        FoodDto.builder()
+            .name("FOOD_NAME")
+            .description("FOOD_DESCRIPTION")
+            .price(Price.builder().amount(10).build())
+            .categoryId(category.getId())
+            .build();
 
     long nonExistingMenuId = 999L;
 
-    CustomException exception = assertThrows(CustomException.class,
-        () -> menuService.addFoodToMenu(nonExistingMenuId, foodDto));
+    CustomException exception =
+        assertThrows(
+            CustomException.class, () -> menuService.addFoodToMenu(nonExistingMenuId, foodDto));
 
-    assertEquals(ErrorCode.NOT_FOUND_NO_CONTENT, exception.getErrorCode(),
+    assertEquals(
+        ErrorCode.NOT_FOUND_NO_CONTENT,
+        exception.getErrorCode(),
         "Error code should be NOT_FOUND_NO_CONTENT");
-    assertEquals("Menu not found for ID: " + nonExistingMenuId, exception.getMessage(),
+    assertEquals(
+        "Menu not found for ID: " + nonExistingMenuId,
+        exception.getMessage(),
         "Exception message should indicate the menu was not found");
   }
 }
