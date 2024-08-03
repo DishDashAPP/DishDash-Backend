@@ -1,19 +1,31 @@
 package com.dish_dash.gateway.configuration;
 
 import com.dishDash.common.enums.ErrorCode;
+import com.dishDash.common.exception.CustomException;
+import com.dishDash.common.response.ErrorResponse;
 import com.dish_dash.gateway.exception.CustomGatewayException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.codec.ErrorDecoder;
+import lombok.RequiredArgsConstructor;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+@RequiredArgsConstructor
 public class FeignClientErrorDecoder implements ErrorDecoder {
-
+  private final ObjectMapper objectMapper;
   @Override
   public Exception decode(String methodKey, Response response) {
     String body = getBodyAsString(response);
-
-    ErrorCode errorCode = mapResponseBodyToErrorCode(body);
+    ErrorResponse errorResponse;
+      try {
+           errorResponse = objectMapper.readValue(body, ErrorResponse.class);
+      } catch (JsonProcessingException e) {
+          return new CustomGatewayException(ErrorCode.INTERNAL_SERVER_ERROR);
+      }
+      ErrorCode errorCode = mapResponseBodyToErrorCode(errorResponse.getMessage());
 
     if (errorCode != null) {
       return new CustomGatewayException(errorCode);
@@ -35,7 +47,7 @@ public class FeignClientErrorDecoder implements ErrorDecoder {
 
   private ErrorCode mapResponseBodyToErrorCode(String body) {
     for (ErrorCode errorCode : ErrorCode.values()) {
-      if (body.contains(errorCode.name())) {
+      if (body.equals(errorCode.name())) {
         return errorCode;
       }
     }

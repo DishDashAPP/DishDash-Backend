@@ -21,6 +21,6 @@ public class ExceptionHandlerAdvice {
     ErrorResponse errorResponse =
         new ErrorResponse(errorCode.getErrorCodeValue(), errorCode.getErrorMessageValue());
 
-    return new ResponseEntity<>(errorResponse, errorCode.getHttpStatus());
+    return new ResponseEntity<>(errorResponse, errorCode.getClientHttpStatus());
   }
 }

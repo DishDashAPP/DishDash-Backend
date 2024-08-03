@@ -15,6 +15,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
+import java.time.LocalDateTime;
+
+import static com.fasterxml.jackson.databind.type.LogicalType.DateTime;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -97,10 +102,7 @@ public class DeliveryPersonService {
                                   .latitude(locationDto.getLatitude())
                                   .longitude(locationDto.getLongitude())
                                   .build());
-
-              location.setLatitude(locationDto.getLatitude());
-              location.setLongitude(locationDto.getLongitude());
-              locationRepository.save(location);
+              locationRepository.modify(locationDto.getLatitude(), locationDto.getLongitude(),  System.currentTimeMillis(), location.getId());
 
               deliveryPerson.setLocation(location);
               deliveryPersonRepository.save(deliveryPerson);

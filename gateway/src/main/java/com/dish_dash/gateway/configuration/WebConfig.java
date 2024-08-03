@@ -1,5 +1,6 @@
 package com.dish_dash.gateway.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.codec.ErrorDecoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,6 @@ public class WebConfig implements WebMvcConfigurer {
 
   @Bean
   public ErrorDecoder errorDecoder() {
-    return new FeignClientErrorDecoder();
+    return new FeignClientErrorDecoder(new ObjectMapper());
   }
 }
