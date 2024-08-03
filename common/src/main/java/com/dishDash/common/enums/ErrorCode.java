@@ -17,7 +17,7 @@ public enum ErrorCode {
   NO_CONTENT(HttpStatus.NO_CONTENT, HttpStatus.NO_CONTENT, 204, "No_content"),
   INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, HttpStatus.UNAUTHORIZED, 401, "Invalid_credentials"),
   NOT_FOUND(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND, 404, "Resource_not_found"),
-  NOT_FOUND_No_CONTENT(HttpStatus.NOT_FOUND, HttpStatus.NO_CONTENT, 204, "Resource_not_found"),
+  NOT_FOUND_NO_CONTENT(HttpStatus.NOT_FOUND, HttpStatus.NO_CONTENT, 204, "Resource_not_found"),
   CONFLICT(HttpStatus.CONFLICT, HttpStatus.CONFLICT, 409, "Conflict"),
   UNPROCESSABLE_ENTITY(HttpStatus.UNPROCESSABLE_ENTITY, HttpStatus.UNPROCESSABLE_ENTITY, 422, "Unprocessable_entity"),
   PAYMENT_REQUIRED(HttpStatus.PAYMENT_REQUIRED, HttpStatus.PAYMENT_REQUIRED, 402, "Payment_required"),

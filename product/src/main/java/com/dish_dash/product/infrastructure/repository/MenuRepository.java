@@ -16,4 +16,6 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
   @Transactional
   @Query("DELETE FROM Menu m WHERE m.restaurantId = :ownerId")
   void deleteByRestaurantOwnerId(long ownerId);
+
+  boolean existsByRestaurantId(long id);
 }
