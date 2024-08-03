@@ -14,14 +14,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-  List<Order> findAllByRestaurantOwnerIdAndStatusIn(
+  List<Order> findAllByRestaurantOwnerIdAndStatusInOrderByIdDesc(
       long restaurantOwnerId, List<OrderStatus> status);
 
   List<Order> findAllByRestaurantOwnerId(long restaurantOwnerId);
 
   Optional<Order> findByDeliveryPersonId(long deliveryPersonId);
 
-  List<Order> findByCustomerId(long customerID);
+  List<Order> findByCustomerIdOrderByIdDesc(long customerID);
 
   @Query("UPDATE Order SET status =:status where id=:id")
   @Modifying
