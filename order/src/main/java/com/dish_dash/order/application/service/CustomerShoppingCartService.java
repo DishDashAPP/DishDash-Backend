@@ -4,6 +4,7 @@ import com.dishDash.common.Price;
 import com.dishDash.common.dto.FoodViewDto;
 import com.dishDash.common.dto.ShoppingCartDto;
 import com.dishDash.common.dto.ShoppingCartItemCreateDto;
+import com.dishDash.common.enums.CurrencyUnit;
 import com.dishDash.common.enums.ErrorCode;
 import com.dishDash.common.exception.CustomException;
 import com.dishDash.common.feign.Product.FoodApi;
@@ -75,14 +76,11 @@ public class CustomerShoppingCartService {
 
                     return orderItem;
                   })
-              .collect(Collectors.toList());
-
-      shoppingCart.setShoppingCartItems(orderItems);
+              .toList();
+      shoppingCart.getShoppingCartItems().clear();
+      shoppingCart.getShoppingCartItems().addAll(orderItems);
       shoppingCart.setTotalPrice(
-          Price.builder()
-              .amount(totalPrice.get())
-              .unit(orderItems.get(0).getPrice().getUnit())
-              .build());
+          Price.builder().amount(totalPrice.get()).unit(CurrencyUnit.TOMAN).build());
       return ShoppingCartMapper.INSTANCE.shoppingCartToDto(
           shoppingCartRepository.save(shoppingCart));
     }
