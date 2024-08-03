@@ -86,17 +86,15 @@ public class CustomerShoppingCartService {
       ShoppingCartDto shoppingCartDto =
           ShoppingCartMapper.INSTANCE.shoppingCartToDto(shoppingCartRepository.save(shoppingCart));
       log.info("Shopping cart updated. {}", shoppingCartDto);
-      shoppingCartDto.setShoppingCartItems(
-          shoppingCartDto.getShoppingCartItems().stream()
-              .peek(
-                  item -> {
-                    FoodViewDto foodDto = foodApi.getFoodById(item.getFoodId());
-                    log.info(
-                        "Shopping cart item updated. item: {}, food: {}", item, foodDto.getName());
-                    item.setName(foodDto.getName());
-                    item.setDescription(foodDto.getDescription());
-                  })
-              .collect(Collectors.toList()));
+      shoppingCartDto
+          .getShoppingCartItems()
+          .forEach(
+              (item -> {
+                FoodViewDto foodDto = foodApi.getFoodById(item.getFoodId());
+                log.info("Shopping cart item updated. item: {}, food: {}", item, foodDto.getName());
+                item.setName(foodDto.getName());
+                item.setDescription(foodDto.getDescription());
+              }));
       log.info("Shopping cart Add name. {}", shoppingCartDto);
       return shoppingCartDto;
     }
