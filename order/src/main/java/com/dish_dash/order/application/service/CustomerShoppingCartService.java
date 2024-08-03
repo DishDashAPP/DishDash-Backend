@@ -87,9 +87,25 @@ public class CustomerShoppingCartService {
     return null;
   }
 
-  public List<ShoppingCartDto> getCustomerShoppingCarts(long customerID) {
-    return shoppingCartRepository.findByCustomerId(customerID).stream()
-        .map(ShoppingCartMapper.INSTANCE::shoppingCartToDto)
+  public List<ShoppingCartDto> getCustomerShoppingCarts(long customerId) {
+    return shoppingCartRepository.findByCustomerId(customerId).stream()
+        .map(
+            shoppingCart -> {
+              ShoppingCartDto shoppingCartDto =
+                  ShoppingCartMapper.INSTANCE.shoppingCartToDto(shoppingCart);
+
+              shoppingCartDto.setShoppingCartItems(
+                  shoppingCartDto.getShoppingCartItems().stream()
+                      .peek(
+                          item -> {
+                            FoodViewDto foodDto = foodApi.getFoodById(item.getFoodId());
+                            item.setName(foodDto.getName());
+                            item.setDescription(foodDto.getDescription());
+                          })
+                      .collect(Collectors.toList()));
+
+              return shoppingCartDto;
+            })
         .collect(Collectors.toList());
   }
 }

@@ -2,6 +2,7 @@ package com.dish_dash.order.domain.repository;
 
 import com.dish_dash.order.domain.model.ShoppingCart;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,5 +13,5 @@ public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long
   Optional<ShoppingCart> findByCustomerIdAndRestaurantOwnerId(
       long customerID, long restaurantOwnerId);
 
-  Collection<ShoppingCart> findByCustomerId(long customerID);
+  List<ShoppingCart> findByCustomerId(long customerID);
 }

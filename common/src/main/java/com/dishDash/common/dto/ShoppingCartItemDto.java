@@ -19,6 +19,7 @@ public class ShoppingCartItemDto {
   private long foodId;
 
   private String name;
+  private String description;
   private Price price;
   private Integer quantity;
 }
