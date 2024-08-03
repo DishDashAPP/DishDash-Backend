@@ -1,0 +1,111 @@
+@startuml
+
+cloud "Internet" {
+    [User]
+}
+
+node "Abriment E-Commerce" {
+    node "Load Balancer" {
+        [Nginx/ALB]
+    }
+
+    node "Docker Swarm Cluster" {
+        package "Microservices" {
+            node "Authentication Service" {
+                [Docker Container]
+                [Linux OS]
+                [JVM (OpenJDK 17)]
+                [Authentication] --> [Spring Boot App]
+            }
+
+            node "Order Service" {
+                [Docker Container]
+                [Linux OS]
+                [JVM (OpenJDK 21)]
+                [Order] --> [Spring Boot App]
+            }
+
+            node "Gateway Service" {
+                [Docker Container]
+                [Linux OS]
+                [JVM (OpenJDK 21)]
+                [Gateway] --> [Spring Boot App]
+            }
+
+            node "Delivery Service" {
+                [Docker Container]
+                [Linux OS]
+                [JVM (OpenJDK 17)]
+                [Delivery] --> [Spring Boot App]
+            }
+
+            node "Product Service" {
+                [Docker Container]
+                [Linux OS]
+                [JVM (OpenJDK 21)]
+                [Product] --> [Spring Boot App]
+            }
+
+            node "Payment Service" {
+                [Docker Container]
+                [Linux OS]
+                [JVM (OpenJDK 21)]
+                [Payment] --> [Spring Boot App]
+            }
+
+            node "User Service" {
+                [Docker Container]
+                [Linux OS]
+                [JVM (OpenJDK 21)]
+                [User] --> [Spring Boot App]
+            }
+        }
+
+        node "Database" {
+            [Docker Container]
+            [Linux OS]
+            [PostgreSQL]
+        }
+
+        node "Redis Cache" {
+            [Docker Container]
+            [Linux OS]
+            [Redis]
+        }
+
+        node "Eureka Discovery Server" {
+            [Docker Container]
+            [Linux OS]
+            [Eureka Server]
+        }
+    }
+}
+
+[User] --> [Nginx/ALB] : HTTP/HTTPS
+[Nginx/ALB] --> [Gateway]
+
+[Gateway] --> [Authentication]
+[Gateway] --> [Order]
+[Gateway] --> [Delivery]
+[Gateway] --> [Product]
+[Gateway] --> [Payment]
+[Gateway] --> [User]
+
+[Authentication] --> [Eureka Server]
+[Order] --> [Eureka Server]
+[Delivery] --> [Eureka Server]
+[Product] --> [Eureka Server]
+[Payment] --> [Eureka Server]
+[User] --> [Eureka Server]
+[Gateway] --> [Eureka Server]
+
+[Authentication] --> [PostgreSQL]
+[Order] --> [PostgreSQL]
+[Delivery] --> [PostgreSQL]
+[Product] --> [PostgreSQL]
+[Payment] --> [PostgreSQL]
+[User] --> [PostgreSQL]
+
+[Authentication] --> [Redis]
+
+@enduml
