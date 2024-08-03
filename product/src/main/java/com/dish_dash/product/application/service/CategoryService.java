@@ -44,15 +44,15 @@ public class CategoryService {
 
   public CategoryCreationDto saveCategory(CategoryCreationDto categoryCreationDto, long userId) {
     log.info("Saving category for restaurant ID: {}", userId);
-    Menu menu =
-        menuRepository
-            .findByRestaurantId(userId)
-            .orElseThrow(
-                () -> {
-                  log.error("Restaurant menu not found for user ID: {}", userId);
-                  return new CustomException(
-                      ErrorCode.UNPROCESSABLE_ENTITY, "Restaurant menu not found");
-                });
+    Menu menu = menuRepository.findByRestaurantId(userId).orElseGet(() -> {
+      log.warn("No existing menu found for user ID: {}. Creating new menu.", userId);
+      Menu newMenu = new Menu();
+      newMenu.setRestaurantId(userId);
+      menuRepository.save(newMenu);
+      log.info("New menu created with ID: {}", newMenu.getId());
+
+      return newMenu;
+    });
 
     Category category = ProductMapper.INSTANCE.dtoToCategory(categoryCreationDto);
     category.setMenu(menu);

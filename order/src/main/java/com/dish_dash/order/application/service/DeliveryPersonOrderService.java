@@ -39,6 +39,6 @@ public class DeliveryPersonOrderService {
           userApi.getRestaurantOwnerProfile(orderDto.getRestaurantOwnerId()));
       return orderDto;
     }
-    throw new CustomException(ErrorCode.BAD_REQUEST, "order not found");
+    throw new CustomException(ErrorCode.NO_CONTENT, "order not found");
   }
 }
