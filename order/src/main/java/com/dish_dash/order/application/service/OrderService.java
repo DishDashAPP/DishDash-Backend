@@ -32,7 +32,6 @@ public class OrderService {
   }
 
   public boolean prepareOrder(OrderDto orderDto) {
-    // TODO call updateStatus
     orderRepository.save(OrderMapper.INSTANCE.orderDtoToOrder(orderDto));
     return true;
   }
