@@ -31,12 +31,12 @@ public class CustomerShoppingCartService {
   private final FoodApi foodApi;
 
   public ShoppingCartDto createShoppingCart(long customerId, long restaurantOwnerId) {
-    if (shoppingCartRepository.existsById(customerId)) {
-      return shoppingCartRepository
-          .findByCustomerIdAndRestaurantOwnerId(customerId, restaurantOwnerId)
-          .map(ShoppingCartMapper.INSTANCE::shoppingCartToDto)
-          .orElse(null);
-    }
+    Optional<ShoppingCart> shoppingCartOptional =
+        shoppingCartRepository.findByCustomerIdAndRestaurantOwnerId(customerId, restaurantOwnerId);
+
+    if (shoppingCartOptional.isPresent())
+      return ShoppingCartMapper.INSTANCE.shoppingCartToDto(shoppingCartOptional.get());
+
     ShoppingCart shoppingCart =
         shoppingCartRepository.save(
             ShoppingCart.builder()
