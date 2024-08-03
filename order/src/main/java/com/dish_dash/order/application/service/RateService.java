@@ -2,7 +2,6 @@ package com.dish_dash.order.application.service;
 
 import com.dishDash.common.dto.RateDto;
 import com.dishDash.common.dto.RestaurantCommentsDto;
-import com.dish_dash.order.domain.mapper.OrderMapper;
 import com.dish_dash.order.domain.model.Order;
 import com.dish_dash.order.domain.model.Rate;
 import com.dish_dash.order.domain.repository.RateRepository;
@@ -29,9 +28,19 @@ public class RateService {
   }
 
   public RateDto getDeliveryRate(String deliveryPersonID) {
-    // TODO rate, no delivery person
-    return OrderMapper.INSTANCE.rateToRateDto(
-        rateRepository.findByDeliveryPersonID(deliveryPersonID));
+    List<Rate> rateOptional = rateRepository.findAllByDeliveryPersonID(deliveryPersonID);
+    long sum = 0L;
+    int numberOfRates = 0;
+    if (rateOptional.isEmpty())
+      return RateDto.builder().numberOfRate(numberOfRates).rate(sum).build();
+    for (Rate rate : rateOptional) {
+      sum += rate.getPoint();
+      numberOfRates++;
+    }
+    return RateDto.builder()
+        .numberOfRate(numberOfRates)
+        .rate(numberOfRates == 0 ? 0 : (float) sum / numberOfRates)
+        .build();
   }
 
   public RestaurantCommentsDto getRestaurantComments(long restaurantId) {

@@ -45,7 +45,7 @@ public class RestaurantOrderService {
 
   public List<OrderDto> getRestaurantOwnerOrderHistory(long restaurantOwnerID) {
     return orderRepository
-        .findAllByRestaurantOwnerIdAndStatusIn(
+        .findAllByRestaurantOwnerIdAndStatusInOrderByIdDesc(
             restaurantOwnerID,
             List.of(OrderStatus.DELIVERED, OrderStatus.NOT_PAID, OrderStatus.DELIVERING))
         .stream()
@@ -55,7 +55,7 @@ public class RestaurantOrderService {
 
   public List<OrderDto> getRestaurantOwnerActiveOrders(long restaurantOwnerID) {
     return orderRepository
-        .findAllByRestaurantOwnerIdAndStatusIn(
+        .findAllByRestaurantOwnerIdAndStatusInOrderByIdDesc(
             restaurantOwnerID, List.of(OrderStatus.PREPARING))
         .stream()
         .map(this::mapOrderToOrderDto)

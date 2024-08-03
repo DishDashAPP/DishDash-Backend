@@ -127,7 +127,7 @@ public class CustomerOrderService {
   }
 
   public List<OrderDto> getCustomerOrders(long customerID) {
-    return orderRepository.findByCustomerId(customerID).stream()
+    return orderRepository.findByCustomerIdOrderByIdDesc(customerID).stream()
         .map(
             order -> {
               OrderDto orderDto = OrderMapper.INSTANCE.orderToDto(order);

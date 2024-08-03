@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RateDto {
-  private long id;
+  private float rate;
+  private int numberOfRate;
 }
