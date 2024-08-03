@@ -30,7 +30,7 @@ public class DeliveryPersonOrderService {
   }
 
   public OrderDto getDeliveryPersonCurrentOrder(long deliveryPersonID) {
-    Optional<Order> order = orderRepository.findByDeliveryPersonId(deliveryPersonID);
+    Optional<Order> order = orderRepository.findByCustomerIdAndStatus(deliveryPersonID, OrderStatus.DELIVERING);
     if (order.isPresent()) {
       OrderDto orderDto = OrderMapper.INSTANCE.orderToDto(order.get());
       orderDto.setDeliveryPersonDto(userApi.getDeliveryPersonProfile(deliveryPersonID));
