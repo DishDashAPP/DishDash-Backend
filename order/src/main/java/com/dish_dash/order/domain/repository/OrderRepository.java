@@ -34,5 +34,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
   void updateDeliveryPerson(@Param("deliveryPersonId") long deliveryPersonId, @Param("id") long id);
 
   Optional<Order> findByCustomerIdAndStatusNot(long customerId, OrderStatus status);
+
   Optional<Order> findByCustomerIdAndStatus(long customerId, OrderStatus status);
+
+  Optional<Order> findByDeliveryPersonIdAndStatus(long deliveryPersonID, OrderStatus orderStatus);
 }
