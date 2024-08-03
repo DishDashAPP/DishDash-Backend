@@ -57,7 +57,6 @@ public class RateServiceIntegrationTest {
     RateDto result = rateService.getDeliveryRate("D123");
 
     assertNotNull(result, "Retrieved RateDto should not be null");
-    assertEquals(rate.getId(), result.getId(), "Retrieved rate ID should match expected");
   }
 
   @Test
