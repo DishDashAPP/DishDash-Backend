@@ -30,13 +30,18 @@ public class DeliveryPersonOrderService {
   }
 
   public OrderDto getDeliveryPersonCurrentOrder(long deliveryPersonID) {
-    Optional<Order> order = orderRepository.findByCustomerIdAndStatus(deliveryPersonID, OrderStatus.DELIVERING);
+    Optional<Order> order =
+        orderRepository.findByCustomerIdAndStatus(deliveryPersonID, OrderStatus.DELIVERING);
     if (order.isPresent()) {
       OrderDto orderDto = OrderMapper.INSTANCE.orderToDto(order.get());
       orderDto.setDeliveryPersonDto(userApi.getDeliveryPersonProfile(deliveryPersonID));
-      orderDto.setCustomerDto(userApi.getCustomerProfile(orderDto.getCustomerId()));
-      orderDto.setRestaurantOwnerDto(
-          userApi.getRestaurantOwnerProfile(orderDto.getRestaurantOwnerId()));
+      if (orderDto.getCustomerId() != 0) {
+        orderDto.setCustomerDto(userApi.getCustomerProfile(orderDto.getCustomerId()));
+      }
+      if (orderDto.getRestaurantOwnerId() != 0) {
+        orderDto.setRestaurantOwnerDto(
+            userApi.getRestaurantOwnerProfile(orderDto.getRestaurantOwnerId()));
+      }
       return orderDto;
     }
     throw new CustomException(ErrorCode.NOT_FOUND_NO_CONTENT, "order not found");

@@ -47,8 +47,15 @@ public class CustomerShoppingCartService {
                 .build());
 
     ShoppingCartDto shoppingCartDto = ShoppingCartMapper.INSTANCE.shoppingCartToDto(shoppingCart);
-    shoppingCartDto.setRestaurantOwner(
-        userApi.getRestaurantOwnerProfile(shoppingCartDto.getRestaurantOwnerId()));
+    if (shoppingCartDto.getRestaurantOwnerId() != 0) {
+      shoppingCartDto.setRestaurantOwner(
+          userApi.getRestaurantOwnerProfile(shoppingCartDto.getRestaurantOwnerId()));
+    }
+    if (shoppingCartDto.getRestaurantOwnerId() != 0) {
+      shoppingCartDto.setRestaurantComments(
+          rateService.getRestaurantComments(shoppingCartDto.getRestaurantOwnerId()));
+    }
+
     return shoppingCartDto;
   }
 
@@ -100,8 +107,14 @@ public class CustomerShoppingCartService {
                 item.setDescription(foodDto.getDescription());
               }));
       log.info("Shopping cart Add name. {}", shoppingCartDto);
-      shoppingCartDto.setRestaurantOwner(
-          userApi.getRestaurantOwnerProfile(shoppingCartDto.getRestaurantOwnerId()));
+        if (shoppingCartDto.getRestaurantOwnerId() != 0) {
+            shoppingCartDto.setRestaurantOwner(
+                    userApi.getRestaurantOwnerProfile(shoppingCartDto.getRestaurantOwnerId()));
+        }
+        if (shoppingCartDto.getRestaurantOwnerId() != 0) {
+            shoppingCartDto.setRestaurantComments(
+                    rateService.getRestaurantComments(shoppingCartDto.getRestaurantOwnerId()));
+        }
       return shoppingCartDto;
     }
     return null;
@@ -123,8 +136,14 @@ public class CustomerShoppingCartService {
                             item.setDescription(foodDto.getDescription());
                           })
                       .collect(Collectors.toList()));
-              shoppingCartDto.setRestaurantOwner(
-                  userApi.getRestaurantOwnerProfile(shoppingCartDto.getRestaurantOwnerId()));
+                if (shoppingCartDto.getRestaurantOwnerId() != 0) {
+                    shoppingCartDto.setRestaurantOwner(
+                            userApi.getRestaurantOwnerProfile(shoppingCartDto.getRestaurantOwnerId()));
+                }
+                if (shoppingCartDto.getRestaurantOwnerId() != 0) {
+                    shoppingCartDto.setRestaurantComments(
+                            rateService.getRestaurantComments(shoppingCartDto.getRestaurantOwnerId()));
+                }
               return shoppingCartDto;
             })
         .collect(Collectors.toList());

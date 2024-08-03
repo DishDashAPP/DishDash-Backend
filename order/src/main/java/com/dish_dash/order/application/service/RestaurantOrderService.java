@@ -64,8 +64,14 @@ public class RestaurantOrderService {
 
   private OrderDto mapOrderToOrderDto(Order order) {
     OrderDto orderDto = OrderMapper.INSTANCE.orderToDto(order);
-    orderDto.setDeliveryPersonDto(userApi.getDeliveryPersonProfile(order.getDeliveryPersonId()));
-    orderDto.setCustomerDto(userApi.getCustomerProfile(order.getCustomerId()));
+    if (order.getDeliveryPersonId() != 0)
+    {
+      orderDto.setDeliveryPersonDto(userApi.getDeliveryPersonProfile(order.getDeliveryPersonId()));
+    }
+    if (order.getCustomerId() != 0)
+    {
+      orderDto.setCustomerDto(userApi.getCustomerProfile(order.getCustomerId()));
+    }
 
     for (OrderItemDto orderItemDto : orderDto.getOrderItems())
       orderItemDto.setName(foodApi.getFoodById(orderItemDto.getFoodId()).getName());
