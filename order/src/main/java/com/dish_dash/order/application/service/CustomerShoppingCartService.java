@@ -49,8 +49,6 @@ public class CustomerShoppingCartService {
     ShoppingCartDto shoppingCartDto = ShoppingCartMapper.INSTANCE.shoppingCartToDto(shoppingCart);
     shoppingCartDto.setRestaurantOwner(
         userApi.getRestaurantOwnerProfile(shoppingCartDto.getRestaurantOwnerId()));
-    shoppingCartDto.setRestaurantComments(
-        rateService.getRestaurantComments(shoppingCartDto.getRestaurantOwnerId()));
     return shoppingCartDto;
   }
 
@@ -104,8 +102,6 @@ public class CustomerShoppingCartService {
       log.info("Shopping cart Add name. {}", shoppingCartDto);
       shoppingCartDto.setRestaurantOwner(
           userApi.getRestaurantOwnerProfile(shoppingCartDto.getRestaurantOwnerId()));
-      shoppingCartDto.setRestaurantComments(
-          rateService.getRestaurantComments(shoppingCartDto.getRestaurantOwnerId()));
       return shoppingCartDto;
     }
     return null;
@@ -129,8 +125,6 @@ public class CustomerShoppingCartService {
                       .collect(Collectors.toList()));
               shoppingCartDto.setRestaurantOwner(
                   userApi.getRestaurantOwnerProfile(shoppingCartDto.getRestaurantOwnerId()));
-              shoppingCartDto.setRestaurantComments(
-                  rateService.getRestaurantComments(shoppingCartDto.getRestaurantOwnerId()));
               return shoppingCartDto;
             })
         .collect(Collectors.toList());
