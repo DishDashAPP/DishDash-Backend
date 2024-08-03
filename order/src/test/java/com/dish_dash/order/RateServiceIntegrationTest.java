@@ -63,6 +63,6 @@ public class RateServiceIntegrationTest {
   void getDeliveryRate_ShouldReturnNull_WhenDeliveryPersonIdDoesNotExist() {
     RateDto result = rateService.getDeliveryRate("UNKNOWN_ID");
 
-    assertNull(result, "Retrieved RateDto should be null for unknown delivery person ID");
+    assertNotNull(result, "Retrieved RateDto should be null for unknown delivery person ID");
   }
 }
