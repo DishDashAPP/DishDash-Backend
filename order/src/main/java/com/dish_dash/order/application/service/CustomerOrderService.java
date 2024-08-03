@@ -14,13 +14,12 @@ import com.dish_dash.order.domain.mapper.OrderMapper;
 import com.dish_dash.order.domain.model.*;
 import com.dish_dash.order.domain.repository.OrderItemRepository;
 import com.dish_dash.order.domain.repository.OrderRepository;
+import com.dish_dash.order.domain.repository.ShoppingCartItemRepository;
+import com.dish_dash.order.domain.repository.ShoppingCartRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
-
-import com.dish_dash.order.domain.repository.ShoppingCartItemRepository;
-import com.dish_dash.order.domain.repository.ShoppingCartRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,8 +44,6 @@ public class CustomerOrderService {
     ShoppingCart shoppingCart =
         shoppingCartRepository
             .findByCustomerIdAndRestaurantOwnerId(customerId, restaurantOwnerId)
-            .stream()
-            .findFirst()
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND, "Shopping cart not found"));
 
     List<ShoppingCartItem> shoppingCartItems =

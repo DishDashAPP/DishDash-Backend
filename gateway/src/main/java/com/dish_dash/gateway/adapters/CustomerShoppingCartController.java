@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerShoppingCartController {
   private final CustomerShoppingCartAPi customerShoppingCartAPi;
 
-  @PostMapping
+  @PostMapping("/{restaurantOwnerId}")
   @Authentication(userId = "#userId")
-  public ShoppingCartDto createShoppingCart(Long userId, @RequestParam Long restaurantOwnerId) {
+  public ShoppingCartDto createShoppingCart(Long userId, @PathVariable Long restaurantOwnerId) {
     return customerShoppingCartAPi.createShoppingCart(userId, restaurantOwnerId);
   }
 

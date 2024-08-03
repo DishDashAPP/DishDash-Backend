@@ -26,8 +26,13 @@ public class CustomerShoppingCartService {
   private final ShoppingCartRepository shoppingCartRepository;
   private final FoodApi foodApi;
 
-  @Transactional
   public ShoppingCartDto createShoppingCart(long customerId, long restaurantOwnerId) {
+    if (shoppingCartRepository.existsById(customerId)) {
+      return shoppingCartRepository
+          .findByCustomerIdAndRestaurantOwnerId(customerId, restaurantOwnerId)
+          .map(ShoppingCartMapper.INSTANCE::shoppingCartToDto)
+          .orElse(null);
+    }
     ShoppingCart shoppingCart =
         shoppingCartRepository.save(
             ShoppingCart.builder()
