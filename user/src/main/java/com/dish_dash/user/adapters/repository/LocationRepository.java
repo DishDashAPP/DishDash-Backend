@@ -14,9 +14,10 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
   Optional<Location> findByDeliveryID(Long deliveryID);
 
-  @Query("UPDATE Location SET latitude =:latitude, longitude =:longitude, timestamp =:timestamp where id=:id")
+  @Query(
+      "UPDATE Location SET latitude =:latitude, longitude =:longitude where id=:id")
   @Modifying
   @Transactional
-  void modify(@Param("latitude") long latitude, @Param("longitude") long longitude,
-      @Param("timestamp") long timestamp, @Param("id") long id);
+  void modify(
+      @Param("latitude") float latitude, @Param("longitude") float longitude, @Param("id") long id);
 }

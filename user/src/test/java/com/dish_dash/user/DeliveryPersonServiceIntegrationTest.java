@@ -48,8 +48,7 @@ public class DeliveryPersonServiceIntegrationTest {
             .phoneNumber("PHONE_NUMBER")
             .build();
 
-    locationDto =
-        LocationDto.builder().latitude((long) 12.345678).longitude((long) 98.765432).build();
+    locationDto = LocationDto.builder().latitude(12.345678F).longitude(98.765432F).build();
   }
 
   @Test
@@ -155,12 +154,12 @@ public class DeliveryPersonServiceIntegrationTest {
   @Test
   void setLocation_ShouldReturnTrue_WhenDeliveryPersonExists() {
     DeliveryPerson deliveryPerson =
-        DeliveryPerson.builder().id(1L).status(DeliveryPersonStatus.ACTIVE).build();
-    deliveryPersonRepository.save(deliveryPerson);
+        deliveryPersonRepository.save(
+            DeliveryPerson.builder().id(1L).status(DeliveryPersonStatus.ACTIVE).build());
 
-    boolean result = deliveryPersonService.setLocation(locationDto, 1L);
+    boolean result = deliveryPersonService.setLocation(locationDto, deliveryPerson.getId());
 
-    Location location = locationRepository.findByDeliveryID(1L).orElse(null);
+    Location location = locationRepository.findByDeliveryID(deliveryPerson.getId()).orElse(null);
 
     assertTrue(result);
     assertNotNull(location);

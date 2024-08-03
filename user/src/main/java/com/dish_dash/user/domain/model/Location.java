@@ -19,8 +19,8 @@ public class Location {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
-  private long latitude;
-  private long longitude;
+  private float latitude;
+  private float longitude;
   @UpdateTimestamp private Timestamp timestamp;
 
   @Column(name = "delivery_id")
