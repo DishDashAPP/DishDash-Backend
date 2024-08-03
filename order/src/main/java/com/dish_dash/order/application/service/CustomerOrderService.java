@@ -141,6 +141,10 @@ public class CustomerOrderService {
                           })
                       .collect(Collectors.toList()));
 
+              if (order.getDeliveryPersonId() != 0) {
+                orderDto.setDeliveryPersonDto(
+                    userApi.getDeliveryPersonProfile(order.getDeliveryPersonId()));
+              }
               return orderDto;
             })
         .collect(Collectors.toList());
@@ -151,11 +155,10 @@ public class CustomerOrderService {
         .findByCustomerIdAndStatusNot(customerId, OrderStatus.DELIVERED)
         .map(
             order -> {
-              OrderDto orderDto =
-                  OrderMapper.INSTANCE.orderToDto(order);
+              OrderDto orderDto = OrderMapper.INSTANCE.orderToDto(order);
 
-                orderDto.setOrderItems(
-                        orderDto.getOrderItems().stream()
+              orderDto.setOrderItems(
+                  orderDto.getOrderItems().stream()
                       .peek(
                           item -> {
                             FoodViewDto foodDto = foodApi.getFoodById(item.getFoodId());
@@ -163,10 +166,10 @@ public class CustomerOrderService {
                             item.setDescription(foodDto.getDescription());
                           })
                       .collect(Collectors.toList()));
-                if (order.getDeliveryPersonId() != 0)
-                {
-                    orderDto.setDeliveryPersonDto(userApi.getDeliveryPersonProfile(order.getDeliveryPersonId()));
-                }
+              if (order.getDeliveryPersonId() != 0) {
+                orderDto.setDeliveryPersonDto(
+                    userApi.getDeliveryPersonProfile(order.getDeliveryPersonId()));
+              }
 
               return orderDto;
             })
