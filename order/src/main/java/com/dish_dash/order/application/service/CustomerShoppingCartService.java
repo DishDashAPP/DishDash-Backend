@@ -29,7 +29,6 @@ public class CustomerShoppingCartService {
   private final ShoppingCartRepository shoppingCartRepository;
   private final FoodApi foodApi;
   private final UserApi userApi;
-  private final RateService rateService;
 
   public ShoppingCartDto createShoppingCart(long customerId, long restaurantOwnerId) {
     Optional<ShoppingCart> shoppingCartOptional =
