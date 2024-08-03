@@ -123,7 +123,22 @@ public class CustomerOrderService {
 
   public List<OrderDto> getCustomerOrders(long customerID) {
     return orderRepository.findByCustomerId(customerID).stream()
-        .map(OrderMapper.INSTANCE::orderToDto)
+        .map(
+            order -> {
+              OrderDto orderDto = OrderMapper.INSTANCE.orderToDto(order);
+
+              orderDto.setOrderItems(
+                  orderDto.getOrderItems().stream()
+                      .peek(
+                          item -> {
+                            FoodViewDto foodDto = foodApi.getFoodById(item.getFoodId());
+                            item.setName(foodDto.getName());
+                            item.setDescription(foodDto.getDescription());
+                          })
+                      .collect(Collectors.toList()));
+
+              return orderDto;
+            })
         .collect(Collectors.toList());
   }
 

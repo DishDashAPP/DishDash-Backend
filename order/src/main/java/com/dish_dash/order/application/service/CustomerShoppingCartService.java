@@ -73,7 +73,6 @@ public class CustomerShoppingCartService {
                             .unit(food.getPrice().getUnit())
                             .build());
                     totalPrice.updateAndGet(v -> v + itemTotalPrice);
-
                     return orderItem;
                   })
               .toList();
@@ -81,8 +80,18 @@ public class CustomerShoppingCartService {
       shoppingCart.getShoppingCartItems().addAll(orderItems);
       shoppingCart.setTotalPrice(
           Price.builder().amount(totalPrice.get()).unit(CurrencyUnit.TOMAN).build());
-      return ShoppingCartMapper.INSTANCE.shoppingCartToDto(
-          shoppingCartRepository.save(shoppingCart));
+      ShoppingCartDto shoppingCartDto =
+          ShoppingCartMapper.INSTANCE.shoppingCartToDto(shoppingCartRepository.save(shoppingCart));
+      shoppingCartDto.setShoppingCartItems(
+          shoppingCartDto.getShoppingCartItems().stream()
+              .peek(
+                  item -> {
+                    FoodViewDto foodDto = foodApi.getFoodById(item.getFoodId());
+                    item.setName(foodDto.getName());
+                    item.setDescription(foodDto.getDescription());
+                  })
+              .collect(Collectors.toList()));
+      return shoppingCartDto;
     }
     return null;
   }

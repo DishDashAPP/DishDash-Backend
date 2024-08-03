@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 public interface FoodApi {
 
   @GetMapping
-  List<FoodViewDto> getAllFoods(@RequestParam long userId);
+  List<FoodViewDto>   getAllFoods(@RequestParam long userId);
 
   @GetMapping("/{id}")
   FoodViewDto getFoodById(@PathVariable long id);
